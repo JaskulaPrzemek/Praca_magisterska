@@ -1,0 +1,161 @@
+\documentclass[aspectratio=169,15pt,]{beamer}
+\usepackage [utf8] { inputenc }
+\usepackage [T1] {fontenc}
+\usepackage{carlito}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\title{Solving the optimal path planning of a mobile robot using improved Q-learning - omówienie artykułu}
+\institute{WYDZIAŁ ELEKTRONIKI, FOTONIKI I MIKROSYSTEMÓW}
+\date{Projekt Specjalnościowy}
+\author[Euclid]{Przemysław Jaskuła \texttt{269995@student.pwr.edu.pl}}
+%\date{\today}
+\pgfdeclareimage[height=\paperheight,width=\paperwidth]{TG}{flower} 
+%\titlegraphic{\pgfuseimage{TG}}
+\usetheme[vertical,lang=pl,hr=false,pagenumbers,navigation]{NewPwr}
+
+\begin{document}
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+\begin{frame}
+\tableofcontents
+\end{frame}
+\section{Reinforcement learning}
+\begin{frame}
+	\sectionpage
+
+\end{frame}
+\begin{frame}
+\centering
+	\includegraphics[width =\textwidth]{Obrazy/RL.jpg}
+\end{frame}
+\section{Q learning}
+\begin{frame}
+	\sectionpage
+
+\end{frame}
+\begin{frame}
+\begin{itemize}
+ \item<1-> \Huge{Stan}
+ \item<2->\Huge{Akcja}
+ \item<3-> \Huge{Agent}
+ \item<4-> \Huge{Nagroda i Kara}
+\end{itemize}
+\end{frame}
+\begin{frame}
+	\centering
+	\begin{align*}
+	&Q(s_t,a_t) \leftarrow (1-\alpha)Q(s,a)+\alpha \left[ r_{t+1} +\gamma \max_{a_{t+1}} Q(s_{t+1},a_{t+1})\right ] \\
+	&s_t  \text{: Obecny stan}\\
+	&a_t \text{: Akcja podjęta w stanie }s_t\\
+	&r_{t+1} \text{: Nagroda po stanie }s_t\\
+	&\alpha \text{: Współczynnik nauki}\\
+	& \gamma \text{: Współczynnik dyskontowy}
+	\end{align*}
+
+
+\end{frame}
+
+\begin{frame}
+\includegraphics[width =\textwidth]{Obrazy/Pseudo.jpg}
+\end{frame}
+\section{Problemy związane z Q learningiem}
+\begin{frame}
+	\sectionpage
+
+\end{frame}
+\begin{frame}
+\centering
+\Huge
+\begin{enumerate}
+  \item<1->
+        Złożoność obliczeniowa wraz z wzrostem przestrzeni poszukiwań
+        \vspace{10pt}
+
+  \item<2->
+      Początkowy etap eksploracji
+
+ \end{enumerate}
+\end{frame}
+\section{Co to jest FPA}
+\begin{frame}
+	\sectionpage
+
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+ \item<1-> Zapylanie globalne zawiera zapylanie biotyczne i krzyżowe, a zapylacze używają dystrybucji Levy-iego przy przenoszeniu pyłków.
+ \item<2-> Zapylanie lokalne będące abiotyczne i samozapylające.
+ \item<3-> Szansa na reprodukcję zależy od tego jak dwa kwiaty są podobne.
+ \item<4-> Prawdopodobieństwo zmiany decyduje między zapylaniem lokalnym a globalnym.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\centering
+	\begin{align*}
+	&x_i^{t+1}=x_i^t +\gamma L (\lambda )(x_i^t - g* ) \\
+	&x_i^t  \text{: Pyłek } i \text{ w iteracji } t\\
+	&g* \text{: Najlepsze rozwiązanie w obecnej iteracji}\\
+	& \gamma \text{: Współczynnik skalowania}\\
+	&L(\lambda) \text{: Siła zapylania}
+	\end{align*}
+
+
+\end{frame}
+
+\begin{frame}
+	\centering
+	\begin{align*}
+	&x_i^{t+1}=x_i^t +\epsilon ( x_j^t - x_k^t)\\
+	&x_i^t  \text{: Pyłek } i \text{ w iteracji } t\\
+	& x_j^t - x_k^t \text{: Pyłki z tego samego gatunku, lecz innych kwiatów}\\
+	& \epsilon \text{: Liczba losowa z dystrybucji jednostajnej}
+	\end{align*}
+
+
+\end{frame}
+
+\begin{frame}
+\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Pseudo2.jpg}
+\end{frame}
+\begin{frame}
+\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Pseudo3.jpg}
+\end{frame}
+
+\section{FPA jako lepsze zainicjiowanie macierzy Q}
+\begin{frame}
+	\sectionpage
+
+\end{frame}
+\begin{frame}
+\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Test2.jpg}
+\end{frame}
+\begin{frame}
+\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Test1.jpg}
+\end{frame}
+\begin{frame}
+\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Test3.jpg}
+\end{frame}
+\begin{frame}
+\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Test4.jpg}
+\end{frame}
+\section{Q \& A}
+\begin{frame}
+	\sectionpage
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+	\Huge{Dziękuję za uwagę}
+
+\end{center}
+
+\end{frame}
+
+\end{document}
+
+

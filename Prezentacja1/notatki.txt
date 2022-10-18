@@ -1,0 +1,80 @@
+Plan wstępny
+
+1:
+Co to jest Reinforcment learning
+Reinforcment learning czyli po polsku uczenie przez wzmacnianie 
+jest to metoda traningu uczenia maszynowego przez nagradzanie zachowań chcianych 
+i/lub karanie zachowań nieodpowiednich. Metoda ta pozwala wyznaczyć optymalną politykę sterowania przez agenta
+w nieznanym mu środowisku. 
+2:
+Q learning clasic
+
+Q learning jest typem ogólnie pojętego reinforcment learningu omawianego już wczesniej. W Q learningu posługujemy się
+podstawowymi pojęciami jak stan, akcja, agent, nagroda oraz kara. 
+W omawianym przypadku agent reprezentuje robota mobilnego, stan będzie pozycją agenta w środowisku a akcją
+będzie przemieszczenie się z jednego stanu do drugiego. Nagrodą jest wartość pozytywna - czyli zwiększająca 
+wartość danej akcji w danym, konkretnym stanie, a karą jest wartość negatywna.
+Doświadczenie zdobywa się przez explorację oraz exploitację przez agenta. 
+Exploracją jest próbowanie nowych akcji w danym stanie a exploitacją jest powtarzanie akcji już znanych.
+W Q learningu nie jest wymagana znajomość prawdopodobieństw przejścia wszystkich akcji oraz stanów.
+
+Wartości macierzy Q są kolejno obliczane przez następujące wyrażenie.
+:
+Gdzie
+
+alfa i gamma od 0 do 1
+alfa - jak bardzo odpowiedź jest ważna
+gamma - patrzenie w przyszłość
+3:
+Problemy z Q learningiem
+
+Biorąc pod uwagę przeszukiwaną przestrzeń z m stanami oraz n akcjami tabela Q będzie miała rozmiar m na n.
+Poruszając się z jednego stanu do następnego agent wybiera akcję z największą wartością Q wśród n możliwych akcji.
+Sprawia to że potrzebne jest n-1 porównań. Więc by zakualizować macierz Q, za każdym razem jest potrzebne m*(n-1)
+porównań.
+Oznacza to że wraz z rozmiarem oraz skomplikowaniem środowiska, szczególnia w rzeczywistych rozwiązaniach, czas
+na znalezienie ścieżki wzrasta eksponencjalnie.
+
+Drugim problemem jest całkowita losowość poruszania się agenta 
+skutkująca marnowaniem zasobów, wolniejszym zbieganiem się do ścieżki optymalnej oraz zajmującą znaczną ilość czasu.
+jak już wcześniej mówiliszmi, akcja dla następnego stanu będzie stwierdzona przez największą wartość z macierzy Q.
+Przez inicjalizację wartości na 0, na początku agent nie ma wyboru, musi być losowy.
+Zastępstwem tego może być inicjalizacjia, w tym wypadku przez użycie algorytmu FPA.
+
+4:
+Co to jest FPA?
+FPA, czyli flower polination algorithm
+Zapylanie polega na przenoszeniu pyłków z jednego kwiatu na drugi kwiat,
+Które można podzielić na z udziałem zwierzą przenoszących pyłki i bez.
+90% korzysta ze zwierząt, zwane również zapylaniem krzyżowym, 10% samo-zapylanie.
+Inspirowany zapylaniem naturalnym FPA Zaproponowane przez Yanga w 2012 ma 4 uproszczone zasady.
+
+Dystrybucja Levy-iego L ~ (lambda * gamma{Lambda)*sin( pi * lambda/2) /pi
+*1/s^(1+lambda)
+
+Zapylanie globalne
+
+Zapylanie Lokalne
+
+5:
+FPA jako lepsze zainicjiowanie macierzy Q
+
+ Improved Decentralized Q-learning algorithm (IDQ) - został zmodyfikowany by
+oceniać różnicę między obecnym stanem a stanem końcowym
+
+
+A - Q learning
+B - IQ-FPA
+
+
+ In this regard, Arin and Rabadi integrated metaheuristic algorithm for 
+randomized priority search with Q-learning, in order to minimize the search time for the optimal solution
+
+Wang et al. proposed a backward Q-learning, combining the Sarsa algorithm and Q-learning [19]. 
+The advantage of using Sarsa algorithm is that it takes a shorter time in convergence, as compared to Q learning. However,
+ Sarsa algorithm tends to be trapped in the local minimum, and this can be compensated by the hybridization with the Q-learning. 
+The backward Q-learning was applied in cliff walk, mountain car and cart–pole balancing control system, 
+where improvement in both learning time and finishing performance were observed.
+
+Rakshit et al. combined the Q-learning as part of local refinement and differential evolution for global search in adaptive memetic algorithm  
+
