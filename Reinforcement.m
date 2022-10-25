@@ -30,9 +30,12 @@ if s==Map(1).Target
    return;
 end
 %if norm(s-Map(1).Target)>norm(s1-Map(1).Target)
-%    r=0.2;
+%    r=0.1;
+%    s1=s;
+%    return;
 %end
 %r=sqrt((Map(1).Target(1)-s(1))^2+(Map(1).Target(2)-s(2))^2);
 s1=s;
+%r=0.05;
 
 end

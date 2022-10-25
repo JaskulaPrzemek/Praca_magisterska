@@ -1,9 +1,10 @@
 PossibleActions=[1,2,3,4];%lewo,prawo,dol,gora
+clear;
 Map=CreateMap(1);
 Qmatrix=zeros(Map(1).Size(1)*Map(1).Size(2),4);
 ViewMap(Map);
 State=Map.StartingPoint;
-for i=1:200
+for i=1:100
     State=Map.StartingPoint;
     step=0;
 while(State(1) ~= Map(1).Target(1)||State(2) ~= Map(1).Target(2))
@@ -21,6 +22,8 @@ Steps(i)=step;
 end
 t=312;
 plot(Steps);
+xlabel("iterations");
+ylabel("Steps");
    function [a]=NextAction(s,Qmatrix)
    e=rand();
     if(e<0.01)
@@ -53,6 +56,6 @@ plot(Steps);
    alpha=0.2;
    gamma=0.8;
    Pos=s(1)+(s(2)-1)*20;
-   Qmatrix(Pos,a)=(1-alpha)*Qmatrix(Pos,a)+alpha*(r+gamma*max(Qmatrix(Sp(1)+(Sp(2)-1)*20,:))-Qmatrix(Pos,a));
+   Qmatrix(Pos,a)=(1-alpha)*Qmatrix(Pos,a)+alpha*(r+gamma*max(Qmatrix(Sp(1)+(Sp(2)-1)*20,:)));
    Q=Qmatrix;
    end
