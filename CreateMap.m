@@ -1,5 +1,15 @@
 function [Map]=CreateMap(type)
-if (type==1)
+switch type
+case -1 %empty Map
+    Map.Size= [20,20];
+    Map.StartingPoint=[2,16];
+    Map.Target=[19,16];
+case 0 %map with one obstacle
+    Map.Size= [20,20];
+    Map.StartingPoint=[2,16];
+    Map.Target=[19,16];
+    Map(1).Obstacles=[10,16,2]; 
+case 1
    Map.Size= [20,20];
    Map.StartingPoint=[2,16];
    Map.Target=[19,11];
@@ -13,9 +23,10 @@ if (type==1)
    Map(8).Obstacles=[16,10;15,12;18,12];
    Map(9).Obstacles=[13,3;14,3;15,2;16,3;17,2;18,4;17,5;15,4;14,5;13,5];
   
-else
-     Map.Size= [20,20];
+otherwise
+    Map.Size= [20,20];
 end
+
 %create polygons for ease of checking int point
 ObstaclesNR=size({Map.Obstacles},2);
 for i=1:ObstaclesNR
