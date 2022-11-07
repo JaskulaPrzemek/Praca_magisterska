@@ -4,6 +4,7 @@ case -1 %empty Map
     Map.Size= [20,20];
     Map.StartingPoint=[2,16];
     Map.Target=[19,16];
+    Map(1).Obstacles=[20,20,1]; 
 case 0 %map with one obstacle
     Map.Size= [20,20];
     Map.StartingPoint=[2,16];
@@ -28,6 +29,7 @@ otherwise
 end
 
 %create polygons for ease of checking int point
+if isfield(Map,"Obstacles")
 ObstaclesNR=size({Map.Obstacles},2);
 for i=1:ObstaclesNR
     if(size(Map(i).Obstacles)==[1,3])
@@ -44,4 +46,6 @@ for i=1:ObstaclesNR
     end
    
 end
+end
+
 end
