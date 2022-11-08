@@ -1,10 +1,10 @@
-function [QMatrix]=FPA(map,function,p)
+function [QMatrix]=FPA(map,function1,p)
 gamma=0.5;
 population=initialpopulation(map);
 PopSize=size(population,1);
 nextPopulation=population;
     for i=1:PopSize
-    Fittnes(i)=funtion(population(i,:));
+    Fittnes(i)=funtion1(population(i,:));
     end
     [Fmax,I]=max(Fittnes);
     best=population(I,:);
@@ -33,8 +33,9 @@ for i=1:populationSize
     population(i,1)=randi([Lx,Ux]);
     population(i,2)=randi([Ly,Uy]);
     ObstaclesNR=size({map.Polygons},2);
-    flag =1;
-    while(flag)
+    flag =0;
+    while(~flag)
+        flag=1;
         for j=1:ObstaclesNR
             if(isinterior(map(j).Polygons,population(i,:)))
                 flag=0;

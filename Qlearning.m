@@ -16,18 +16,18 @@ while(State(1) ~= Map(1).Target(1)||State(2) ~= Map(1).Target(2))
    Qmatrix=Update(State,Sp,a,r,Qmatrix);
    State=Sp;
    step=step+1;
-    Path(step).step=State;
+    %Path(step).step=State;
     end
 Steps(i)=step;
 end
-t=312;
-%WritePath(Qmatrix,Map);
+WritePath(Qmatrix,Map);
+figure(2);
 plot(Steps);
 xlabel("iterations");
 ylabel("Steps");
    function [a]=NextAction(s,Qmatrix,Map)
    e=rand();
-    if(e<-0.01)
+    if(e<0.05)
         a=randi(4);
     else
         Pos(1).s=[s(1)-1,s(2)];
