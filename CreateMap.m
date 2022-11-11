@@ -23,7 +23,17 @@ case 1
    Map(7).Obstacles=[18,14;16,18;20,14];
    Map(8).Obstacles=[16,10;15,12;18,12];
    Map(9).Obstacles=[13,3;14,3;15,2;16,3;17,2;18,4;17,5;15,4;14,5;13,5];
-  
+case 2
+   Map.Size= [20,20];
+   Map.StartingPoint=[2,16];
+   Map.Target=[19,11];
+   for i=1:3
+      for j=1:5
+          x=6+(i-1)*4;
+          y=6+(j-1)*3-(i-1)*2;
+          Map(j+(i-1)*5).Obstacles=[x,y;x,y+1;x+1,y+1;x+1,y];
+      end
+   end
 otherwise
     Map.Size= [20,20];
 end
@@ -48,4 +58,18 @@ for i=1:ObstaclesNR
 end
 end
 
+%createCMAP for faster checking of interior point
+Map(1).Cmap=2*ones(Map(1).Size(1),Map(1).Size(2));
+for i=1:Map(1).Size(1)
+    for j=1:Map(1).Size(2)
+       for k=1:ObstaclesNR
+            if(isinterior(Map(k).Polygons,[i,j]))
+                Map(1).Cmap(i,j)=-1;
+                break;
+            end
+       end
+    end
+end
+Map(1).Cmap(Map(1).StartingPoint(1),Map(1).StartingPoint(2))=1;
+Map(1).Cmap(Map(1).Target(1),Map(1).Target(2))=0;
 end

@@ -16,14 +16,13 @@ r=0;
         r=-1;
         return;
     end
-  ObstaclesNR=size({Map.Polygons},2);
  
-for i=1:ObstaclesNR
-   if(isinterior(Map(i).Polygons,s)==1)
+
+   if(Map(1).Cmap(s(1),s(2))==-1)
       r=-1;
       return;
    end
-end
+
 if s==Map(1).Target
    r=2;
    s1=s;
