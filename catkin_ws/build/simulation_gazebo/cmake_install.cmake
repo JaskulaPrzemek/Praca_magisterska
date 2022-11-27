@@ -1,8 +1,8 @@
-# Install script for directory: /home/pszemek/Desktop/catkin_ws/src/simulation_gazebo
+# Install script for directory: /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/simulation_gazebo
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/pszemek/Desktop/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/pszemek/Desktop/catkin_ws/build/simulation_gazebo/catkin_generated/installspace/simulation_gazebo.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/simulation_gazebo/catkin_generated/installspace/simulation_gazebo.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulation_gazebo/cmake" TYPE FILE FILES
-    "/home/pszemek/Desktop/catkin_ws/build/simulation_gazebo/catkin_generated/installspace/simulation_gazeboConfig.cmake"
-    "/home/pszemek/Desktop/catkin_ws/build/simulation_gazebo/catkin_generated/installspace/simulation_gazeboConfig-version.cmake"
+    "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/simulation_gazebo/catkin_generated/installspace/simulation_gazeboConfig.cmake"
+    "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/simulation_gazebo/catkin_generated/installspace/simulation_gazeboConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulation_gazebo" TYPE FILE FILES "/home/pszemek/Desktop/catkin_ws/src/simulation_gazebo/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulation_gazebo" TYPE FILE FILES "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/simulation_gazebo/package.xml")
 endif()
 

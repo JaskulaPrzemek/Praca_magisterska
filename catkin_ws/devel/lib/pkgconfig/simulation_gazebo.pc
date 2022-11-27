@@ -1,4 +1,4 @@
-prefix=/home/pszemek/Desktop/catkin_ws/devel
+prefix=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/devel
 
 Name: simulation_gazebo
 Description: Description of simulation_gazebo

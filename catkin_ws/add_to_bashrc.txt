@@ -1,0 +1,1 @@
+ export GAZEBO_MODEL_PATH=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/

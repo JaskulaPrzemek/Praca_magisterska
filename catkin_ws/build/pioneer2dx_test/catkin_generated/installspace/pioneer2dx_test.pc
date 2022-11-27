@@ -1,0 +1,8 @@
+prefix=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/install
+
+Name: pioneer2dx_test
+Description: Description of pioneer2dx_test
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -29,6 +29,9 @@ end
 if Render
 WritePath(Qmatrix,Map);
 end
+%if Gazebo
+GazeboRun(Qmatrix,Map)
+%end    
 end
 function [a]=NextAction(s,Qmatrix,Map,Egreedy)
    e=rand();
@@ -69,4 +72,5 @@ function [a]=NextAction(s,Qmatrix,Map,Egreedy)
    Pos=s(1)+(s(2)-1)*20;
    Qmatrix(Pos,a)=(1-alpha)*Qmatrix(Pos,a)+alpha*(r+gamma*max(Qmatrix(Sp(1)+(Sp(2)-1)*20,:)));
    Q=Qmatrix;
+   
    end
