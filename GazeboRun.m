@@ -56,9 +56,9 @@ switch command
         while theta<-0.2 || theta >0.2
         theta=getTheta(odomSub);
         if theta> 0.2
-        twist.Angular.Z=-1;
+        twist.Angular.Z=-0.3;
         else
-        twist.Angular.Z=1;
+        twist.Angular.Z=0.3;
         end
         send(velPub,twist);
         end
@@ -66,9 +66,9 @@ switch command
         while theta<89.8 || theta >90.2
         theta=getTheta(odomSub);
         if theta> 90.2
-        twist.Angular.Z=-1;
+        twist.Angular.Z=-0.3;
         else
-        twist.Angular.Z=1;
+        twist.Angular.Z=0.3;
         end
         send(velPub,twist);
         end
@@ -76,9 +76,9 @@ switch command
         while theta<179.8 || theta >180.2
         theta=getTheta(odomSub);
         if theta<179.8
-        twist.Angular.Z=1;
+        twist.Angular.Z=0.3;
         else
-        twist.Angular.Z=-1;
+        twist.Angular.Z=-0.3;
         end
         send(velPub,twist);
         end
@@ -86,9 +86,9 @@ switch command
         while theta>-89.8 || theta <-90.2
         theta=getTheta(odomSub);
         if theta> -90.2
-        twist.Angular.Z=-1;
+        twist.Angular.Z=-0.3;
         else
-        twist.Angular.Z=1;
+        twist.Angular.Z=0.3;
         end
         
         send(velPub,twist);
@@ -109,7 +109,7 @@ function moveOneF(velPub,odomSub)
 [xbeg,ybeg]=getPose(odomSub);
 [x,y]=getPose(odomSub);
 twist = rosmessage(velPub);
-twist.Linear.X=1;
+twist.Linear.X=0.3;
 send(velPub,twist);
 while x>(xbeg-1)&& x<(xbeg+1) && y>(ybeg-1) && y<(ybeg+1)
     [x,y]=getPose(odomSub);
