@@ -11,7 +11,11 @@ y2=-8;
 midx=(x1+x2)/2;
 midy=(y1+y2)/2;
 lenght=sqrt((x1-x2)^2 +(y1-y2)^2);
+if (x2-x1)=0
+angle=90;
+else
 angle=atan((y2-y1)/(x2-x1));
+end
 sizeval=string(num2str(lenght,6)) +" 0.01 2.5";
 pose1val=num2str(midx,6)+" " +num2str(midy,6)+" 0 0 -0 0";
 pose2val="-0 0 0 0 -0 "+num2str(angle,6);
