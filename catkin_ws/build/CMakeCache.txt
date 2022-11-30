@@ -382,6 +382,12 @@ UBUNTU:BOOL=TRUE
 //LSB Distrib - codename tag
 UBUNTU_FOCAL:BOOL=TRUE
 
+//Value Computed by CMake
+Wall_BINARY_DIR:STATIC=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall
+
+//Value Computed by CMake
+Wall_SOURCE_DIR:STATIC=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/Wall
+
 //Path to a file.
 _gmock_INCLUDES:FILEPATH=/usr/src/googletest/googlemock/include/gmock/gmock.h
 
@@ -442,12 +448,6 @@ gtest_hide_internal_symbols:BOOL=OFF
 
 //Dependencies for the target
 gtest_main_LIB_DEPENDS:STATIC=general;gtest;
-
-//Value Computed by CMake
-pioneer2dx_BINARY_DIR:STATIC=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test
-
-//Value Computed by CMake
-pioneer2dx_SOURCE_DIR:STATIC=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/pioneer2dx_test
 
 //Value Computed by CMake
 pioneer2dx_test_BINARY_DIR:STATIC=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test
@@ -609,7 +609,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=6
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=7
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

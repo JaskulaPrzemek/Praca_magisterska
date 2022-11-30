@@ -3,6 +3,6 @@ CATKIN_PACKAGE_PREFIX = ""
 PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
-PROJECT_NAME = "pioneer2dx"
-PROJECT_SPACE_DIR = "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/devel"
+PROJECT_NAME = "Wall"
+PROJECT_SPACE_DIR = "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/install"
 PROJECT_VERSION = "0.0.0"

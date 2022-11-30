@@ -137,14 +137,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/CMakeFiles /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx/CMakeFiles/progress.marks
-	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pioneer2dx/all
+	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/CMakeFiles /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/CMakeFiles/progress.marks
+	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Wall/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pioneer2dx/clean
+	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Wall/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,12 +154,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pioneer2dx/preinstall
+	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Wall/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pioneer2dx/preinstall
+	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Wall/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
@@ -168,18 +168,18 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-pioneer2dx/CMakeFiles/_catkin_empty_exported_target.dir/rule:
-	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pioneer2dx/CMakeFiles/_catkin_empty_exported_target.dir/rule
-.PHONY : pioneer2dx/CMakeFiles/_catkin_empty_exported_target.dir/rule
+Wall/CMakeFiles/_catkin_empty_exported_target.dir/rule:
+	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 Wall/CMakeFiles/_catkin_empty_exported_target.dir/rule
+.PHONY : Wall/CMakeFiles/_catkin_empty_exported_target.dir/rule
 
 # Convenience name for target.
-_catkin_empty_exported_target: pioneer2dx/CMakeFiles/_catkin_empty_exported_target.dir/rule
+_catkin_empty_exported_target: Wall/CMakeFiles/_catkin_empty_exported_target.dir/rule
 
 .PHONY : _catkin_empty_exported_target
 
 # fast build rule for target.
 _catkin_empty_exported_target/fast:
-	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f pioneer2dx/CMakeFiles/_catkin_empty_exported_target.dir/build.make pioneer2dx/CMakeFiles/_catkin_empty_exported_target.dir/build
+	cd /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build && $(MAKE) -f Wall/CMakeFiles/_catkin_empty_exported_target.dir/build.make Wall/CMakeFiles/_catkin_empty_exported_target.dir/build
 .PHONY : _catkin_empty_exported_target/fast
 
 # Help Target

@@ -1,4 +1,4 @@
-# Install script for directory: /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/pioneer2dx
+# Install script for directory: /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/Wall
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx/catkin_generated/installspace/pioneer2dx.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/catkin_generated/installspace/Wall.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pioneer2dx/cmake" TYPE FILE FILES
-    "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx/catkin_generated/installspace/pioneer2dxConfig.cmake"
-    "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx/catkin_generated/installspace/pioneer2dxConfig-version.cmake"
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Wall/cmake" TYPE FILE FILES
+    "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/catkin_generated/installspace/WallConfig.cmake"
+    "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/catkin_generated/installspace/WallConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pioneer2dx" TYPE FILE FILES "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/pioneer2dx/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/Wall" TYPE FILE FILES "/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/Wall/package.xml")
 endif()
 

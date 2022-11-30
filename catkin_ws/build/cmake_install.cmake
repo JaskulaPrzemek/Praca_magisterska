@@ -131,6 +131,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/gtest/cmake_install.cmake")
+  include("/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/cmake_install.cmake")
   include("/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test/cmake_install.cmake")
   include("/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/simulation_gazebo/cmake_install.cmake")
 

@@ -54,6 +54,7 @@ CMAKE_BINARY_DIR = /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build
 
 # The main recursive "all" target.
 all: gtest/all
+all: Wall/all
 all: pioneer2dx_test/all
 all: simulation_gazebo/all
 
@@ -61,6 +62,7 @@ all: simulation_gazebo/all
 
 # The main recursive "preinstall" target.
 preinstall: gtest/preinstall
+preinstall: Wall/preinstall
 preinstall: pioneer2dx_test/preinstall
 preinstall: simulation_gazebo/preinstall
 
@@ -73,10 +75,29 @@ clean: CMakeFiles/clean_test_results.dir/clean
 clean: CMakeFiles/tests.dir/clean
 clean: CMakeFiles/download_extra_data.dir/clean
 clean: gtest/clean
+clean: Wall/clean
 clean: pioneer2dx_test/clean
 clean: simulation_gazebo/clean
 
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory Wall
+
+# Recursive "all" directory target.
+Wall/all:
+
+.PHONY : Wall/all
+
+# Recursive "preinstall" directory target.
+Wall/preinstall:
+
+.PHONY : Wall/preinstall
+
+# Recursive "clean" directory target.
+Wall/clean: Wall/CMakeFiles/_catkin_empty_exported_target.dir/clean
+
+.PHONY : Wall/clean
 
 #=============================================================================
 # Directory level rules for directory gtest
@@ -149,7 +170,7 @@ pioneer2dx_test/preinstall:
 .PHONY : pioneer2dx_test/preinstall
 
 # Recursive "clean" directory target.
-pioneer2dx_test/clean: pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/clean
+pioneer2dx_test/clean:
 
 .PHONY : pioneer2dx_test/clean
 
@@ -416,31 +437,31 @@ gtest/googletest/CMakeFiles/gtest.dir/clean:
 .PHONY : gtest/googletest/CMakeFiles/gtest.dir/clean
 
 #=============================================================================
-# Target rules for target pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir
+# Target rules for target Wall/CMakeFiles/_catkin_empty_exported_target.dir
 
 # All Build rule for target.
-pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/all:
-	$(MAKE) -f pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/build.make pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/depend
-	$(MAKE) -f pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/build.make pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/build
+Wall/CMakeFiles/_catkin_empty_exported_target.dir/all:
+	$(MAKE) -f Wall/CMakeFiles/_catkin_empty_exported_target.dir/build.make Wall/CMakeFiles/_catkin_empty_exported_target.dir/depend
+	$(MAKE) -f Wall/CMakeFiles/_catkin_empty_exported_target.dir/build.make Wall/CMakeFiles/_catkin_empty_exported_target.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/CMakeFiles --progress-num= "Built target _catkin_empty_exported_target"
-.PHONY : pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/all
+.PHONY : Wall/CMakeFiles/_catkin_empty_exported_target.dir/all
 
 # Build rule for subdir invocation for target.
-pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/rule: cmake_check_build_system
+Wall/CMakeFiles/_catkin_empty_exported_target.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 Wall/CMakeFiles/_catkin_empty_exported_target.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/CMakeFiles 0
-.PHONY : pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/rule
+.PHONY : Wall/CMakeFiles/_catkin_empty_exported_target.dir/rule
 
 # Convenience name for target.
-_catkin_empty_exported_target: pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/rule
+_catkin_empty_exported_target: Wall/CMakeFiles/_catkin_empty_exported_target.dir/rule
 
 .PHONY : _catkin_empty_exported_target
 
 # clean rule for target.
-pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/clean:
-	$(MAKE) -f pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/build.make pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/clean
-.PHONY : pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir/clean
+Wall/CMakeFiles/_catkin_empty_exported_target.dir/clean:
+	$(MAKE) -f Wall/CMakeFiles/_catkin_empty_exported_target.dir/build.make Wall/CMakeFiles/_catkin_empty_exported_target.dir/clean
+.PHONY : Wall/CMakeFiles/_catkin_empty_exported_target.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

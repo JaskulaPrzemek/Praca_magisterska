@@ -1,2 +1,2 @@
-pioneer2dx_test:simulation_gazebo
+Wall:pioneer2dx_test:simulation_gazebo
 -DCATKIN_DEVEL_PREFIX=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/install -G Unix Makefiles

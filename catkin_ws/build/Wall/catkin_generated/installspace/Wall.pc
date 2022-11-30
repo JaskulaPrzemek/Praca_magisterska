@@ -1,7 +1,7 @@
 prefix=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/install
 
-Name: pioneer2dx
-Description: Description of pioneer2dx
+Name: Wall
+Description: Description of Wall
 Version: 0.0.0
 Cflags: 
 Libs: -L${prefix}/lib 

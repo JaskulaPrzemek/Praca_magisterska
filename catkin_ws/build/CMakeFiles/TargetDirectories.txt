@@ -35,6 +35,14 @@
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/gtest/googletest/CMakeFiles/test.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/gtest/googletest/CMakeFiles/gtest_main.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/gtest/googletest/CMakeFiles/gtest.dir
+/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/CMakeFiles/install/strip.dir
+/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/CMakeFiles/install/local.dir
+/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/CMakeFiles/install.dir
+/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/CMakeFiles/list_install_components.dir
+/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/CMakeFiles/rebuild_cache.dir
+/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/CMakeFiles/edit_cache.dir
+/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/CMakeFiles/test.dir
+/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/Wall/CMakeFiles/_catkin_empty_exported_target.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test/CMakeFiles/install/strip.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test/CMakeFiles/install/local.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test/CMakeFiles/install.dir
@@ -42,7 +50,6 @@
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test/CMakeFiles/rebuild_cache.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test/CMakeFiles/edit_cache.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test/CMakeFiles/test.dir
-/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/pioneer2dx_test/CMakeFiles/_catkin_empty_exported_target.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/simulation_gazebo/CMakeFiles/install/strip.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/simulation_gazebo/CMakeFiles/install/local.dir
 /home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/build/simulation_gazebo/CMakeFiles/install.dir
