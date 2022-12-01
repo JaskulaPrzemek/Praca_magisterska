@@ -222,8 +222,8 @@
         </inertia>
       </inertial>
       <sensor type="ray" name="sonar">
-	<pose>0.25 0 0 0 0 0</pose>
-	<visualize>true</visualize>
+	<pose>0 0 0 0 0 0</pose>
+	<visualize>false</visualize>
 	<update_rate>5</update_rate>
 	<ray>
 	<scan>
@@ -236,7 +236,7 @@
 	<vertical>
 		<samples>10</samples>
 		<resolution>1</resolution>
-		<min_angle>-0.1</min_angle>
+		<min_angle>-0</min_angle>
 		<max_angle>0.4</max_angle>
 	</vertical>
 	</scan>

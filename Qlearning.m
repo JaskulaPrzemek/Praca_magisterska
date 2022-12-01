@@ -1,6 +1,6 @@
-function [Steps]=Qlearning(MapNR,isFPA,Egreedy,Render)
+function [Steps]=Qlearning(MapNR,isFPA,Egreedy,Render,Gazebo)
 %PossibleActions=[1,2,3,4];
-Map=CreateMap(MapNR);
+Map=CreateMap(MapNR,Gazebo);
 
 if Render
 ViewMap(Map);

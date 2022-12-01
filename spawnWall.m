@@ -1,18 +1,14 @@
-function spawnWall()
+function spawnWall(x1,y1,x2,y2)
 try
     rosnode list;
 catch exp   % Error from rosnode list
-    rosinit  % only if error: rosinit
+    rosinit;  % only if error: rosinit
 end
-x1=-3;
-x2=-5;
-y1=-7;
-y2=-8;
 midx=(x1+x2)/2;
 midy=(y1+y2)/2;
 lenght=sqrt((x1-x2)^2 +(y1-y2)^2);
-if (x2-x1)=0
-angle=90;
+if (x2-x1)==0
+angle=pi/2;
 else
 angle=atan((y2-y1)/(x2-x1));
 end
@@ -62,7 +58,7 @@ s = writeToString(matlab.io.xml.dom.DOMWriter, buildModel.ModelObj);
             
             serviceMsg.ModelName = modName;
           orientation = [1 0 0 0];
-            position = [0 0 0.1]; 
+            position = [0 0 0]; 
        pose = rosmessage('geometry_msgs/Pose','DataFormat','struct');
             point = pose.Position;
             point.X = position(1);

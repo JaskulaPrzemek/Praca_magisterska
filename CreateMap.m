@@ -1,4 +1,4 @@
-function [Map]=CreateMap(type)
+function [Map]=CreateMap(type,Gazebo)
 switch type
 case -1 %empty Map
     Map.Size= [20,20];
@@ -68,6 +68,30 @@ for i=1:Map(1).Size(1)
                 break;
             end
        end
+    end
+end
+if Gazebo
+    if isfield(Map,"Obstacles")
+    ObstaclesNR=size({Map.Obstacles},2);
+        for i=1:ObstaclesNR
+            if(size(Map(i).Obstacles)==[1,3])
+            n=100;
+            xc=Map(i).Obstacles(1);
+            yc=Map(i).Obstacles(2);
+            r=Map(i).Obstacles(3);
+            theta = (0:n-1)*(2*pi/n);
+            x = xc + r*cos(theta);
+            y = yc + r*sin(theta);
+
+            else
+                nrWalls=length(Map(i).Obstacles);
+                for j=1:nrWalls-1
+                    spawnWall(Map(i).Obstacles(j,1),Map(i).Obstacles(j,2),Map(i).Obstacles(j+1,1),Map(i).Obstacles(j+1,2));
+                    pause(0.1);
+                end
+                spawnWall(Map(i).Obstacles(end,1),Map(i).Obstacles(end,2),Map(i).Obstacles(1,1),Map(i).Obstacles(1,2));
+            end
+        end
     end
 end
 Map(1).Cmap(Map(1).StartingPoint(1),Map(1).StartingPoint(2))=1;
