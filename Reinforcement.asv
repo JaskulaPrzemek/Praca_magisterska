@@ -12,10 +12,6 @@ r=0;
             s(2)=s(2)+1;
            
     end
-if Gazebo
-[r,s1]=goToPoint(s,Map(1).Target);
-return
-end
     if s(1)<=0 ||s(1)>20 || s(2)<=0 ||s(2)>20
         r=-1;
         return;
@@ -34,5 +30,6 @@ if s==Map(1).Target
 end
 
 s1=s;
+%r=0.05;
 
 end

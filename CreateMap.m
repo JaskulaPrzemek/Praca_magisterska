@@ -75,14 +75,18 @@ if Gazebo
     ObstaclesNR=size({Map.Obstacles},2);
         for i=1:ObstaclesNR
             if(size(Map(i).Obstacles)==[1,3])
-            n=100;
-            xc=Map(i).Obstacles(1);
-            yc=Map(i).Obstacles(2);
-            r=Map(i).Obstacles(3);
-            theta = (0:n-1)*(2*pi/n);
-            x = xc + r*cos(theta);
-            y = yc + r*sin(theta);
-
+                n=100;
+                xc=Map(i).Obstacles(1);
+                yc=Map(i).Obstacles(2);
+                r=Map(i).Obstacles(3);
+                theta = (0:n-1)*(2*pi/n);
+                x = xc + r*cos(theta);
+                y = yc + r*sin(theta);
+                for j=1:n-1
+                    spawnWall(x(j),y(j),x(j+1),y(j+1));
+                    pause(0.1);
+                end
+                spawnWall(x(end),y(end),x(1),y(1));
             else
                 nrWalls=length(Map(i).Obstacles);
                 for j=1:nrWalls-1
