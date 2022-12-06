@@ -18,7 +18,7 @@ for i=1:100
 while(State(1) ~= Map(1).Target(1)||State(2) ~= Map(1).Target(2))
     
    a=NextAction(State,Qmatrix,Map,Egreedy);
-   [r,Sp]=Reinforcement(State,a,Map);
+   [r,Sp]=Reinforcement(State,a,Map,0);
    Qmatrix=Update(State,Sp,a,r,Qmatrix);
    State=Sp;
    step=step+1;

@@ -1,7 +1,7 @@
 timerVal=tic;
 %filename=fullfile(pwd,"catkin_ws/start.bash");
 %system(filename)
-steps1=Qlearning(2,0,-0.01,1,1);
+steps1=Qlearning(1,0,-0.01,1,1);
 time1=toc(timerVal)
 figure(2);
 timerVal=tic;
