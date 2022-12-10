@@ -9,8 +9,18 @@ function [Map]=RandomMap()
         for j=1:NrOfVertices
             flag=false;
             while ~flag
-                x=randi([1,20]);
-                y=randi([1,20]);
+                x=randi([1,19]);
+                y=randi([1,19]);
+                if(x<20&&y<20&&Map(1).Cmap(x+1,y+1)==-1)
+                    continue;
+                end
+                if(x<20&&Map(1).Cmap(x+1,y)==-1||y<20&&Map(1).Cmap(x,y+1)==-1)
+                    continue;
+                end
+                if (x>2)
+                    if(y>2)
+                    end
+                end
                 if(isequal([x,y],Map.StartingPoint) || isequal([x,y],Map.Target)||Map(1).Cmap(x,y)==-1)
                     continue;
                 else
@@ -24,7 +34,7 @@ function [Map]=RandomMap()
                          continue;
                         end
                         if(y>Map(i).Obstacles(j-1,2)+2||y<Map(i).Obstacles(j-1,2)-2)
-                         continue;
+                         continue;Map(1).Cmap(x,y)==-1
                         end
                         Map(i).Obstacles(j,1)=x;
                         Map(i).Obstacles(j,2)=y;
@@ -46,3 +56,4 @@ function [Map]=RandomMap()
     end
     ViewMap(Map);
     end
+ 
