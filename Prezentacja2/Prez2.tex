@@ -21,27 +21,13 @@
 \begin{frame}
 \tableofcontents
 \end{frame}
-\section{Reinforcement learning}
+\section{Przypomnienie}
 \begin{frame}
 	\sectionpage
-
 \end{frame}
+\subsection{Q-learning}
 \begin{frame}
-\centering
-	\includegraphics[width =\textwidth]{Obrazy/RL.jpg}
-\end{frame}
-\section{Q learning}
-\begin{frame}
-	\sectionpage
-
-\end{frame}
-\begin{frame}
-\begin{itemize}
- \item<1-> \Huge{Stan}
- \item<2->\Huge{Akcja}
- \item<3-> \Huge{Agent}
- \item<4-> \Huge{Nagroda i Kara}
-\end{itemize}
+	\subsectionpage
 \end{frame}
 \begin{frame}
 	\centering
@@ -53,46 +39,14 @@
 	&\alpha \text{: Współczynnik nauki}\\
 	& \gamma \text{: Współczynnik dyskontowy}
 	\end{align*}
-
-
 \end{frame}
-
 \begin{frame}
 \includegraphics[width =\textwidth]{Obrazy/Pseudo.jpg}
 \end{frame}
-\section{Problemy związane z Q learningiem}
+\subsection{FPA}
 \begin{frame}
-	\sectionpage
-
+	\subsectionpage
 \end{frame}
-\begin{frame}
-\centering
-\Huge
-\begin{enumerate}
-  \item<1->
-        Złożoność obliczeniowa wraz z wzrostem przestrzeni poszukiwań
-        \vspace{10pt}
-
-  \item<2->
-      Początkowy etap eksploracji
-
- \end{enumerate}
-\end{frame}
-\section{Co to jest FPA}
-\begin{frame}
-	\sectionpage
-
-\end{frame}
-
-\begin{frame}
-\begin{itemize}
- \item<1-> Zapylanie globalne zawiera zapylanie biotyczne i krzyżowe, a zapylacze używają dystrybucji Levy-iego przy przenoszeniu pyłków.
- \item<2-> Zapylanie lokalne będące abiotyczne i samozapylające.
- \item<3-> Szansa na reprodukcję zależy od tego jak dwa kwiaty są podobne.
- \item<4-> Prawdopodobieństwo zmiany decyduje między zapylaniem lokalnym a globalnym.
-\end{itemize}
-\end{frame}
-
 \begin{frame}
 	\centering
 	\begin{align*}
@@ -124,24 +78,64 @@
 \begin{frame}
 \includegraphics[width =\textwidth,height=\textheight]{Obrazy/Pseudo3.jpg}
 \end{frame}
-
-\section{FPA jako lepsze zainicjiowanie macierzy Q}
+\section{Wyniki}
 \begin{frame}
 	\sectionpage
+\end{frame}
+\subsection{Algorytmy w Matlabie}
+\begin{frame}
+	\subsectionpage
+\end{frame}
+\begin{frame}
+Zdjęcia dróg dla Classic i FPA
+\end{frame}
+
+\begin{frame}
+Zdjęcia kroków dla Classic i FPA
+\end{frame}
+
+\subsection{Wyniki w Ros-Gazebo}
+\begin{frame}
+	\subsectionpage
+\end{frame}
+
+\begin{frame}
+Zdjęcia dróg dla Classic i FPA
+\end{frame}
+
+\begin{frame}
+Zdjęcia kroków dla Classic i FPA
+\end{frame}
+
+\begin{frame}
+Filmik pokazujący przejazd/ naukę
+\end{frame}
+
+\section{Napotkane problemy}
+\begin{frame}
+	\sectionpage
+\end{frame}
+
+\begin{frame}
+Blokady w minimach lokalnych( taniec w miejscu)
+
+Powrót do miejsca po przeszkodzie
+
+Czas obliczeń
 
 \end{frame}
+
+\section{Następne kroki}
 \begin{frame}
-\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Test2.jpg}
+	\sectionpage
 \end{frame}
+
 \begin{frame}
-\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Test1.jpg}
+Dunno yet
+
+Zaimplementowanie mapy losowej?
 \end{frame}
-\begin{frame}
-\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Test3.jpg}
-\end{frame}
-\begin{frame}
-\includegraphics[width =\textwidth,height=\textheight]{Obrazy/Test4.jpg}
-\end{frame}
+
 \section{Q \& A}
 \begin{frame}
 	\sectionpage

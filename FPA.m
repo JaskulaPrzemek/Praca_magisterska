@@ -81,8 +81,14 @@ function [z] = levy(m,beta)
 end
 function [MaxQ,Qmatrix]=fitness(State,Qmatrix,Map,Gazebo)
     for i=1:4
+    if Gazebo
+    spawnPioneer(State(1),State(2));
+    end
         [r,Sp]=Reinforcement(State,i,Map,Gazebo);
         Qmatrix=Update(State,Sp,i,r,Qmatrix);
+    if Gazebo
+    deleteModel("pioneer2dx");
+    end
     end
     MaxQ=max(Qmatrix(State(1)+(State(2)-1)*20,:));
 end
