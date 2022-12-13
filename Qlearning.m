@@ -1,12 +1,19 @@
 function [Steps]=Qlearning(MapNR,isFPA,Egreedy,Render,Gazebo)
 %PossibleActions=[1,2,3,4];
+if(Gazebo)
+    try
+        rosnode list;
+    catch exp   % Error from rosnode list
+        rosinit;  % only if error: rosinit
+    end
+end
 Map=CreateMap(MapNR,Gazebo);
 
 if Render
 ViewMap(Map);
 end
 if(isFPA)
-Qmatrix=FPA(Map,0.5);
+Qmatrix=FPA(Map,0.5,Gazebo);
 else
   Qmatrix=zeros(Map(1).Size(1)*Map(1).Size(2),4);  
 end
@@ -14,24 +21,27 @@ Steps=zeros(1,100);
 for i=1:100
     State=Map.StartingPoint;
     step=0;
-
+    spawnPioneer(State(1),State(2))
 while(State(1) ~= Map(1).Target(1)||State(2) ~= Map(1).Target(2))
     
    a=NextAction(State,Qmatrix,Map,Egreedy);
-   [r,Sp]=Reinforcement(State,a,Map,0);
+   [r,Sp]=Reinforcement(State,a,Map,Gazebo);
    Qmatrix=Update(State,Sp,a,r,Qmatrix);
    State=Sp;
    step=step+1;
     %Path(step).step=State;
-    end
+end
+if ismember("pioneer2dx",getSpawnedModels())
+    deleteModel("pioneer2dx");
+end
 Steps(i)=step;
 end
 if Render
 WritePath(Qmatrix,Map);
 end
-%if Gazebo
+if Gazebo
 GazeboRun(Qmatrix,Map)
-%end    
+end    
 end
 function [a]=NextAction(s,Qmatrix,Map,Egreedy)
    e=rand();

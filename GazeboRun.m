@@ -16,7 +16,7 @@ vel = rospublisher("/pioneer2dx/cmd_vel","geometry_msgs/Twist","DataFormat","str
 while (s(1) ~= map(1).Target(1) || s(2) ~= map(1).Target(2))
 temp=s(1)+(s(2)-1)*20;
 
-[~,a]=max(Qmatrix(temp,:))
+[~,a]=max(Qmatrix(temp,:));
 switch(a)
         case 1
             s(1)=s(1)-1;
@@ -50,7 +50,7 @@ theta = rad2deg(angles(1));
 end
 function setDirection(velPub,odomSub,command)
 twist = rosmessage(velPub);
-theta=getTheta(odomSub)
+theta=getTheta(odomSub);
 switch command
     case 2
         while theta<-0.2 || theta >0.2
@@ -118,85 +118,4 @@ while x>(xbeg-1)&& x<(xbeg+1) && y>(ybeg-1) && y<(ybeg+1)
 end
 twist.Linear.X=0;
 send(velPub,twist);
-end
-
-function deleteModel(modName)
-            obj.RemoveModClient = rossvcclient('gazebo/delete_model','DataFormat','struct');
-            serviceMsg = rosmessage(obj.RemoveModClient);
-            serviceMsg.ModelName = convertStringsToChars(modName);
-            msg = call(obj.RemoveModClient,serviceMsg);
-            if ~msg.Success
-                error('Service call to remove model failed')
-            end
-end
-function spawnPioneer(x,y)
-    obj.SpawnClient = rossvcclient('gazebo/spawn_sdf_model','DataFormat','struct');
-    serviceMsg = rosmessage(obj.SpawnClient);
-    buildModel.ModelObj = parseFile(matlab.io.xml.dom.Parser, '/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/src/pioneer2dx_test/model.sdf');
-    s = writeToString(matlab.io.xml.dom.DOMWriter, buildModel.ModelObj);
-    serviceMsg.ModelXml = s;
-
-        model = buildModel.ModelObj.getElementsByTagName('model');
-        modName = char(model.item(0).getAttribute('name'));
-                
-            
-            list = getSpawnedModels();
-            
-            try
-                if isequal(class(list{2}),'double')
-                    list(2) = [];
-                end
-            catch
-            end
-            
-            objnum = 0;
-            Name = modName;
-            while(1)
-                
-                
-                ind = find(ismember(list,modName));
-                
-                if (ind)
-                    modName = [Name '_' num2str(objnum)];
-                    objnum = objnum+1;
-                else
-                    break
-                end
-            end
-            
-            serviceMsg.ModelName = modName;
-            
-            % Default values for position and orientation
-            orientation = [1 0 0 0];
-            position = [x y 0.1]; 
-       pose = rosmessage('geometry_msgs/Pose','DataFormat','struct');
-            point = pose.Position;
-            point.X = position(1);
-            point.Y = position(2);
-            point.Z = position(3);
-            
-            orient = pose.Orientation;
-            
-            orient.W = orientation(1);
-            orient.X = orientation(2);
-            orient.Y = orientation(3);
-            orient.Z = orientation(4);
-            
-            pose.Position = point;
-            pose.Orientation = orient;
-            
-            serviceMsg.InitialPose = pose;
-            
-            % Set reference frame for spawn to absolute coordinates
-            serviceMsg.ReferenceFrame = 'world';
-            
-            msg = call(obj.SpawnClient, serviceMsg);
-            
-end
-
-function out=getSpawnedModels()
-    obj.ModelListClient = rossvcclient('gazebo/get_world_properties','DataFormat','struct');
-     serviceMsg = rosmessage(obj.ModelListClient);
-     msg = call(obj.ModelListClient, serviceMsg);     
-       out = msg.ModelNames;
 end

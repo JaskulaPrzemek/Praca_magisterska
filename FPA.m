@@ -1,4 +1,4 @@
-function [Qmatrix]=FPA(map,p)
+function [Qmatrix]=FPA(map,p,Gazebo)
 gamma=0.5;
 Iterations=1000;
 population=initialpopulation(map);
@@ -9,7 +9,7 @@ Fittnes=zeros(1,PopSize);
 BestFitness=0;
 for j=1:Iterations
     for i=1:PopSize
-    [Fittnes(i),Qmatrix]=fitness(population(i,:),Qmatrix,map);
+    [Fittnes(i),Qmatrix]=fitness(population(i,:),Qmatrix,map,Gazebo);
     end
     [tmpBest,I]=max(Fittnes);
     if(tmpBest>=BestFitness)
@@ -79,9 +79,9 @@ function [z] = levy(m,beta)
 
     z = u./(abs(v).^(1/beta));
 end
-function [MaxQ,Qmatrix]=fitness(State,Qmatrix,Map)
+function [MaxQ,Qmatrix]=fitness(State,Qmatrix,Map,Gazebo)
     for i=1:4
-        [r,Sp]=Reinforcement(State,i,Map);
+        [r,Sp]=Reinforcement(State,i,Map,Gazebo);
         Qmatrix=Update(State,Sp,i,r,Qmatrix);
     end
     MaxQ=max(Qmatrix(State(1)+(State(2)-1)*20,:));

@@ -1,9 +1,4 @@
 function spawnWall(x1,y1,x2,y2)
-try
-    rosnode list;
-catch exp   % Error from rosnode list
-    rosinit;  % only if error: rosinit
-end
 midx=(x1+x2)/2;
 midy=(y1+y2)/2;
 lenght=sqrt((x1-x2)^2 +(y1-y2)^2);

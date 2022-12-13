@@ -43,7 +43,7 @@ if isfield(Map,"Obstacles")
 ObstaclesNR=size({Map.Obstacles},2);
 for i=1:ObstaclesNR
     if(size(Map(i).Obstacles)==[1,3])
-        n=100;
+        n=30;
         xc=Map(i).Obstacles(1);
         yc=Map(i).Obstacles(2);
         r=Map(i).Obstacles(3);
@@ -70,12 +70,13 @@ for i=1:Map(1).Size(1)
        end
     end
 end
+Gazebo=~Gazebo
 if Gazebo
     if isfield(Map,"Obstacles")
     ObstaclesNR=size({Map.Obstacles},2);
         for i=1:ObstaclesNR
             if(size(Map(i).Obstacles)==[1,3])
-                n=100;
+                n=30;
                 xc=Map(i).Obstacles(1);
                 yc=Map(i).Obstacles(2);
                 r=Map(i).Obstacles(3);

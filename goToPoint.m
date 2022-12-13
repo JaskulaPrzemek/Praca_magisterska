@@ -5,11 +5,13 @@ sensorSub=rossubscriber("/sonar","DataFormat","struct");
 startpoint=zeros(1,2);
 setDirection(vel,odomSub,targetPoint)
 [~,startpoint(1),startpoint(2)]=getOdom(odomSub);
+startpoint=round(startpoint);
 sensorMsg=receive(sensorSub,3);
 flag=0;
 twist = rosmessage(vel);
-while(sensorMsg.Range_>0.1)
+while(sensorMsg.Range_>0.30)
     sensorMsg=receive(sensorSub,3);
+    sensorMsg.Range_
     [theta,x,y]=getOdom(odomSub);
     distance=sqrt((x-targetPoint(1))^2+(y-targetPoint(2))^2);
     if distance<0.1
@@ -19,18 +21,13 @@ while(sensorMsg.Range_>0.1)
         send(vel,twist);
         break;
     end
-    if (targetPoint(1)-x)==0
-        if(y>targetPoint(2))
-        targetAngle=-90;
-        else
-        targetAngle=90;  
-        end
-    else
-        targetAngle=rad2deg(atan((targetPoint(2)-y)/(targetPoint(1)-x)));
-        if(x>targetPoint(1))
-            targetAngle=targetAngle+180;
-        end
+    targetAngle=rad2deg(atan2((targetPoint(2)-y),(targetPoint(1)-x)));
+    if theta>175 && targetAngle<-175
+        targetAngle=targetAngle+360;
     end
+        if theta<-175 && targetAngle>175
+        targetAngle=targetAngle-360;
+        end
     twist.Angular.Z=(targetAngle-theta)/90;
     if distance<0.1
     twist.Linear.X=0.05;
@@ -51,28 +48,38 @@ if ~flag
     distance=sqrt((x-startpoint(1))^2+(y-startpoint(2))^2);
     twist.Angular.Z=0;
     while distance>0.05
-        [theta,x,y]=getOdom(odomSub);
+        [theta,x,y]=getOdom(odomSub)
         distance=sqrt((x-startpoint(1))^2+(y-startpoint(2))^2);
-        targetAngle=rad2deg(atan((startpoint(2)-y)/(startpoint(1)-x)));
-        if(x>targetPoint(1))
+        targetAngle=rad2deg(atan2((startpoint(2)-y),(startpoint(1)-x)))
+
+        if targetAngle<0
             targetAngle=targetAngle+180;
+        else
+            if(targetAngle>0)
+            targetAngle=targetAngle-180;
+            end
         end
-        %targetAngle=targetAngle+180;
-        twist.Angular.Z=(targetAngle-theta)/180;
+        if theta>175 && targetAngle<-175
+        targetAngle=targetAngle+360;
+         end
+        if theta<-175 && targetAngle>175
+        targetAngle=targetAngle-360;
+        end
+        twist.Angular.Z=(targetAngle-theta)/90;
         twist.Linear.X=-0.1;
         send(vel,twist)
     end
 twist.Angular.Z=0;
 twist.Linear.X=0;
 send(vel,twist);
-r=-1;
+r=-1
 s1=startpoint;
 else
     if targetPoint==mapTarget
         s1=targetPoint;
         r=2;
     else
-        r=0;
+        r=0
         s1=targetPoint;
     end
 end
@@ -92,18 +99,7 @@ twist = rosmessage(velPub);
 [theta,x,y]=getOdom(odomSub);
 distance=sqrt((x-point(1))^2+(y-point(2))^2);
 if distance >0.05
-    if (point(2)-y)==0
-        if(y>point(2))
-        targetAngle=-90;
-        else
-        targetAngle=90;  
-        end
-    else
-    targetAngle=rad2deg(atan((point(2)-y)/(point(1)-x)));
-    if(x>point(1))
-    targetAngle=targetAngle+180;
-    end
-    end
+    targetAngle=rad2deg(atan2((point(2)-y),(point(1)-x)));
 else
     targetAngle=theta;
 end
