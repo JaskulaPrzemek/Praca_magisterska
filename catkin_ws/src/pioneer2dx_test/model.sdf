@@ -174,7 +174,7 @@
     </joint>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
         <alwaysOn>true</alwaysOn>
-        <updateRate>100000</updateRate>
+        <updateRate>100</updateRate>
         <leftJoint>left_wheel_hinge</leftJoint>
         <rightJoint>right_wheel_hinge</rightJoint>
         <wheelSeparation>0.39</wheelSeparation>
@@ -224,7 +224,7 @@
       <sensor type="ray" name="sonar">
 	<pose>0 0 0 0 0 0</pose>
 	<visualize>false</visualize>
-	<update_rate>100</update_rate>
+	<update_rate>10</update_rate>
 	<ray>
 	<scan>
 	<horizontal>
@@ -249,7 +249,7 @@
 	<plugin filename="libgazebo_ros_range.so" name="gazebo_ros_range">
 	<gaussianNoise>0.005</gaussianNoise>
 		<alwaysOn>true</alwaysOn>
-		<updateRate>100</updateRate>
+		<updateRate>10</updateRate>
 		<topicName>sonar</topicName>
 		<frameName>base_sonar_front</frameName>
 		<fov>0.5</fov>
