@@ -1,0 +1,11 @@
+Carlos Núñez-Molina, Juan Fernández-Olivares, Raúl Pérez,
+Learning to select goals in Automated Planning with Deep-Q Learning,
+Expert Systems with Applications,
+Volume 202,
+2022,
+117265,
+ISSN 0957-4174,
+https://doi.org/10.1016/j.eswa.2022.117265.
+(https://www.sciencedirect.com/science/article/pii/S0957417422006376)
+Abstract: In this work we propose a planning and acting architecture endowed with a module which learns to select subgoals with Deep Q-Learning. This allows us to decrease the load of a planner when faced with scenarios with real-time restrictions. We have trained this architecture on a video game environment used as a standard test-bed for intelligent systems applications, testing it on different levels of the same game to evaluate its generalization abilities. We have measured the performance of our approach as more training data is made available, as well as compared it with both a state-of-the-art, classical planner and the standard Deep Q-Learning algorithm. The results obtained show our model performs better than the alternative methods considered, when both plan quality (plan length) and time requirements are taken into account. On the one hand, it is more sample-efficient than standard Deep Q-Learning, and it is able to generalize better across levels. On the other hand, it reduces problem-solving time when compared with a state-of-the-art automated planner, at the expense of obtaining plans with only 9% more actions.
+Keywords: Automated Planning; Goal selection; Deep Q-Learning
