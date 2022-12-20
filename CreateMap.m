@@ -1,4 +1,11 @@
 function [Map]=CreateMap(type,Gazebo)
+if(Gazebo)
+    try
+        rosnode list;
+    catch exp   % Error from rosnode list
+        rosinit;  % only if error: rosinit
+    end
+end
 switch type
 case -1 %empty Map
     Map.Size= [20,20];
@@ -70,7 +77,7 @@ for i=1:Map(1).Size(1)
        end
     end
 end
-Gazebo=~Gazebo
+%Gazebo=~Gazebo
 if Gazebo
     if isfield(Map,"Obstacles")
     ObstaclesNR=size({Map.Obstacles},2);

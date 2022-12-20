@@ -1,7 +1,7 @@
 function [r,s1]=goToPoint(targetPoint,mapTarget)
-odomSub = rossubscriber("/pioneer2dx/odom","DataFormat","struct");
-vel = rospublisher("/pioneer2dx/cmd_vel","geometry_msgs/Twist","DataFormat","struct");
-sensorSub=rossubscriber("/sonar","DataFormat","struct");
+   global odomSub;
+    global vel;
+global sensorSub;
 startpoint=zeros(1,2);
 setDirection(vel,odomSub,targetPoint)
 [~,startpoint(1),startpoint(2)]=getOdom(odomSub);
@@ -11,7 +11,6 @@ flag=0;
 twist = rosmessage(vel);
 while(sensorMsg.Range_>0.30)
     sensorMsg=receive(sensorSub,3);
-    sensorMsg.Range_
     [theta,x,y]=getOdom(odomSub);
     distance=sqrt((x-targetPoint(1))^2+(y-targetPoint(2))^2);
     if distance<0.1
@@ -32,8 +31,8 @@ while(sensorMsg.Range_>0.30)
     if distance<0.1
     twist.Linear.X=0.05;
     else
-        if distance>0.4
-            twist.Linear.X=0.4;
+        if distance>0.15
+            twist.Linear.X=0.15;
         else
             twist.Linear.X=distance;
         end
@@ -44,13 +43,13 @@ twist.Angular.Z=0;
 twist.Linear.X=0;
 send(vel,twist);
 if ~flag
-    [theta,x,y]=getOdom(odomSub);
+    [~,x,y]=getOdom(odomSub);
     distance=sqrt((x-startpoint(1))^2+(y-startpoint(2))^2);
     twist.Angular.Z=0;
     while distance>0.05
-        [theta,x,y]=getOdom(odomSub)
+        [theta,x,y]=getOdom(odomSub);
         distance=sqrt((x-startpoint(1))^2+(y-startpoint(2))^2);
-        targetAngle=rad2deg(atan2((startpoint(2)-y),(startpoint(1)-x)))
+        targetAngle=rad2deg(atan2((startpoint(2)-y),(startpoint(1)-x)));
 
         if targetAngle<0
             targetAngle=targetAngle+180;
@@ -72,14 +71,14 @@ if ~flag
 twist.Angular.Z=0;
 twist.Linear.X=0;
 send(vel,twist);
-r=-1
+r=-1;
 s1=startpoint;
 else
     if targetPoint==mapTarget
         s1=targetPoint;
         r=2;
     else
-        r=0
+        r=0;
         s1=targetPoint;
     end
 end
@@ -106,9 +105,9 @@ end
         while theta<targetAngle-0.2 || theta >targetAngle+0.2
         [theta,~,~]=getOdom(odomSub);
         if theta> targetAngle+0.2
-        twist.Angular.Z=-0.3;
+        twist.Angular.Z=-0.05;
         else
-        twist.Angular.Z=0.3;
+        twist.Angular.Z=0.05;
         end
         send(velPub,twist);
         end

@@ -1,4 +1,4 @@
-function [Steps]=Qlearning(MapNR,isFPA,Egreedy,Render,Gazebo)
+function [Steps]=Qlearning(Map,isFPA,Egreedy,Render,Gazebo)
 %PossibleActions=[1,2,3,4];
 if(Gazebo)
     try
@@ -6,8 +6,13 @@ if(Gazebo)
     catch exp   % Error from rosnode list
         rosinit;  % only if error: rosinit
     end
+    global odomSub;
+    odomSub = rossubscriber("/pioneer2dx/odom","nav_msgs/Odometry");
+    global vel;
+vel = rospublisher("/pioneer2dx/cmd_vel","geometry_msgs/Twist","DataFormat","struct");
+global sensorSub;
+sensorSub=rossubscriber("/sonar","sensor_msgs/Range");
 end
-Map=CreateMap(MapNR,Gazebo);
 
 if Render
 ViewMap(Map);
@@ -21,7 +26,9 @@ Steps=zeros(1,100);
 for i=1:100
     State=Map.StartingPoint;
     step=0;
+    if(Gazebo)
     spawnPioneer(State(1),State(2))
+    end
 while(State(1) ~= Map(1).Target(1)||State(2) ~= Map(1).Target(2))
     
    a=NextAction(State,Qmatrix,Map,Egreedy);
@@ -31,8 +38,10 @@ while(State(1) ~= Map(1).Target(1)||State(2) ~= Map(1).Target(2))
    step=step+1;
     %Path(step).step=State;
 end
-if ismember("pioneer2dx",getSpawnedModels())
-    deleteModel("pioneer2dx");
+if Gazebo
+    if ismember("pioneer2dx",getSpawnedModels())
+        deleteModel("pioneer2dx");
+    end
 end
 Steps(i)=step;
 end
