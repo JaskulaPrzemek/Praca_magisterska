@@ -12,14 +12,14 @@ class Map:
         self.obstacles=[]
         if type == -1:
             self.startingPoint=(2,16)
-            self.target=(2,16)
+            self.target=(19,16)
         if type == 0:
             self.startingPoint=(2,16)
-            self.target=(2,16)
+            self.target=(19,16)
             self.obstacles.append([(10,16,2)])
         if type == 1:
             self.startingPoint=(2,16)
-            self.target=(2,16)
+            self.target=(19,11)
             self.obstacles.append([(2,9),(2,12),(4,12),(2,9)])
             self.obstacles.append([(4,6,1)])
             self.obstacles.append([(3,3),(4,2),(6,2),(7,3),(3,3)])
@@ -31,7 +31,7 @@ class Map:
             self.obstacles.append([(13,3),(14,3),(15,2),(16,3),(17,2),(18,4),(17,5),(15,4),(14,5),(13,5),(13,3)])
         if type == 2:
             self.startingPoint=(2,16)
-            self.target=(2,16)
+            self.target=(19,11)
             for i in  range(1,4):
                 for j in range(1,6):
                     x=6+(i-1)*4
@@ -83,6 +83,33 @@ class Map:
         plt.yticks(np.arange(0,self.size[1],2))
         ax.set_axisbelow(True)
         if(show):
+            plt.show()
+        return fig
+    def plotPath(self,Q,show=True,fig=-1):
+        x=[]
+        y=[]
+        if fig ==-1:
+            fig=self.viewMap(False)
+        plt.figure(fig.number)
+        state=self.startingPoint
+        x.append(state[0])
+        y.append(state[1])
+        while state != self.target:
+            temp=state[0]+state[1]*20 -21
+            list_Q =Q[temp].tolist()
+            a= list_Q.index(max(list_Q))
+            if a==0:
+                state=(state[0]-1,state[1])
+            elif a==1:
+                state=(state[0]+1,state[1])
+            elif a==2:
+                state=(state[0],state[1]-1)
+            else:
+                state=(state[0],state[1]+1)
+            x.append(state[0])
+            y.append(state[1])
+        plt.plot(x,y)
+        if show:
             plt.show()
         return fig
     def createGazeboMap(self):

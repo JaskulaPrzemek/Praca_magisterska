@@ -1,16 +1,38 @@
 import math
 import rospy
-
+import matplotlib.pyplot as plt
 import gazeboCommunication as gzlib
 import Mapa as mp
-#spawnWall(1,2,2,1)
-gz=gzlib.GazeboCommunication()
-gz.updateModelList()
-print(gz.modelList)
-gz.spawnPioneer(2,2)
-print(gz.updateModelList())
-Mapa=mp.Map()
-Mapa.createMap(1)
-Mapa.createCMap()
-Mapa.createGazeboMap()
+import Qlearning as Q
+import FPA as f
+def avg(lst):
+    return sum(lst) / len(lst)
+fpa=f.FPA()
+l=Q.Qlearning()
+l.createMap(2)
+l.setEpsilon(0.01)
+times=[]
+for i in range(10):
+    l.learn()
+    times.append(l.time)
+print (avg(times))
+l.setEpsilon(0.01)
+l.setStrategy(fpa)
+for i in range(10):
+    l.learn()
+    times[i]=l.time
+print (avg(times))
+l.createMap(1)
+l.setEpsilon(0.01)
+l.resetStrategy()
+for i in range(10):
+    l.learn()
+    times[i]=l.time
+print (avg(times))
+l.setEpsilon(0.01)
+l.setStrategy(fpa)
+for i in range(10):
+    l.learn()
+    times[i]=l.time   
+print (avg(times)) 
 
