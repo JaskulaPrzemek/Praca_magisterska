@@ -45,6 +45,7 @@ class Qlearning:
     def learn(self):
         start=time.time()
         self.initializeQMatrix()
+        self.Qtime=time.time()-start
         self.steps=[]
         self.a=-1
         self.nextState=()

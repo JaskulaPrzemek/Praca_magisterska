@@ -1,10 +1,10 @@
 
 %filename=fullfile(pwd,"catkin_ws/start.bash");
 %system(filename)
-Gazebo=1;
-%Map=CreateMap(1,Gazebo);
+Gazebo=0
+Map=CreateMap(1,Gazebo);
 timerVal=tic;
-%steps1=Qlearning(Map,0,-0.01,1,Gazebo);
+steps1=Qlearning(Map,0,-0.01,1,Gazebo);
 time1=toc(timerVal)
 figure(2);
 timerVal=tic;
