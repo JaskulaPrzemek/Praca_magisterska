@@ -102,7 +102,7 @@ class Qlearning:
             self.ReinforceSim()
         
     def ReinforceSim(self):
-        if self.a==0:
+    	if self.a==0:
             posNext=(self.state[0]-1,self.state[1])
         elif self.a==1:
             posNext=(self.state[0]+1,self.state[1])
@@ -126,7 +126,19 @@ class Qlearning:
         self.nextState=posNext
 
     def ReinforceGazebo(self):
-        pass
+    	if self.a==0:
+            posNext=(self.state[0]-1,self.state[1])
+        elif self.a==1:
+            posNext=(self.state[0]+1,self.state[1])
+        elif self.a==2:
+            posNext=(self.state[0],self.state[1]-1)
+        else:
+            posNext=(self.state[0],self.state[1]+1)
+        gz=gzlib.GazeboCommunication()
+        [r,posNext]=gz.goToPoint(posNext,self.map.target)
+        self.r=r
+        self.nextState=posNext
+        
     def UpdateQ(self):
         pos=self.state[0]+(self.state[1]-1)*20 -1
         self.Q[pos][self.a]=(1-self.alpha)*self.Q[pos][self.a]+self.alpha*(self.r+self.gamma*max(self.Q[self.nextState[0]+(self.nextState[1]-1)*20 -1]))
