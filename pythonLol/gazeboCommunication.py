@@ -2,6 +2,7 @@
 import numpy as np
 import math
 import rospy
+import angles
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Range
@@ -162,12 +163,12 @@ class GazeboCommunication(metaclass=SingletonMeta):
 		x=self.robot_x - target[0]
 		y=self.robot_y - target[1]
 		dist_to_goal = math.sqrt(x**2 + y**2)
-		error_angle = angels.normalize(angles.shortest_angular_distance(angles.normalize_angle(self.robot_angle), math.atan2(y, x)) -pi)
+		error_angle = angels.normalize_angle(angles.shortest_angular_distance(angles.normalize_angle(self.robot_angle), math.atan2(y, x)) -pi)
 		while abs(dist_to_goal) > 0.05:
 			x=self.robot_x - target[0]
 			y=self.robot_y - target[1]
 			dist_to_goal = math.sqrt(x**2 + y**2)
-			error_angle = angels.normalize(angles.shortest_angular_distance(angles.normalize_angle(self.robot_angle), math.atan2(y, x)) -pi)
+			error_angle = angels.normalize_angle(angles.shortest_angular_distance(angles.normalize_angle(self.robot_angle), math.atan2(y, x)) -pi)
 			self.cmd.angular.z=self.Kp*error_angle
 			self.cmd.linear.x=-self.Kp*dist_to_goal
 			self.publish()
