@@ -37,6 +37,8 @@ class Map:
                     x=6+(i-1)*4
                     y=6+(j-1)*3-(i-1)*2
                     self.obstacles.append([(x,y),(x,y+1),(x+1,y+1),(x+1,y),(x,y)])
+        if type == 3:
+            self.createRandomMap()
     def createRandomMap(self):
         pass
     def createCMap(self):

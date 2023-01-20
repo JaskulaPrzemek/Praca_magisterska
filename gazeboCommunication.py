@@ -26,6 +26,7 @@ class GazeboCommunication(metaclass=SingletonMeta):
 		rospy.Subscriber('/pioneer2dx/odom', Odometry, self.callback_odom)
 		rospy.Subscriber('/sonar', Range, self.callback_range)
 		self.cmd_publisher=rospy.Publisher('/pioneer2dx/cmd_vel', Twist, queue_size=2)
+		self.spawn_model_prox = rospy.ServiceProxy('gazebo/spawn_sdf_model', SpawnModel)
 		self.cmd=Twist()
 		self.modelList=[]
 		self.angMax=0.3
@@ -117,8 +118,7 @@ class GazeboCommunication(metaclass=SingletonMeta):
 		initial_pose.orientation.x = 0
 		initial_pose.orientation.y = 0
 		initial_pose.orientation.z = 0
-		spawn_model_prox = rospy.ServiceProxy('gazebo/spawn_sdf_model', SpawnModel)
-		spawn_model_prox(tname, model.toxml(), '', initial_pose, 'world')
+		self.spawn_model_prox(tname, model.toxml(), '', initial_pose, 'world')
 	def publish(self):
 		if self.cmd.angular.z >self.angMax:
 				self.cmd.angular.z=self.angMax
