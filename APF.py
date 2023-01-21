@@ -14,6 +14,26 @@ class APF(InitializationInterface):
         self.inverseInfuence=1/self.influenceDistance
         self.Umax=0.5
         
+    def setAttractivePot(self):
+        self.attractivePot=True
+    def resetAttractivePot(self):
+        self.attractivePot=False
+    def setRepulsivePot(self):
+        self.repulsivePot=True
+    def resetRepulsivePot(self):
+        self.repulsivePot=False
+    def setAttractScale(self,scale):
+        self.atractScale=scale
+    def setRepulseScale(self,scale):
+        self.repulseScale=scale
+    def setUmax(self,Um):
+        self.Umax=Um
+    def setInfuenceDistance(self,dist):
+        self.influenceDistance=dist
+    def getAttract(self):
+        return self.test
+    def getQMatrix(self):
+        return self.Q
     def initialize(self,map,gazebo):
         self.map=map
         self.size=map.size
@@ -33,39 +53,36 @@ class APF(InitializationInterface):
                 if(self.repulsivePot):
                     aRep=0
                     for obstacle in self.map.obstacles:
-                        if len(obstacle)==1:
-                            distance=self.distance(point,obstacle)
-                        else:
                             midpoint=self.midpoint(obstacle)
                             distance=self.distance(point,midpoint)
-                            
-                        if distance< self.influenceDistance:
+                            if distance< self.influenceDistance:
                                 aRep=aRep+0.5*self.repulseScale*(1/distance-self.inverseInfuence)**2
-                                #print(midpoint)
-                                #print(point)
-                                #print(distance)
-                                #print(aRep)
+                                if(aRep<-1):
+                                    aRep=-1
                 pos=i+j*20 -21
                 U=((self.Umax-aPot-aRep)/self.Umax)
-                self.Q[pos]=aPot+aRep
-                self.test[i][j]=aPot+aRep
-        #plt.xlim([0,self.size[0]])
-        #plt.ylim([0,self.size[1]])
-        #plt.xticks(np.arange(0,self.size[0],2))
-        #plt.yticks(np.arange(0,self.size[1],2))
-        #plt.imshow(self.test)
-        #plt.show()
+                self.Q[pos]=aPot-aRep
+                self.test[j][i]=aPot+aRep
+        self.test[self.test==-1]=min(self.test[self.test>-1])
+        
         print("y")
         return self.Q
 
-                
+    def showAttract(self):
+        
+        plt.imshow(self.test)
+        plt.xlim([0,self.size[0]])
+        plt.ylim([0,self.size[1]])
+        plt.xticks(np.arange(0,self.size[0],2))
+        plt.yticks(np.arange(0,self.size[1],2))
+        plt.show()
     def distance(self,point1,point2):
         diff1 = (point1[0]-point2[0])**2
         diff2 = (point1[1]-point2[1])**2
         return math.sqrt(diff1+diff2)
 
     def midpoint(self,obstacle):
-        #print(obstacle)
+        #could be moved to map and be even faste?
         area=0
         sumx=0
         sumy=0
@@ -76,12 +93,7 @@ class APF(InitializationInterface):
             sumx=sumx+(obs[0]+obs1[0])*diff
             sumy=sumy+(obs[1]+obs1[1])*diff
             area=area+diff
-            #print(obs)
-            #print(obs1)
-            #print(diff)
-        #print(area)
         area=area*3
-        
         x=sumx/area
         y=sumy/area
         return (x,y)
