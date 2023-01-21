@@ -74,6 +74,7 @@ class Qlearning:
                 self.UpdateQ()
                 self.state = self.nextState
                 stepNr += 1
+                #print(self.state)
             self.steps.append(stepNr)
             self.DealWithPioneer()
         self.epsilon = temp_eps

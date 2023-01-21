@@ -1,7 +1,8 @@
 import numpy as np
 import random
 import math
-class FPA():
+from interfaces import InitializationInterface
+class FPA(InitializationInterface):
     def __init__(self):
         self.gamma=0.5
         self.iterations=100
