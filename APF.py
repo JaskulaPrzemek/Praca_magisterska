@@ -65,7 +65,7 @@ class APF(InitializationInterface):
                 self.test[j][i]=aPot+aRep
         self.test[self.test==-1]=min(self.test[self.test>-1])
         
-        print("y")
+        #print("apf")
         return self.Q
 
     def showAttract(self):

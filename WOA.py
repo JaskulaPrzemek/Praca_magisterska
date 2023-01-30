@@ -56,19 +56,26 @@ class WOA(InitializationInterface):
                     nextPopulation[i]=D*math.exp(self.b*l)*math.cos(2*math.pi*l)+G
                     
                 nextPopulation[i]=nextPopulation[i].round().astype(int)
-                nextPopulation[i][nextPopulation[i]>=self.map.size[1]]=self.map.size[1]-1
-                nextPopulation[i][nextPopulation[i]<0]=0
+                if nextPopulation[i][0]<0:
+                    nextPopulation[i][0]=0
+                elif nextPopulation[i][0]>= self.map.size[1]:
+                    nextPopulation[i][0]=20
+                if nextPopulation[i][1]<0:
+                    nextPopulation[i][1]=0
+                elif nextPopulation[i][1]>= self.map.size[1]:
+                    nextPopulation[i][1]=20
+                #nextPopulation[i][nextPopulation[i]>=self.map.size[1]]=self.map.size[1]-1
+                #nextPopulation[i][nextPopulation[i]<0]=0
                 fitnessList[i]=self.fitness(nextPopulation[i])
-        print("woa")
+        #print("woa")
         return self.Reinfocment.Q
     def fitness(self,Whale):
-        self.state=Whale
-        self.Reinfocment.state=self.state
+        self.Reinfocment.state=Whale
         for i in range(4):
             self.Reinfocment.a=i
             self.Reinfocment.Reinforcment()
             self.Reinfocment.UpdateQ()
-        return max(self.Reinfocment.Q[self.state[0]+self.state[1]*20 -21])
+        return max(self.Reinfocment.Q[Whale[0]+Whale[1]*20 -21])
 
     def initialPopulation(self):
         population=[]
