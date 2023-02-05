@@ -75,6 +75,11 @@ class Qlearning:
                 self.state = self.nextState
                 stepNr += 1
                 #print(self.state)
+                if stepNr >1000000:
+                    break
+            if stepNr >1000000:
+                    self.Q = np.zeros((self.map.size[0]*self.map.size[1], 4))
+                    break
             self.steps.append(stepNr)
             self.DealWithPioneer()
         self.epsilon = temp_eps

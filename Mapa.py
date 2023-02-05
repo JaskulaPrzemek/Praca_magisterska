@@ -4,6 +4,7 @@ from matplotlib.path import Path
 import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 import gazeboCommunication as gzlib
+import random
 class Map:
     def __init__(self):
         pass
@@ -40,21 +41,129 @@ class Map:
         if type == 3:
             self.createRandomMap()
     def createRandomMap(self):
-        pass
+        nr_of_obstacles=int(random.random()*7+6)
+        for i in range(nr_of_obstacles):
+            p=random.random()
+            flag=False
+            while(not flag):
+                if p<0.1:
+                    randr=int(random.random()*2+1)
+                    minx=1+randr
+                    maxx=self.size[0]-randr-minx
+                    randx=int(random.random()*maxx+minx)
+                    randy=int(random.random()*maxx+minx)
+                    tempobstacle=[(randx,randy,randr)]
+                else:
+                    if p<0.3:
+                        nr_or_vertices=3
+                    else:
+                        nr_or_vertices=int(random.random()*6+4)
+                    randx=int(random.random()*(self.size[0]-1)+1)
+                    randy=int(random.random()*(self.size[0]-1)+1)
+                    tempobstacle=[(randx,randy)]
+                    for j in range(nr_or_vertices-1):
+                        x=-1
+                        y=-1
+                        while(x<1 or x> self.size[0] or y<1 or y>self.size[1]):
+                            x=tempobstacle[j][0]+int(random.random()*(6)-3)
+                            y=tempobstacle[j][1]+int(random.random()*(6)-3)
+                            if (x,y) in tempobstacle:
+                                x=-1
+                            if j>0 and ( tempobstacle[j-1][1] ==y or  tempobstacle[j-1][0] ==x):
+                                x=-1
+                        tempobstacle.append((x,y))
+                    tempobstacle.append(tempobstacle[0])
+                if(self.checkProperObstacle(tempobstacle)):
+                    self.obstacles.append(tempobstacle)
+                    flag=True
+        self.createCMap()
+        x=int(random.random()*(self.size[0]-2)+1)
+        y=int(random.random()*(self.size[0]-2)+1)
+        while (self.checkInterior(x,y)):
+            x=int(random.random()*(self.size[0]-2)+1)
+            y=int(random.random()*(self.size[0]-2)+1)
+        self.startingPoint=(x,y)
+        x=int(random.random()*(self.size[0]-2)+1)
+        y=int(random.random()*(self.size[0]-2)+1)
+        while (self.checkInterior(x,y) or self.startingPoint==(x,y) or np.sqrt((self.startingPoint[0]-x)**2 +(self.startingPoint[1]-y)**2)<9):
+            x=int(random.random()*(self.size[0]-2)+1)
+            y=int(random.random()*(self.size[0]-2)+1)
+        self.target=(x,y)
+        if(wavefront(self.startingPoint,self.target,self)):
+            self.obstacles=[]
+            self.createRandomMap()
+        #for obs in self.obstacles:
+        #   print(obs)
+    def checkProperObstacle(self,obstacle):
+        if(self.selfIntersecting(obstacle)):
+            return False
+        self.createCMap()
+        width =self.size[0]+1
+        height=self.size[1]+1
+        img = Image.new(mode='L', size=(width, height), color=0)  # mode L = 8-bit pixels, black and white
+        draw = ImageDraw.Draw(img)
+        if len(obstacle)==1:
+            n=20
+            xc=obstacle[0][0]
+            yc=obstacle[0][1]
+            r=obstacle[0][2]
+            theta= np.arange(0,n)*(2*np.pi/n)
+            x=xc+ r*np.cos(theta)
+            y=yc + r*np.sin(theta)
+            obstacle=[]
+            for i in range(n):
+                obstacle.append((x[i],y[i]))
+            obstacle.append((x[0],y[0]))        
+        draw.polygon(obstacle, outline=1, fill=1)
+        mask = np.array(img).astype('float32')
+        mask[np.where(mask == 0)] = 0
+        mask=mask.astype(int)
+        mask=mask+self.cMap
+        result=np.where(mask==2)
+        if(not np.any(result)):
+            return True
+        else:
+            return False
+    def selfIntersecting(self,obstacle):
+        if len(obstacle)<=4:
+            return False
+        sides=[]
+        for i in range(len(obstacle)-1):
+            sides.append((obstacle[i],obstacle[i+1]))
+        for i in range(len(sides)):
+            side1=sides[i]
+            for j in range(len(sides)):
+                if j==i or j== i-1 or j==i+1:
+                    continue
+                if(i==0 or i==len(sides)-1):
+                    if(j==0 or j ==len(sides)-1):
+                        continue
+                if self.lineIntersect(side1,sides[j]):
+                    return True
+        return False
+        
+    def lineIntersect(self,Side1,Side2):
+        A=Side1[0]
+        B=Side1[1]
+        C=Side2[0]
+        D=Side2[1]
+        return self.ccw(A,C,D) != self.ccw(B,C,D) and self.ccw(A,B,C) != self.ccw(A,B,D)
+    def ccw(self,A,B,C):
+        return (C[1]-A[1]) * (B[0]-A[0]) > (B[1]-A[1]) * (C[0]-A[0])
     def createCMap(self):
         width =self.size[0]+1
         height=self.size[1]+1
         img = Image.new(mode='L', size=(width, height), color=0)  # mode L = 8-bit pixels, black and white
         draw = ImageDraw.Draw(img)
         # draw polygons
+        n=20
+        theta= np.arange(0,n)*(2*np.pi/n)
         for polygon in self.obstacles:
             if len(polygon)==1:
                 index=self.obstacles.index(polygon)
-                n=20
                 xc=polygon[0][0]
                 yc=polygon[0][1]
                 r=polygon[0][2]
-                theta= np.arange(0,n)*(2*np.pi/n)
                 x=xc+ r*np.cos(theta)
                 y=yc + r*np.sin(theta)
                 polygon=[]
@@ -67,8 +176,8 @@ class Map:
         # replace 0 with 'value'
         mask = np.array(img).astype('float32')
         mask[np.where(mask == 0)] = 0
-        self.cMap=mask.astype(np.int)
-
+        self.cMap=mask.astype(int)
+        
     def viewMap(self,show=True):
         fig, ax = plt.subplots(figsize=(6, 6))
         plt.grid()
@@ -96,21 +205,24 @@ class Map:
         state=self.startingPoint
         x.append(state[0])
         y.append(state[1])
-        while state != self.target:
-            temp=state[0]+state[1]*20 -21
-            list_Q =Q[temp].tolist()
-            a= list_Q.index(max(list_Q))
-            if a==0:
-                state=(state[0]-1,state[1])
-            elif a==1:
-                state=(state[0]+1,state[1])
-            elif a==2:
-                state=(state[0],state[1]-1)
-            else:
-                state=(state[0],state[1]+1)
-            x.append(state[0])
-            y.append(state[1])
+        if np.any(Q):
+            while state != self.target:
+                temp=state[0]+state[1]*20 -21
+                list_Q =Q[temp].tolist()
+                a= list_Q.index(max(list_Q))
+                if a==0:
+                    state=(state[0]-1,state[1])
+                elif a==1:
+                    state=(state[0]+1,state[1])
+                elif a==2:
+                    state=(state[0],state[1]-1)
+                else:
+                    state=(state[0],state[1]+1)
+                x.append(state[0])
+                y.append(state[1])
         plt.plot(x,y)
+        plt.plot(self.target[0],self.target[1],'or')
+        plt.plot(self.startingPoint[0],self.startingPoint[1],'ob')
         if show:
             plt.show()
         return fig
@@ -124,3 +236,46 @@ class Map:
             return True
         return False
         
+def wavefront(start,finish,Map):
+    startIdx=start[1]
+    startIdy=start[0]
+    finishIdx=finish[1]
+    finishIdy=finish[0]
+    trueDim=Map.size[0]
+    WavefrontMap=np.copy(Map.cMap.astype(float))
+    WavefrontMap[WavefrontMap>0.5]=np.Inf
+    WavefrontMap[WavefrontMap<=0.5]=-2
+    WavefrontMap[finishIdx][finishIdy]=0
+    tempMap=np.copy(WavefrontMap)
+    while WavefrontMap[startIdx][startIdy]==-2:
+        flag=True
+        for i in range(trueDim):
+            for j in range(trueDim):
+                if(i==0 or i== trueDim-1 or j==0 or j == trueDim-1):
+                    continue
+                if WavefrontMap[i][j]==-2:
+                    if i+1<trueDim and WavefrontMap[i+1][j]!= -2 and WavefrontMap[i+1][j]!= np.Inf:
+                        tempMap[i][j]=WavefrontMap[i+1][j]+1
+                        flag=False
+                    if i-1>-1 and WavefrontMap[i-1][j]!= -2 and WavefrontMap[i-1][j]!= np.Inf:
+                        tempMap[i][j]=WavefrontMap[i-1][j]+1
+                        flag=False
+                    if j+1<trueDim and WavefrontMap[i][j+1]!= -2 and WavefrontMap[i][j+1]!= np.Inf:
+                        tempMap[i][j]=WavefrontMap[i][j+1]+1
+                        flag=False
+                    if j-1>-1 and WavefrontMap[i][j-1]!= -2 and WavefrontMap[i][j-1]!= np.Inf:
+                        tempMap[i][j]=WavefrontMap[i][j-1]+1
+                        flag=False
+        WavefrontMap=np.copy(tempMap)
+        if(flag):
+            break
+            plt.imshow(WavefrontMap)
+            plt.xlim([0,trueDim])
+            plt.ylim([0,trueDim])
+            plt.xticks(np.arange(0,trueDim,2))
+            plt.yticks(np.arange(0,trueDim,2))
+            for obs in Map.obstacles:
+                print(obs)  
+            
+        
+    return flag
