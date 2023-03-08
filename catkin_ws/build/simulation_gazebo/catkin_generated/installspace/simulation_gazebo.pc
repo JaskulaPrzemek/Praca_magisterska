@@ -1,8 +1,0 @@
-prefix=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/install
-
-Name: simulation_gazebo
-Description: Description of simulation_gazebo
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

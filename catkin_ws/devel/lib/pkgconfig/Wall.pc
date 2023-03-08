@@ -1,8 +1,0 @@
-prefix=/home/pszemek/Desktop/Projekt_Specjalnosciowy/catkin_ws/devel
-
-Name: Wall
-Description: Description of Wall
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
