@@ -68,6 +68,7 @@ class WOA(InitializationInterface):
                 #nextPopulation[i][nextPopulation[i]<0]=0
                 fitnessList[i]=self.fitness(nextPopulation[i])
         #print("woa")
+        self.Q=self.Reinfocment.Q.copy()
         return self.Reinfocment.Q
     def fitness(self,Whale):
         self.Reinfocment.state=Whale
@@ -91,5 +92,19 @@ class WOA(InitializationInterface):
                 #y=random.randint(1,self.map.size[1])
             population.append(np.array([x,y]))
         return population
-    def save(self,path=""):
-        pass
+    def save(self,path="data.txt",full=True,Q=True):
+        with open(path, "a") as file:
+            file.write( f"{__name__}: \n" )
+            self.iterations=500
+            self.b=0
+            self.initA=2
+            self.probability=0.5
+            self.populationSize=30
+            if full:
+                file.write( f"i {self.iterations} \n")
+                file.write( f"b {self.b} \n")
+                file.write( f"iA {self.initA} \n")
+                file.write( f"p {self.probability} \n")
+                file.write( f"ps {self.populationSize} \n")
+            if Q:
+                file.write( f"Q {np.array_str(self.Q)} \n")

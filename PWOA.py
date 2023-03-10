@@ -8,5 +8,5 @@ class PWOA(InitializationInterface):
         pass
     def initialize(self,map,gazebo):
         pass
-    def save(self,path=""):
+    def save(self,path="data.txt",full=True,Q=True):
         pass

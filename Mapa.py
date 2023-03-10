@@ -40,6 +40,8 @@ class Map:
                     self.obstacles.append([(x,y),(x,y+1),(x+1,y+1),(x+1,y),(x,y)])
         if type == 3:
             self.createRandomMap()
+        self.obstaclesShort= self.obstacles.copy()
+
     def createRandomMap(self):
         nr_of_obstacles=int(random.random()*7+6)
         for i in range(nr_of_obstacles):
@@ -160,17 +162,14 @@ class Map:
         theta= np.arange(0,n)*(2*np.pi/n)
         for polygon in self.obstacles:
             if len(polygon)==1:
-                index=self.obstacles.index(polygon)
                 xc=polygon[0][0]
                 yc=polygon[0][1]
                 r=polygon[0][2]
                 x=xc+ r*np.cos(theta)
                 y=yc + r*np.sin(theta)
-                polygon=[]
-                for i in range(n):
-                    polygon.append((x[i],y[i]))
+                polygon =[(x[i], y[i]) for i in range(0, n)]
                 polygon.append((x[0],y[0]))
-                self.obstacles[index]=polygon
+                #self.obstacles[index]=polygon
                 
             draw.polygon(polygon, outline=1, fill=1)
         # replace 0 with 'value'
@@ -184,6 +183,17 @@ class Map:
         for polygon in self.obstacles:
             x=[]
             y=[]
+            if len(polygon)==1:
+                n=20
+                theta= np.arange(0,n)*(2*np.pi/n)
+                xc=polygon[0][0]
+                yc=polygon[0][1]
+                r=polygon[0][2]
+                xp=xc+ r*np.cos(theta)
+                yp=yc + r*np.sin(theta)
+                polygon =[(xp[i], yp[i]) for i in range(0, n)]
+                polygon.append((xp[0],yp[0]))
+                #print(polygon)
             for point in polygon:
                 x.append(point[0])
                 y.append(point[1])
@@ -228,7 +238,7 @@ class Map:
                     state=(state[0],state[1]+1)
                 x.append(state[0])
                 y.append(state[1])
-        self.path=[(xp,yp) for xp in x for yp in y]
+        self.path=tuple(zip(x,y))
         self.pathLenght=len(x)
         self.pathSmoothness = self.getSmoothness(self.path)
         return x,y
@@ -252,12 +262,20 @@ class Map:
         for obstacle in self.obstacles:
             for point_index in range (len(obstacle)-1):
                 gz.spawnWall(obstacle[point_index][0],obstacle[point_index][1],obstacle[point_index+1][0],obstacle[point_index+1][1])
+
     def checkInterior(self,x,y):
         if self.cMap[y][x]==1:
             return True
         return False
-    def save(self,path=""):
-        pass
+    
+    def save(self,path="data.txt"):
+        with open(path, "a") as file:
+            file.write( "Map: \n" )
+            file.write( f"S {self.startingPoint} \n")
+            file.write( f"T {self.target} \n")
+            file.write( "O: \n" )
+            for obstacle in self.obstaclesShort:
+                file.write( f"{str(obstacle)} \n")
         
 def wavefront(start,finish,Map):
     startIdx=start[1]

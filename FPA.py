@@ -67,7 +67,7 @@ class FPA(InitializationInterface):
                 else:
                     nextPopulation[i]=population[i]
             population=nextPopulation
-        return self.Q
+        return self.Q.copy()
     def fitness(self,flower):
         self.state=flower
         for i in range(4):
@@ -134,5 +134,23 @@ class FPA(InitializationInterface):
                 #y=random.randint(1,self.map.size[1])
             population.append(np.array([x,y]))
         return population
-    def save(self,path=""):
-        pass
+    def save(self,path="data.txt",full=True,Q=True):
+        with open(path, "a") as file:
+            file.write( f"{__name__}: \n" )
+            self.gamma=0.5
+            self.iterations=100
+            self.updateGamma=0.8
+            self.updateAlpha=0.2
+            self.populationSize=10
+            self.probability=0.5
+            self.beta=1.4
+            if full:
+                file.write( f"g {self.gamma} \n")
+                file.write( f"i {self.iterations} \n")
+                file.write( f"ug {self.updateGamma} \n")
+                file.write( f"ua {self.updateAlpha} \n")
+                file.write( f"ps {self.populationSize} \n")
+                file.write( f"p {self.probability} \n")
+                file.write( f"b {self.beta} \n")
+            if Q:
+                file.write( f"Q {np.array_str(self.Q)} \n")

@@ -23,19 +23,23 @@ woa=w.WOA()
 l.createMap(3)
 #l.map.viewMap()
 l.setEpsilon(0.01)
-l.setStrategy(fpa)
+l.setStrategy(woa)
 times=[]
 lenght=[]
 smoothness=[]
-for i in range(10):
-    l.createMap(-1) 
+path="data1.txt"
+l.createMap(3) 
+#l.map.save(path)
+for i in range(1):
     l.learn()
     times.append(l.time)
     lenght.append(l.pathLenght)
     smoothness.append(l.pathSmoothness)
     #path=l.plotPath(show)
     #steps=l.plotSteps(show)
-    l.plotPath()
+    #l.save(path,mapa=False,strategy=True,sFull=True,Q=True,sQ=True)
+    #l.plotPath()
+    
 print(max(times))
 print(avg(times))
 print(max(lenght))

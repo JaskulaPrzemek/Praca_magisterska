@@ -6,7 +6,7 @@ import Mapa as mp
 import random
 import matplotlib.pyplot as plt
 import time
-
+import sys
 
 class Qlearning:
     def __init__(self):
@@ -19,6 +19,7 @@ class Qlearning:
         self.gamma = 0.8
         self.time = 0
         self.strategyFlag = False
+        np.set_printoptions(threshold=sys.maxsize,suppress=True)
 
     def createMap(self, type):
         self.map.createMap(type)
@@ -192,6 +193,23 @@ class Qlearning:
         self.pathLenght = self.map.pathLenght
         self.pathSmoothness = self.map.pathSmoothness
     
-    def save(self,path=""):
-        pass
+    def save(self,path="data.txt",mapa = True,strategy=True,sFull =True, Q = True, sQ = True):
+        with open(path, "a") as file:
+            file.write( "Qlearn: \n" )
+            file.write( f"E {self.epsilon} \n")
+            file.write( f"a {self.alpha} \n")
+            file.write( f"g {self.gamma} \n")
+            file.write( f"t {self.time} \n")
+            file.write( f"st {str(self.steps)} \n")
+            file.write( f"Qt {self.Qtime} \n")
+            file.write( f"p {self.path} \n")
+            file.write( f"l {self.pathLenght} \n")
+            file.write( f"s {self.pathSmoothness} \n")
+            file.write( f"Q {np.array_str(self.Q)} \n")
+        if mapa:
+            self.map.save(path)
+        if self.strategyFlag and strategy:
+            self.strategy.save(path,sFull,sQ)
+
+
 

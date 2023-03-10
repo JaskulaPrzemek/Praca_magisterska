@@ -6,5 +6,5 @@ class InitializationInterface(ABC):
     def initialize(self, map,gazebo):
         pass
     @abstractmethod
-    def save(self,path=""):
+    def save(self,path="data.txt",full=True,Q=True):
         pass

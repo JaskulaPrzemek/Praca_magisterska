@@ -66,7 +66,7 @@ class APF(InitializationInterface):
         self.test[self.test==-1]=min(self.test[self.test>-1])
         
         #print("apf")
-        return self.Q
+        return self.Q.copy()
 
     def showAttract(self):
         
@@ -97,5 +97,14 @@ class APF(InitializationInterface):
         x=sumx/area
         y=sumy/area
         return (x,y)
-    def save(self,path=""):
-        pass
+    def save(self,path="data.txt",full=True,Q=True):
+        with open(path, "a") as file:
+            file.write( f"{__name__}: \n" )
+            if full:
+                if self.attractivePot:
+                    file.write( f"a {self.atractScale}: \n" )
+                if self.repulsivePot:
+                    file.write( f"r {self.repulseScale}: \n" )
+                file.write( f"D {self.influenceDistance}: \n" )
+            if Q:
+                file.write( f"Q {np.array_str(self.Q)} \n")
