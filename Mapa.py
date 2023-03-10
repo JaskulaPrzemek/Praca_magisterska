@@ -7,7 +7,9 @@ import gazeboCommunication as gzlib
 import random
 class Map:
     def __init__(self):
-        pass
+        self.size=(20,20)
+        self.obstacles=[]
+
     def createMap(self,type=1):
         self.size=(20,20)
         self.obstacles=[]
@@ -40,60 +42,73 @@ class Map:
                     self.obstacles.append([(x,y),(x,y+1),(x+1,y+1),(x+1,y),(x,y)])
         if type == 3:
             self.createRandomMap()
+        if type ==4:
+            self.startingPoint=(1,5)
+            self.target=(8,4)
+            self.obstacles.append([(7,12),(7,17),(15,17),(15,5),(7,5),(7,8),(13,8),(13,15),(7,15)])
         self.obstaclesShort= self.obstacles.copy()
 
     def createRandomMap(self):
-        nr_of_obstacles=int(random.random()*7+6)
-        for i in range(nr_of_obstacles):
-            p=random.random()
-            flag=False
-            while(not flag):
-                if p<0.1:
-                    randr=int(random.random()*2+1)
-                    minx=1+randr
-                    maxx=self.size[0]-randr-minx
-                    randx=int(random.random()*maxx+minx)
-                    randy=int(random.random()*maxx+minx)
-                    tempobstacle=[(randx,randy,randr)]
-                else:
-                    if p<0.3:
-                        nr_or_vertices=3
+        while True:
+            nr_of_obstacles=int(random.random()*7+6)
+            for i in range(nr_of_obstacles):
+                p=random.random()
+                flag=False
+                while(not flag):
+                    if p<0.1:
+                        randr=int(random.random()*2+1)
+                        minx=1+randr
+                        maxx=self.size[0]-randr-minx
+                        randx=int(random.random()*maxx+minx)
+                        randy=int(random.random()*maxx+minx)
+                        tempobstacle=[(randx,randy,randr)]
                     else:
-                        nr_or_vertices=int(random.random()*6+4)
-                    randx=int(random.random()*(self.size[0]-1)+1)
-                    randy=int(random.random()*(self.size[0]-1)+1)
-                    tempobstacle=[(randx,randy)]
-                    for j in range(nr_or_vertices-1):
-                        x=-1
-                        y=-1
-                        while(x<1 or x> self.size[0] or y<1 or y>self.size[1]):
-                            x=tempobstacle[j][0]+int(random.random()*(6)-3)
-                            y=tempobstacle[j][1]+int(random.random()*(6)-3)
-                            if (x,y) in tempobstacle:
-                                x=-1
-                            if j>0 and ( tempobstacle[j-1][1] ==y or  tempobstacle[j-1][0] ==x):
-                                x=-1
-                        tempobstacle.append((x,y))
-                    tempobstacle.append(tempobstacle[0])
-                if(self.checkProperObstacle(tempobstacle)):
-                    self.obstacles.append(tempobstacle)
-                    flag=True
-        self.createCMap()
-        x=int(random.random()*(self.size[0]-2)+1)
-        y=int(random.random()*(self.size[0]-2)+1)
-        while (self.checkInterior(x,y)):
+                        if p<0.3:
+                            nr_or_vertices=3
+                        else:
+                            nr_or_vertices=int(random.random()*6+4)
+                        randx=int(random.random()*(self.size[0]-1)+1)
+                        randy=int(random.random()*(self.size[0]-1)+1)
+                        tempobstacle=[(randx,randy)]
+                        z=0
+                        for j in range(nr_or_vertices-1):
+                            x=-1
+                            y=-1
+                            
+                            while(x<1 or x> self.size[0] or y<1 or y>self.size[1]):
+                                x=tempobstacle[j][0]+int(random.random()*(6)-3)
+                                y=tempobstacle[j][1]+int(random.random()*(6)-3)
+                                if (x,y) in tempobstacle:
+                                    x=-1
+                                    z+=1
+                                if j>0 and ( tempobstacle[j-1][1] ==y or  tempobstacle[j-1][0] ==x):
+                                    x=-1
+                                    z+=1
+                                if z> 120:
+                                    flag=True
+                                    break
+                            tempobstacle.append((x,y))
+                        tempobstacle.append(tempobstacle[0])
+                    if(self.checkProperObstacle(tempobstacle)):
+                        self.obstacles.append(tempobstacle)
+                        flag=True
+            self.createCMap()
             x=int(random.random()*(self.size[0]-2)+1)
             y=int(random.random()*(self.size[0]-2)+1)
-        self.startingPoint=(x,y)
-        x=int(random.random()*(self.size[0]-2)+1)
-        y=int(random.random()*(self.size[0]-2)+1)
-        while (self.checkInterior(x,y) or self.startingPoint==(x,y) or np.sqrt((self.startingPoint[0]-x)**2 +(self.startingPoint[1]-y)**2)<9):
+            while (self.checkInterior(x,y)):
+                x=int(random.random()*(self.size[0]-2)+1)
+                y=int(random.random()*(self.size[0]-2)+1)
+            self.startingPoint=(x,y)
             x=int(random.random()*(self.size[0]-2)+1)
             y=int(random.random()*(self.size[0]-2)+1)
-        self.target=(x,y)
-        if(wavefront(self.startingPoint,self.target,self)):
-            self.obstacles=[]
-            self.createRandomMap()
+            while (self.checkInterior(x,y) or self.startingPoint==(x,y) or np.sqrt((self.startingPoint[0]-x)**2 +(self.startingPoint[1]-y)**2)<9):
+                x=int(random.random()*(self.size[0]-2)+1)
+                y=int(random.random()*(self.size[0]-2)+1)
+            self.target=(x,y)
+            if(not wavefront(self.startingPoint,self.target,self)):
+                break
+            else:
+                self.obstacles=[]
         #for obs in self.obstacles:
         #   print(obs)
     def checkProperObstacle(self,obstacle):
@@ -276,6 +291,20 @@ class Map:
             file.write( "O: \n" )
             for obstacle in self.obstaclesShort:
                 file.write( f"{str(obstacle)} \n")
+    def getListRep(self):
+        listRep=(np.reshape(self.cMap,(self.size[0]+1)*(self.size[1]+1))).tolist()
+        listRep.extend(self.startingPoint)
+        listRep.extend(self.target)
+        return listRep
+    def loadListRep(self,ListRep):
+        
+        cMap=ListRep[:-4]
+        size=int(np.sqrt(len(cMap)))
+        self.cMap=np.reshape(cMap,(size,size))
+        self.size=(size,size)
+        self.startingPoint=ListRep[-4:-2]
+        self.target=ListRep[-2:]
+
         
 def wavefront(start,finish,Map):
     startIdx=start[1]

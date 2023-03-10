@@ -13,6 +13,7 @@ import APF as a
 import WOA as w
 import random
 import time
+import numpy as np
 def avg(lst):
     return sum(lst) / len(lst)
 show=False
@@ -46,6 +47,8 @@ print(max(lenght))
 print(avg(lenght))
 print(max(smoothness))
 print(avg(smoothness))
+
+
 #l.setStrategy(fpa)
 #l.learn()
 #print(l.time)

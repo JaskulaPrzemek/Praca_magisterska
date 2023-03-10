@@ -19,6 +19,7 @@ class Qlearning:
         self.gamma = 0.8
         self.time = 0
         self.strategyFlag = False
+        self.disableInit = False
         np.set_printoptions(threshold=sys.maxsize,suppress=True)
 
     def createMap(self, type):
@@ -42,6 +43,12 @@ class Qlearning:
     def setGamma(self, gamma):
         self.gamma = gamma
 
+    def setDisableInit(self):
+        self.disableInit = True
+
+    def reSetDisableInit(self):
+        self.disableInit = False   
+
     def setStrategy(self, strategy):
         self.strategyFlag = True
         self.strategy = strategy
@@ -58,7 +65,8 @@ class Qlearning:
 
     def learn(self):
         start = time.time()
-        self.initializeQMatrix()
+        if not self.disableInit :
+            self.initializeQMatrix()
         self.Qtime = time.time()-start
         self.steps = []
         self.a = -1
@@ -77,10 +85,11 @@ class Qlearning:
                 self.state = self.nextState
                 stepNr += 1
                 #print(self.state)
-                if stepNr >1000000:
+                if stepNr >100000:
                     break
-            if stepNr >1000000:
+            if stepNr >100000:
                     self.Q = np.zeros((self.map.size[0]*self.map.size[1], 4))
+                    self.steps.append(stepNr)
                     break
             self.steps.append(stepNr)
             self.DealWithPioneer()
