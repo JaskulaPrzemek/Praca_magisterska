@@ -1,7 +1,11 @@
 import math
-import rospy
+try:
+    import rospy
+    import gazeboCommunication as gzlib
+except(ImportError):
+    pass
 import matplotlib.pyplot as plt
-import gazeboCommunication as gzlib
+
 import Mapa as mp
 import Qlearning as Q
 import FPA as f
@@ -19,16 +23,25 @@ woa=w.WOA()
 l.createMap(3)
 #l.map.viewMap()
 l.setEpsilon(0.01)
+l.setStrategy(fpa)
 times=[]
+lenght=[]
+smoothness=[]
 for i in range(10):
-    start=time.time()
-    l.createMap(3) 
+    l.createMap(-1) 
     l.learn()
-    times.append(time.time()-start)
+    times.append(l.time)
+    lenght.append(l.pathLenght)
+    smoothness.append(l.pathSmoothness)
     #path=l.plotPath(show)
     #steps=l.plotSteps(show)
+    l.plotPath()
 print(max(times))
 print(avg(times))
+print(max(lenght))
+print(avg(lenght))
+print(max(smoothness))
+print(avg(smoothness))
 #l.setStrategy(fpa)
 #l.learn()
 #print(l.time)

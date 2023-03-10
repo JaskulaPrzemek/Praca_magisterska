@@ -197,11 +197,19 @@ class Map:
             plt.show()
         return fig
     def plotPath(self,Q,show=True,fig=-1):
-        x=[]
-        y=[]
         if fig ==-1:
             fig=self.viewMap(False)
         plt.figure(fig.number)
+        x,y=self.getPath(Q)
+        plt.plot(x,y)
+        plt.plot(self.target[0],self.target[1],'or')
+        plt.plot(self.startingPoint[0],self.startingPoint[1],'ob')
+        if show:
+            plt.show()
+        return fig
+    def getPath(self,Q):
+        x=[]
+        y=[]
         state=self.startingPoint
         x.append(state[0])
         y.append(state[1])
@@ -220,12 +228,25 @@ class Map:
                     state=(state[0],state[1]+1)
                 x.append(state[0])
                 y.append(state[1])
-        plt.plot(x,y)
-        plt.plot(self.target[0],self.target[1],'or')
-        plt.plot(self.startingPoint[0],self.startingPoint[1],'ob')
-        if show:
-            plt.show()
-        return fig
+        self.path=[(xp,yp) for xp in x for yp in y]
+        self.pathLenght=len(x)
+        self.pathSmoothness = self.getSmoothness(self.path)
+        return x,y
+    
+    def getSmoothness(self,path):
+        """
+        Calculate Path smoothnes as in FPA article
+        https://www.sciencedirect.com/science/article/pii/S0921889018308285
+        """
+        sum=0
+        for index,(x,y) in enumerate(path,start=1):
+            if index >=self.pathLenght-1:
+                break
+            x1,y1 = path[index + 1]
+            x2,y2 = path[index - 1]
+            sum +=abs (np.arctan2((y1-y),(x1-x)) - np.arctan2((y-y2),(x-x2)))
+        return sum
+
     def createGazeboMap(self):
         gz=gzlib.GazeboCommunication()
         for obstacle in self.obstacles:
@@ -235,6 +256,8 @@ class Map:
         if self.cMap[y][x]==1:
             return True
         return False
+    def save(self,path=""):
+        pass
         
 def wavefront(start,finish,Map):
     startIdx=start[1]

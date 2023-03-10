@@ -47,6 +47,7 @@ class Qlearning:
 
     def resetStrategy(self):
         self.strategyFlag = False
+        self.strategy = None
 
     def initializeQMatrix(self):
         if self.strategyFlag == 0:
@@ -84,6 +85,7 @@ class Qlearning:
             self.DealWithPioneer()
         self.epsilon = temp_eps
         self.time = (time.time()-start)
+        self.getPath()
 
     def NextAction(self):
         epsilon = random.random()
@@ -183,3 +185,13 @@ class Qlearning:
 
     def plotPath(self, show=True, fig=-1):
         return self.map.plotPath(self.Q, show, fig)
+    
+    def getPath(self):
+        self.map.getPath(self.Q)
+        self.path=self.map.path
+        self.pathLenght = self.map.pathLenght
+        self.pathSmoothness = self.map.pathSmoothness
+    
+    def save(self,path=""):
+        pass
+

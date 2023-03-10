@@ -134,3 +134,5 @@ class FPA(InitializationInterface):
                 #y=random.randint(1,self.map.size[1])
             population.append(np.array([x,y]))
         return population
+    def save(self,path=""):
+        pass

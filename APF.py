@@ -97,3 +97,5 @@ class APF(InitializationInterface):
         x=sumx/area
         y=sumy/area
         return (x,y)
+    def save(self,path=""):
+        pass

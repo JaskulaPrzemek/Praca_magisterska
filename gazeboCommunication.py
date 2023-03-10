@@ -1,15 +1,19 @@
 #!/usr/bin/env python
 import numpy as np
 import math
-import rospy
-import angles
-from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Twist
-from sensor_msgs.msg import Range
-from geometry_msgs.msg import Pose
-from gazebo_msgs.srv import *
-import xml.dom.minidom as md
-from tf.transformations import euler_from_quaternion
+try:
+	import rospy
+	import angles
+	from nav_msgs.msg import Odometry
+	from geometry_msgs.msg import Twist
+	from sensor_msgs.msg import Range
+	from geometry_msgs.msg import Pose
+	from gazebo_msgs.srv import *
+	import xml.dom.minidom as md
+	from tf.transformations import euler_from_quaternion
+except ImportError:
+	pass
+
 
 class SingletonMeta(type):
 

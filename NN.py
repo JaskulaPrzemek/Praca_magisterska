@@ -14,3 +14,5 @@ class NN(InitializationInterface):
         ])
     def initialize(self,map,gazebo):
         pass
+    def save(self,path=""):
+        pass
