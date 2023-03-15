@@ -57,8 +57,8 @@ class FPA(InitializationInterface):
                     else:
                         #j=random.randint(0,self.populationSize-1)
                         #k=random.randint(0,self.populationSize-1)
-                        j=int(random.random()*(self.populationSize-1))
-                        k=int(random.random()*(self.populationSize-1))
+                        j=int(random.random()*(self.populationSize))
+                        k=int(random.random()*(self.populationSize))
                         temp=population[i]+random.random()*(population[j]-population[k])
                 temp=temp.round().astype(int)
                 fitness=self.fitness(temp)
@@ -125,11 +125,11 @@ class FPA(InitializationInterface):
         for i in range(self.populationSize):
             #x=random.randint(1,self.map.size[0])
             #y=random.randint(1,self.map.size[1])
-            x=int(random.random()*(self.map.size[0]-1)+1)
-            y=int(random.random()*(self.map.size[1]-1)+1)
+            x=int(random.random()*(self.map.size[0])+1)
+            y=int(random.random()*(self.map.size[1])+1)
             while self.map.checkInterior(x,y):
-                x=int(random.random()*(self.map.size[0]-1)+1)
-                y=int(random.random()*(self.map.size[1]-1)+1)
+                x=int(random.random()*(self.map.size[0])+1)
+                y=int(random.random()*(self.map.size[1])+1)
                 #x=random.randint(1,self.map.size[0])
                 #y=random.randint(1,self.map.size[1])
             population.append(np.array([x,y]))
@@ -137,13 +137,6 @@ class FPA(InitializationInterface):
     def save(self,path="data.txt",full=True,Q=True):
         with open(path, "a") as file:
             file.write( f"{__name__}: \n" )
-            self.gamma=0.5
-            self.iterations=100
-            self.updateGamma=0.8
-            self.updateAlpha=0.2
-            self.populationSize=10
-            self.probability=0.5
-            self.beta=1.4
             if full:
                 file.write( f"g {self.gamma} \n")
                 file.write( f"i {self.iterations} \n")

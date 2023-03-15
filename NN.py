@@ -5,115 +5,105 @@ from interfaces import InitializationInterface
 import Qlearning as Q
 import Mapa as mp
 import tensorflow as tf
+
+
 class NN(InitializationInterface):
-
-    class CustomModel(tf.keras.Model):
-        def __init__(self,model):
-            super().__init__()
-            self.Qlearning=Q.Qlearning()
-            self.Qlearning.setEpsilon(0.05)
-            self.Qlearning.setDisableInit()
-            self.model=model
-        def call(self, x):
-            # Equivalent to `call()` of the wrapped keras.Model
-            x = self.model(x)
-            return x
-    
-        def train_step(self, data):
-            # Unpack the data. Its structure depends on your model and
-            # on what you pass to `fit()`.
-            x, y = data
-
-            with tf.GradientTape() as tape:
-                y_test= self(x, training=True)  # Forward pass
-                # Compute the loss value
-                # (the loss function is configured in `compile()`)
-                self.Qlearning.map.loadListRep((x.numpy()).tolist()[0])
-                y_pred= self.run_average_steps(1,y_test.numpy())
-                #print(y)
-                #print(y_pred)
-                loss = self.compiled_loss(y, y_pred, regularization_losses=self.losses)
-
-            # Compute gradients
-            trainable_vars = self.trainable_variables
-            gradients = tape.gradient(loss, trainable_vars)
-            # Update weights
-            self.optimizer.apply_gradients(zip(gradients, trainable_vars))
-            # Update metrics (includes the metric that tracks the loss)
-            self.compiled_metrics.update_state(y, y_pred)
-            # Return a dict mapping metric names to current value
-            return {m.name: m.result() for m in self.metrics}
-        
-        def run_average_steps(self,n,Q_list):
-            avg=[]
-            for Q in Q_list:
-                suma=0
-                Q=np.reshape(Q,(400,4))
-                for i in range(n):
-                    print(f"Run {i}")
-                    self.Qlearning.Q=Q
-                    #print(Q)
-                    self.Qlearning.learn()
-                    steps=self.Qlearning.steps
-                    #print(steps)
-                    suma+=sum(steps)
-                avg.append(suma/n)
-                #print(avg)
-            avg=tf.constant(avg)
-            return avg
-            
-
-        
 
     def __init__(self):
         self.model = tf.keras.Sequential([
             #map is 21*21,start is 2, finish is 2
-        tf.keras.layers.InputLayer(input_shape=(445,)),
-        tf.keras.layers.Dense(445, activation='relu'),
-        tf.keras.layers.Dense(445, activation='relu'),
-            #output is the Q which is 20*20*4
-        tf.keras.layers.Dense(1600,activation='softmax')
+            tf.keras.layers.InputLayer(input_shape=(445,)),
+            tf.keras.layers.Dense(445, activation='relu'),
+            tf.keras.layers.Dense(445, activation='relu'),
+            # output is the Q which is 20*20*4
+            tf.keras.layers.Dense(1600, activation='relu')
         ])
-        self.InputTrainNumber= 64*1
-        self.model=self.CustomModel(self.model)
+        self.InputTrainNumber = 64*1
+        self.average_nr = 1
+        self.batch_size=2
+        self.Qlearning = Q.Qlearning()
+        self.Qlearning.setEpsilon(0.05)
+        self.Qlearning.setDisableInit()
 
-    def getTrainData(self):
-        xdata=[]
-        ydata=[22*100]*self.InputTrainNumber
-        mapa=mp.Map()
-        with open("Training_maps.txt",'a') as file:
+    def custom_loss(self, y_true, y_pred):
+        avg = tf.py_function(func=self.run_average_steps, inp=[y_true, y_pred], Tout=[tf.float64])
+        print(avg)
+        return avg
+
+    def run_average_steps(self, map_rep, Q_list):
+        avg = []
+        print("calculating loss")
+        for map_list, Q_matrix in zip(map_rep.numpy(),Q_list.numpy()):
+            suma = 0
+            Q_matrix = np.reshape(Q_matrix, (400, 4))
+            map_list = np.reshape(map_list, (445))
+            self.Qlearning.map.loadListRep(map_list)
+            for i in range(self.average_nr):
+                print(f"Run {i}")
+                self.Qlearning.Q = np.copy(Q_matrix)
+                self.Qlearning.learn()
+                steps = self.Qlearning.steps
+                # print(steps)
+                suma += sum(steps)/len(steps)
+            avg.append(suma/self.average_nr)
+            # print(avg)
+        #avg = tf.constant(avg,dtype=tf.float64)
+        print (avg)
+        return avg
+
+    def createTrainData(self):
+        xdata = []
+        ydata = [22*100]*self.InputTrainNumber
+        mapa = mp.Map()
+        with open("Training_maps.txt", 'a') as file:
             for i in range(self.InputTrainNumber):
                 mapa.createRandomMap()
-                v=mapa.getListRep()
+                v = mapa.getListRep()
                 file.write(f"{str(v)} \n")
                 xdata.append(v)
-            
-        self.TrainX=xdata
-        self.TrainY=ydata
+
+        self.TrainX = xdata
+        self.TrainY = ydata
         print("Finished generating")
+
     def loadTrainingData(self):
-        xdata=[]
-        with open("Training_maps.txt",'r') as file:
+        xdata = []
+        nr = 0
+        with open("Training_maps.txt", 'r') as file:
             for line in file:
                 xdata.append(eval(line))
-            #print(xdata)
-        ydata=[22*100]*len(xdata)
-        self.TrainX=xdata
-        self.TrainY=ydata
+                nr += 1
+                if nr >= self.InputTrainNumber:
+                    break
+            # print(xdata)
+        # ydata=[22*100]*len(xdata)
+        self.TrainX = xdata
+        # self.TrainY=ydata
         print("Finished loading")
+
     def train(self):
-        self.model.compile(tf.keras.optimizers.SGD(),run_eagerly=True,metrics=['mse'],loss=tf.keras.losses.MeanAbsoluteError())
-        self.model.fit(self.TrainX,self.TrainY,epochs=5, batch_size=4,verbose=1)
-    def save(self,path="model"):
+        self.model.compile(optimizer='adam', run_eagerly=False,
+                           loss=self.custom_loss)
+        print("Finished compiling")
+        steps = int( np.ceil(len(self.TrainX) / self.batch_size) )
+        self.model.fit(self.TrainX, self.TrainX,
+                       epochs=5, batch_size=self.batch_size, verbose=2,steps_per_epoch=steps)
+
+    def save_model(self, path="model"):
         self.model.save(path)
-    def load(self,path="model"):
-        self.model=tf.keras.models.load_model(path)
-    def initialize(self,map,gazebo):
-        pass
-    def save(self,path="data.txt",full=True,Q=True):
+
+    def load(self, path="model"):
+        self.model = tf.keras.models.load_model(path)
+
+    def initialize(self, map, gazebo):
         pass
 
-network=NN()
-network.InputTrainNumber= 64*64*8
+    def save(self, path="data.txt", full=True, Q=True):
+        pass
+
+
+network = NN()
+network.InputTrainNumber = 8*1
 network.loadTrainingData()
 network.train()
+#network.save_model()
