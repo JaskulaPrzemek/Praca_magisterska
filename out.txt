@@ -1,0 +1,20 @@
+Finished generating
+Finished loading
+Model: "model"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_1 (InputLayer)        [(None, 445)]             0         
+                                                                 
+ dense (Dense)               (None, 1)                 446       
+                                                                 
+ dense_1 (Dense)             (None, 1600)              3200      
+                                                                 
+=================================================================
+Total params: 3,646
+Trainable params: 3,646
+Non-trainable params: 0
+_________________________________________________________________
+Finished compiling
+8
+Epoch 1/5

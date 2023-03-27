@@ -162,3 +162,5 @@ cython_debug/
 .asv
 #For Generated datafile
 Training_maps.txt
+Training_Q.txt
+model/

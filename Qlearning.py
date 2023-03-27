@@ -60,7 +60,7 @@ class Qlearning:
 
     def initializeQMatrix(self):
         if self.strategyFlag == 0:
-            self.Q = np.zeros((self.map.size[0]*self.map.size[1], 4))
+            self.Q = np.zeros((self.map.size[0] * self.map.size[1], 4))
         else:
             self.Q = self.strategy.initialize(self.map, self.gazebo)
 
@@ -68,7 +68,7 @@ class Qlearning:
         start = time.time()
         if not self.disableInit:
             self.initializeQMatrix()
-        self.Qtime = time.time()-start
+        self.Qtime = time.time() - start
         self.steps = []
         self.a = -1
         self.nextState = ()
@@ -78,9 +78,9 @@ class Qlearning:
         for i in range(100):
             self.state = self.map.startingPoint
             stepNr = 0
-            self.epsilon = temp_eps*(1-i/75)
+            self.epsilon = temp_eps * (1 - i / 75)
             self.StartPioneer()
-            pp=[]
+            pp = []
             while self.state != self.map.target:
                 pp.append(self.state)
                 self.NextAction()
@@ -91,52 +91,53 @@ class Qlearning:
                 # print(self.state)
                 # print(stepNr)
                 if stepNr > 100000:
-                    #print(stepNr)
+                    # print(stepNr)
                     flag = True
                     break
             if flag:
-                self.Q = np.zeros((self.map.size[0]*self.map.size[1], 4))
+                self.Q = np.zeros((self.map.size[0] * self.map.size[1], 4))
                 self.steps.append(stepNr)
                 break
-            #print(stepNr)
+            # print(stepNr)
             self.steps.append(stepNr)
             self.DealWithPioneer()
         self.epsilon = temp_eps
-        self.time = (time.time()-start)
-        self.getPath(flag)
+        self.time = time.time() - start
+        if not self.disableInit:
+            self.getPath(flag)
 
     def NextAction(self):
         epsilon = random.random()
         Q = []
         if epsilon < self.epsilon:
-            #self.a = random.randint(0, 3)
-            self.a = int(random.random()*(4))
+            # self.a = random.randint(0, 3)
+            self.a = int(random.random() * (4))
         else:
             PossibleStates = [
-            (self.state[0]-1, self.state[1]),
-            (self.state[0]+1, self.state[1]),
-            (self.state[0], self.state[1]-1),
-            (self.state[0], self.state[1]+1)
+                (self.state[0] - 1, self.state[1]),
+                (self.state[0] + 1, self.state[1]),
+                (self.state[0], self.state[1] - 1),
+                (self.state[0], self.state[1] + 1),
             ]
 
-            for x,y in PossibleStates:
+            for x, y in PossibleStates:
                 if x <= 0 or y <= 0 or x >= self.map.size[0] or y >= self.map.size[1]:
                     Q.append(-100)
-                elif (x,y) == self.map.target:
+                elif (x, y) == self.map.target:
                     Q.append(200)
                 else:
-                    val = max(self.Q[x+(y-1)*20-1])
+                    val = max(self.Q[x + (y - 1) * 20 - 1])
                     Q.append(val)
             indexes = []
             max_value = max(Q)
-            for index,value in enumerate(Q):
+            for index, value in enumerate(Q):
                 if value == max_value:
                     indexes.append(index)
             if len(indexes) == 1:
-                self.a=indexes[0]
+                self.a = indexes[0]
             else:
-                i=int(random.random()*(len(indexes)))
-                self.a=indexes[i]
+                i = int(random.random() * (len(indexes)))
+                self.a = indexes[i]
 
     def Reinforcment(self):
         if self.gazebo:
@@ -146,48 +147,56 @@ class Qlearning:
 
     def ReinforceSim(self):
         if self.a == 0:
-            x,y = (self.state[0]-1, self.state[1])
+            x, y = (self.state[0] - 1, self.state[1])
         elif self.a == 1:
-            x,y = (self.state[0]+1, self.state[1])
+            x, y = (self.state[0] + 1, self.state[1])
         elif self.a == 2:
-            x,y = (self.state[0], self.state[1]-1)
+            x, y = (self.state[0], self.state[1] - 1)
         else:
-            x,y = (self.state[0], self.state[1]+1)
-        if x <= 0 or x >= self.map.size[0] or y <= 0 or y >= self.map.size[1] or self.map.checkInterior(x, y):
+            x, y = (self.state[0], self.state[1] + 1)
+        if (
+            x <= 0
+            or x >= self.map.size[0]
+            or y <= 0
+            or y >= self.map.size[1]
+            or self.map.checkInterior(x, y)
+        ):
             self.r = -1
             self.nextState = self.state
             return
-        if (x,y) == self.map.target:
+        if (x, y) == self.map.target:
             self.r = 2
-            self.nextState = (x,y)
+            self.nextState = (x, y)
             return
         self.r = 0
-        self.nextState = (x,y)
+        self.nextState = (x, y)
 
     def ReinforceGazebo(self):
         if self.a == 0:
-            posNext = (self.state[0]-1, self.state[1])
+            posNext = (self.state[0] - 1, self.state[1])
         elif self.a == 1:
-            posNext = (self.state[0]+1, self.state[1])
+            posNext = (self.state[0] + 1, self.state[1])
         elif self.a == 2:
-            posNext = (self.state[0], self.state[1]-1)
+            posNext = (self.state[0], self.state[1] - 1)
         else:
-            posNext = (self.state[0], self.state[1]+1)
+            posNext = (self.state[0], self.state[1] + 1)
         gz = gzlib.GazeboCommunication()
         [r, posNext] = gz.goToPoint(posNext, self.map.target)
         self.r = r
         self.nextState = posNext
 
     def UpdateQ(self):
-        pos = self.state[0]+(self.state[1]-1)*20 - 1
-        self.Q[pos][self.a] = (1-self.alpha)*self.Q[pos][self.a]+self.alpha*(
-            self.r+self.gamma*max(self.Q[self.nextState[0]+(self.nextState[1]-1)*20 - 1]))
+        pos = self.state[0] + (self.state[1] - 1) * 20 - 1
+        self.Q[pos][self.a] = (1 - self.alpha) * self.Q[pos][self.a] + self.alpha * (
+            self.r
+            + self.gamma
+            * max(self.Q[self.nextState[0] + (self.nextState[1] - 1) * 20 - 1])
+        )
 
     def StartPioneer(self):
         if self.gazebo:
             gz = gzlib.GazeboCommunication()
-            gz.spawnPioneer(
-                self.map.startingPoint[0], self.map.startingPoint[1])
+            gz.spawnPioneer(self.map.startingPoint[0], self.map.startingPoint[1])
 
     def DealWithPioneer(self):
         if self.gazebo:
@@ -200,7 +209,7 @@ class Qlearning:
         else:
             plt.figure(fig.number)
         plt.plot(self.steps)
-        if (show):
+        if show:
             plt.show()
         return fig
 
@@ -219,7 +228,9 @@ class Qlearning:
             self.pathLenght = 100
             self.pathSmoothness = 100
 
-    def save(self, path="data.txt", mapa=True, strategy=True, sFull=True, Q=True, sQ=True):
+    def save(
+        self, path="data.txt", mapa=True, strategy=True, sFull=True, Q=True, sQ=True
+    ):
         with open(path, "a") as file:
             file.write("Qlearn: \n")
             file.write(f"E {self.epsilon} \n")

@@ -232,6 +232,8 @@ class Map:
         plt.ylim([0, self.size[1]])
         plt.xticks(np.arange(0, self.size[0], 2))
         plt.yticks(np.arange(0, self.size[1], 2))
+        plt.plot(self.target[0], self.target[1], 'or')
+        plt.plot(self.startingPoint[0], self.startingPoint[1], 'ob')
         ax.set_axisbelow(True)
         if(show):
             plt.show()
@@ -243,8 +245,6 @@ class Map:
         plt.figure(fig.number)
         x, y = self.getPath(Q)
         plt.plot(x, y)
-        plt.plot(self.target[0], self.target[1], 'or')
-        plt.plot(self.startingPoint[0], self.startingPoint[1], 'ob')
         if show:
             plt.show()
         return fig

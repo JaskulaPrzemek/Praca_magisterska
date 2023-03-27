@@ -2,92 +2,139 @@ import numpy as np
 import random
 import math
 from interfaces import InitializationInterface
-import Qlearning as Q
+import Qlearning as Qmodule
 import Mapa as mp
 import tensorflow as tf
+from multiprocessing import Process, Queue
 
 
 class NN(InitializationInterface):
-
     def __init__(self):
-        self.model = tf.keras.Sequential([
-            #map is 21*21,start is 2, finish is 2
-            tf.keras.layers.InputLayer(input_shape=(445,)),
-            tf.keras.layers.Dense(445, activation='relu'),
-            tf.keras.layers.Dense(445, activation='relu'),
-            # output is the Q which is 20*20*4
-            tf.keras.layers.Dense(1600, activation='relu')
-        ])
-        self.InputTrainNumber = 64*1
+        inputs = tf.keras.layers.Input(shape=(445,))
+        x = tf.keras.layers.Dense(445, activation="relu")(inputs)
+        outputs = tf.keras.layers.Dense(1764, activation="relu")(x)
+        self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
+        self.eagerly = True
+        self.InputTrainNumber = 64 * 1
         self.average_nr = 1
-        self.batch_size=2
-        self.Qlearning = Q.Qlearning()
+        self.batch_size = 2
+        self.Qlearning = Qmodule.Qlearning()
+        self.eps = 0.05
         self.Qlearning.setEpsilon(0.05)
-        self.Qlearning.setDisableInit()
+        # self.Qlearning.setDisableInit()
 
     def custom_loss(self, y_true, y_pred):
-        avg = tf.py_function(func=self.run_average_steps, inp=[y_true, y_pred], Tout=[tf.float64])
-        print(avg)
-        return avg
+        # avg = tf.py_function(
+        #     func=self.run_average_steps, inp=[y_true, y_pred], Tout=[tf.float64]
+        # )
+        avg = self.run_average_steps(y_true, y_pred)
+        # print(avg)
+
+        return tf.constant(avg)
 
     def run_average_steps(self, map_rep, Q_list):
         avg = []
         print("calculating loss")
-        for map_list, Q_matrix in zip(map_rep.numpy(),Q_list.numpy()):
-            suma = 0
-            Q_matrix = np.reshape(Q_matrix, (400, 4))
+        Qlist = [Queue() for _ in range(self.batch_size)]
+        # print(Qlist)
+        # avg.append(self.batch_size)
+        list_of_lists_of_processes = []
+        for map_list, q_matrix, q in zip(map_rep.numpy(), Q_list.numpy(), Qlist):
+            q_matrix = np.reshape(q_matrix, (441, 4))
             map_list = np.reshape(map_list, (445))
-            self.Qlearning.map.loadListRep(map_list)
-            for i in range(self.average_nr):
-                print(f"Run {i}")
-                self.Qlearning.Q = np.copy(Q_matrix)
-                self.Qlearning.learn()
-                steps = self.Qlearning.steps
-                # print(steps)
-                suma += sum(steps)/len(steps)
-            avg.append(suma/self.average_nr)
+            p_list = [
+                Process(
+                    target=self.get_avg_step,
+                    args=(
+                        map_list,
+                        q_matrix,
+                        q,
+                    ),
+                )
+                for _ in range(self.average_nr)
+            ]
+            for process in p_list:
+                process.start()
+            list_of_lists_of_processes.append(p_list)
+        for l, q in zip(list_of_lists_of_processes, Qlist):
+            for p in l:
+                p.join()
+            suma = 0
+            for _ in range(self.average_nr):
+                suma += q.get()
+            avg.append(suma / self.average_nr)
             # print(avg)
-        #avg = tf.constant(avg,dtype=tf.float64)
-        print (avg)
+        # avg = tf.constant(avg,dtype=tf.float64)
+        print(avg)
         return avg
+
+    def get_avg_step(self, map_rep, q_matrix, Que):
+        # print("process jo")
+        q = Qmodule.Qlearning()
+        q.setEpsilon(self.eps)
+        q.setDisableInit()
+        q.Q = np.copy(q_matrix)
+        q.map.loadListRep(map_rep)
+        q.learn()
+        steps = q.steps
+        avg = sum(steps) / len(steps)
+        Que.put(avg)
 
     def createTrainData(self):
         xdata = []
-        ydata = [22*100]*self.InputTrainNumber
+        ydata = []
         mapa = mp.Map()
-        with open("Training_maps.txt", 'a') as file:
-            for i in range(self.InputTrainNumber):
+        with open("Training_maps.txt", "a") as file:
+            for _ in range(self.InputTrainNumber):
                 mapa.createRandomMap()
                 v = mapa.getListRep()
                 file.write(f"{str(v)} \n")
                 xdata.append(v)
+        for map in xdata:
+            self.Qlearning.map.loadListRep(map)
+            self.Qlearning.learn()
+            ydata.append(np.reshape(self.Qlearning.Q, (1764)))
 
-        self.TrainX = xdata
-        self.TrainY = ydata
+        self.TrainX = np.array(xdata)
+        self.TrainY = np.array(ydata)
+        np.savetxt("Training_Q.txt", self.TrainY)
         print("Finished generating")
 
     def loadTrainingData(self):
         xdata = []
         nr = 0
-        with open("Training_maps.txt", 'r') as file:
+        with open("Training_maps.txt", "r") as file:
             for line in file:
-                xdata.append(eval(line))
+                x = eval(line)
+                xdata.append(x)
                 nr += 1
                 if nr >= self.InputTrainNumber:
                     break
-            # print(xdata)
         # ydata=[22*100]*len(xdata)
-        self.TrainX = xdata
-        # self.TrainY=ydata
+        nr = 0
+        ydata = np.loadtxt("Training_Q.txt")
+        print(ydata.shape)
+        self.TrainX = np.array(xdata)
+        self.TrainY = ydata[: self.InputTrainNumber, :]
+        print(self.TrainY.shape)
         print("Finished loading")
 
     def train(self):
-        self.model.compile(optimizer='adam', run_eagerly=False,
-                           loss=self.custom_loss)
+        # self.model.compile(
+        #    optimizer="adam", run_eagerly=self.eagerly, loss=self.custom_loss
+        # )
+        self.model.compile(
+            optimizer="adam",
+            run_eagerly=self.eagerly,
+            loss=tf.keras.losses.MeanAbsoluteError(),
+        )
         print("Finished compiling")
-        steps = int( np.ceil(len(self.TrainX) / self.batch_size) )
-        self.model.fit(self.TrainX, self.TrainX,
-                       epochs=5, batch_size=self.batch_size, verbose=2,steps_per_epoch=steps)
+        steps = int(np.ceil(len(self.TrainX) / self.batch_size))
+        print(steps)
+        hist = self.model.fit(
+            self.TrainX, self.TrainY, batch_size=self.batch_size, verbose=1, epochs=25
+        )
+        print(hist)
 
     def save_model(self, path="model"):
         self.model.save(path)
@@ -103,7 +150,9 @@ class NN(InitializationInterface):
 
 
 network = NN()
-network.InputTrainNumber = 8*1
-network.loadTrainingData()
+network.InputTrainNumber = 1 * 1 * 4
+network.createTrainData()
+# network.loadTrainingData()
+network.model.summary()
 network.train()
-#network.save_model()
+network.save_model()
