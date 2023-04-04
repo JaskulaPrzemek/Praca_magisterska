@@ -150,9 +150,9 @@ class NN(InitializationInterface):
 
 
 network = NN()
-network.InputTrainNumber = 1 * 1 * 4
+network.InputTrainNumber = 4 * 64 * 4
 network.createTrainData()
 # network.loadTrainingData()
-network.model.summary()
-network.train()
-network.save_model()
+# network.model.summary()
+# network.train()
+# network.save_model()
