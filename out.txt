@@ -1,20 +1,3 @@
-Finished generating
-Finished loading
-Model: "model"
-_________________________________________________________________
- Layer (type)                Output Shape              Param #   
-=================================================================
- input_1 (InputLayer)        [(None, 445)]             0         
-                                                                 
- dense (Dense)               (None, 1)                 446       
-                                                                 
- dense_1 (Dense)             (None, 1600)              3200      
-                                                                 
-=================================================================
-Total params: 3,646
-Trainable params: 3,646
-Non-trainable params: 0
-_________________________________________________________________
-Finished compiling
-8
-Epoch 1/5
+version https://git-lfs.github.com/spec/v1
+oid sha256:ab6299eb17c297dd05346e2448471de17e0f9a1a9a6871bbe375cbce2bf74cca
+size 877

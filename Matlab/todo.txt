@@ -1,4 +1,3 @@
- sudo apt-get install ubuntu-restricted-extras
- sudo apt-get install libavcodec58 ffmpeg
- 
- for mp4
+version https://git-lfs.github.com/spec/v1
+oid sha256:3fd0c2a296782a6169da936d65a91cfcd748805e06fe6c547b50880566d293ec
+size 104

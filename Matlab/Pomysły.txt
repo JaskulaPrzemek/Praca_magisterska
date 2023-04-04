@@ -1,2 +1,3 @@
-1,2 metody inicjalizacji
-
+version https://git-lfs.github.com/spec/v1
+oid sha256:f6277ee830660907911c9417aa1dffe3dd27ad99000d333a23e749aae4329107
+size 28
