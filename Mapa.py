@@ -56,6 +56,7 @@ class Map:
         self.obstaclesShort = self.obstacles.copy()
 
     def createRandomMap(self):
+        self.obstacles.clear()
         while True:
             nr_of_obstacles = int(random.random()*7+6)
             for i in range(nr_of_obstacles):

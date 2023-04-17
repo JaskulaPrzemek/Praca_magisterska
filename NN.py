@@ -12,6 +12,7 @@ class NN(InitializationInterface):
     def __init__(self):
         inputs = tf.keras.layers.Input(shape=(445,))
         x = tf.keras.layers.Dense(445, activation="relu")(inputs)
+        x = tf.keras.layers.Dense(1764, activation="relu")(x)
         outputs = tf.keras.layers.Dense(1764, activation="relu")(x)
         self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
         self.eagerly = True
@@ -85,7 +86,8 @@ class NN(InitializationInterface):
         ydata = []
         mapa = mp.Map()
         with open("Training_maps.txt", "a") as file:
-            for _ in range(self.InputTrainNumber):
+            for i in range(self.InputTrainNumber):
+                print(f'Map {i}')
                 mapa.createRandomMap()
                 v = mapa.getListRep()
                 file.write(f"{str(v)} \n")
@@ -132,7 +134,7 @@ class NN(InitializationInterface):
         steps = int(np.ceil(len(self.TrainX) / self.batch_size))
         print(steps)
         hist = self.model.fit(
-            self.TrainX, self.TrainY, batch_size=self.batch_size, verbose=1, epochs=25
+            self.TrainX, self.TrainY, batch_size=self.batch_size, verbose=1, epochs=125
         )
         print(hist)
 
@@ -150,9 +152,10 @@ class NN(InitializationInterface):
 
 
 network = NN()
-network.InputTrainNumber = 1 * 1 * 4
-network.createTrainData()
-# network.loadTrainingData()
-network.model.summary()
-network.train()
-network.save_model()
+network.InputTrainNumber = 64 * 64 * 4
+#network.createTrainData()
+#network.loadTrainingData()
+#network.model.summary()
+#network.train()
+#network.save_model()
+network.load()
