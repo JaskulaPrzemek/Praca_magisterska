@@ -84,9 +84,9 @@ class Map:
                     self.obstacles.append(
                         [(x, y), (x, y + 1), (x + 1, y + 1), (x + 1, y), (x, y)]
                     )
-        if type == 3:
-            self.createRandomMap()
         if type == 4:
+            self.createRandomMap()
+        if type == 3:
             self.startingPoint = (1, 11)
             self.target = (18, 11)
             self.obstacles.append(
@@ -210,15 +210,15 @@ class Map:
         mask = mask + self.cMap
         result = np.where(mask == 2)
         if not np.any(result):
-                return True
-            else:
-                return False
-    
-        def selfIntersecting(self, obstacle):
-            if len(obstacle) <= 4:
-                return False
-            sides = []
-            for i in range(len(obstacle) - 1):
+            return True
+        else:
+            return False
+
+    def selfIntersecting(self, obstacle):
+        if len(obstacle) <= 4:
+            return False
+        sides = []
+        for i in range(len(obstacle) - 1):
             sides.append((obstacle[i], obstacle[i + 1]))
         for i in range(len(sides)):
             side1 = sides[i]
@@ -369,10 +369,12 @@ class Map:
         return False
 
     def save(self, path="data.txt"):
+        path = path[:-4] + "Map.txt"
         with open(path, "a") as file:
             file.write("Map: \n")
             file.write(f"S {self.startingPoint} \n")
             file.write(f"T {self.target} \n")
+            file.write(f"W {self.size} \n")
             file.write("O: \n")
             for obstacle in self.obstaclesShort:
                 file.write(f"{str(obstacle)} \n")

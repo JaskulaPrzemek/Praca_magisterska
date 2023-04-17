@@ -1,8 +1,9 @@
 import math
+
 try:
     import rospy
     import gazeboCommunication as gzlib
-except(ImportError):
+except ImportError:
     pass
 import matplotlib.pyplot as plt
 
@@ -11,6 +12,7 @@ import Qlearning as Q
 import FPA as f
 import APF as a
 import WOA as w
+import NN as n
 import random
 import time
 import numpy as np
@@ -20,53 +22,13 @@ def avg(lst):
     return sum(lst) / len(lst)
 
 
-show = False
-fpa = f.FPA()
-l = Q.Qlearning()
-apf = a.APF()
-woa = w.WOA()
-m=mp.Map()
-l.createMap(4)
-# l.map.viewMap()
-l.setEpsilon(0.01)
-#l.setStrategy()
-times = []
-lenght = []
-smoothness = []
-path = "data1.txt"
-
-# l.map.save(path)
-for i in range(1000):
-    pass
-    #l.createMap(3)
-    #l.learn()
-    #times.append(l.time)
-    #lenght.append(l.pathLenght)
-    #smoothness.append(l.pathSmoothness)
-    #path=l.plotPath(show)
-    #steps=l.plotSteps(show)
-    # l.save(path,mapa=False,strategy=True,sFull=True,Q=True,sQ=True)
-    #print(np.flip(l.map.cMap,axis=0))
-    #l.plotPath()
-    
-
-#print(max(times))
-#print(avg(times))
-#print(max(lenght))
-#print(avg(lenght))
-#print(max(smoothness))
-#print(avg(smoothness))
-
-m.createMap(1)
-m.viewMap()
+nn = n.NN()
+m = mp.Map()
 m.createMap(2)
-m.viewMap()
-m.createMap(3)
-m.viewMap()
-m.createMap(4)
-m.viewMap()
-m.createMap(0)
-m.viewMap()
+m.createCMap()
+nn.load()
+print(type(nn.model))
+nn.initialize(m, False)
 # l.setStrategy(fpa)
 # l.learn()
 # print(l.time)

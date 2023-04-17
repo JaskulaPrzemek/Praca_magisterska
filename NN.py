@@ -12,10 +12,7 @@ class NN(InitializationInterface):
     def __init__(self):
         inputs = tf.keras.layers.Input(shape=(445,))
         x = tf.keras.layers.Dense(445, activation="relu")(inputs)
-<<<<<<< HEAD
         x = tf.keras.layers.Dense(1764, activation="relu")(x)
-=======
->>>>>>> ab05b57103f02242bc77a3390b972c519b8f820b
         outputs = tf.keras.layers.Dense(1764, activation="relu")(x)
         self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
         self.eagerly = True
@@ -89,12 +86,7 @@ class NN(InitializationInterface):
         ydata = []
         mapa = mp.Map()
         with open("Training_maps.txt", "a") as file:
-<<<<<<< HEAD
-            for i in range(self.InputTrainNumber):
-                print(f'Map {i}')
-=======
             for _ in range(self.InputTrainNumber):
->>>>>>> ab05b57103f02242bc77a3390b972c519b8f820b
                 mapa.createRandomMap()
                 v = mapa.getListRep()
                 file.write(f"{str(v)} \n")
@@ -149,29 +141,25 @@ class NN(InitializationInterface):
         self.model.save(path)
 
     def load(self, path="model"):
-        self.model = tf.keras.models.load_model(path)
+        self.model = tf.keras.saving.load_model(path)
 
     def initialize(self, map, gazebo):
-        pass
+        List = map.getListRep()
+        # self.model.summary()
+        output = self.model.predict(List)
+        print(output)
+        self.Q = np.reshape(output, (441, 4))
+        return self.Q
 
     def save(self, path="data.txt", full=True, Q=True):
-        pass
+        with open(path, "a") as file:
+            file.write(f"Qi {np.array_str(self.Q)} \n")
 
 
-network = NN()
-<<<<<<< HEAD
-network.InputTrainNumber = 64 * 64 * 4
-#network.createTrainData()
-#network.loadTrainingData()
-#network.model.summary()
-#network.train()
-#network.save_model()
-network.load()
-=======
-network.InputTrainNumber = 4 * 64 * 4
-network.createTrainData()
-# network.loadTrainingData()
-# network.model.summary()
-# network.train()
-# network.save_model()
->>>>>>> ab05b57103f02242bc77a3390b972c519b8f820b
+nn = NN()
+m = mp.Map()
+m.createMap(2)
+m.createCMap()
+nn.load()
+print(type(nn.model))
+nn.initialize(m, False)
