@@ -9,8 +9,7 @@ import Qlearning as Q
 import FPA as f
 import APF as a
 import WOA as w
-
-# import NN as n
+import NN as n
 
 
 NNBool = False
@@ -26,7 +25,7 @@ if WOABool:
 if APFBool:
     APF = a.APF()
 if NNBool:
-    NN = a.APF()
+    NN = n.NN()
 
 
 def genForMap(Qlearning, mapstr):

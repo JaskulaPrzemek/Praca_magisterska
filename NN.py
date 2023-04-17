@@ -11,17 +11,20 @@ from multiprocessing import Process, Queue
 class NN(InitializationInterface):
     def __init__(self):
         inputs = tf.keras.layers.Input(shape=(445,))
-        x = tf.keras.layers.Dense(445, activation="relu")(inputs)
-        x = tf.keras.layers.Dense(1764, activation="relu")(x)
-        outputs = tf.keras.layers.Dense(1764, activation="relu")(x)
+        x = tf.keras.layers.Dense(445, activation="elu")(inputs)
+        x = tf.keras.layers.Dense(1764, activation="elu")(x)
+        outputs = tf.keras.layers.Dense(1764, activation="elu")(x)
         self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
         self.eagerly = True
         self.InputTrainNumber = 64 * 1
         self.average_nr = 1
         self.batch_size = 2
         self.Qlearning = Qmodule.Qlearning()
+        self.epochs = 15
         self.eps = 0.05
         self.Qlearning.setEpsilon(0.05)
+        self.optimizer = "adam"
+        self.loss = tf.keras.losses.MeanAbsoluteError()
         # self.Qlearning.setDisableInit()
 
     def custom_loss(self, y_true, y_pred):
@@ -125,27 +128,31 @@ class NN(InitializationInterface):
         #    optimizer="adam", run_eagerly=self.eagerly, loss=self.custom_loss
         # )
         self.model.compile(
-            optimizer="adam",
+            optimizer=self.optimizer,
             run_eagerly=self.eagerly,
-            loss=tf.keras.losses.MeanAbsoluteError(),
+            loss=self.loss,
+            metrics=["accuracy"],
         )
         print("Finished compiling")
         steps = int(np.ceil(len(self.TrainX) / self.batch_size))
         print(steps)
         hist = self.model.fit(
-            self.TrainX, self.TrainY, batch_size=self.batch_size, verbose=1, epochs=125
+            self.TrainX,
+            self.TrainY,
+            batch_size=self.batch_size,
+            verbose=1,
+            epochs=self.epochs,
         )
         print(hist)
 
-    def save_model(self, path="model"):
+    def save_model(self, path="model.keras"):
         self.model.save(path)
 
-    def load(self, path="model"):
+    def load(self, path="model.keras"):
         self.model = tf.keras.saving.load_model(path)
 
     def initialize(self, map, gazebo):
         List = map.getListRep()
-        # self.model.summary()
         output = self.model.predict(List)
         print(output)
         self.Q = np.reshape(output, (441, 4))
@@ -156,10 +163,11 @@ class NN(InitializationInterface):
             file.write(f"Qi {np.array_str(self.Q)} \n")
 
 
-nn = NN()
-m = mp.Map()
-m.createMap(2)
-m.createCMap()
-nn.load()
-print(type(nn.model))
-nn.initialize(m, False)
+# network.model.summary()
+# print(network.model.layers[1].get_weights())
+# print(network.model.layers[2].get_weights())
+# print(network.model.layers[3].get_weights())
+# network.loadTrainingData()
+# network.model.summary()
+# network.train()
+# network.save_model()
