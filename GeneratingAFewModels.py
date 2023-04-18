@@ -1,12 +1,12 @@
-import NN
+import NN as n
 import tensorflow as tf
 
 """
 
-Generates a shiteton of models for comparison
+Generates a lot of models for comparison
 """
 
-network = NN()
+network = n.NN()
 network.InputTrainNumber = 64 * 32 * 1
 "2048 for training"
 network.loadTrainingData()
@@ -31,38 +31,38 @@ sqd = "sqd"
 network.optimizer = adam
 network.loss = mse
 network.train()
-network.save("AdamModelMSE.keras")
+network.save_model("AdamModelMSE.keras")
 network.loss = mape
 network.train()
-network.save("AdamModelMape.keras")
+network.save_model("AdamModelMape.keras")
 network.loss = msle
 network.train()
-network.save("AdamModelMsle.keras")
+network.save_model("AdamModelMsle.keras")
 network.loss = csl
 network.train()
-network.save("AdamModelCsl.keras")
+network.save_model("AdamModelCsl.keras")
 network.loss = lc
 network.train()
-network.save("AdamModelLc.keras")
+network.save_model("AdamModelLc.keras")
 network.loss = h
 network.train()
-network.save("AdamModelH.keras")
+network.save_model("AdamModelH.keras")
 network.optimizer = sqd
 network.loss = mse
 network.train()
-network.save("SqdModelMSE.keras")
+network.save_model("SqdModelMSE.keras")
 network.loss = mape
 network.train()
-network.save("SqdModelMape.keras")
+network.save_model("SqdModelMape.keras")
 network.loss = msle
 network.train()
-network.save("SqdModelMsle.keras")
+network.save_model("SqdModelMsle.keras")
 network.loss = csl
 network.train()
-network.save("SqdModelCsl.keras")
+network.save_model("SqdModelCsl.keras")
 network.loss = lc
 network.train()
-network.save("SqdModelLc.keras")
+network.save_model("SqdModelLc.keras")
 network.loss = h
 network.train()
-network.save("SqdModelH.keras")
+network.save_model("SqdModelH.keras")
