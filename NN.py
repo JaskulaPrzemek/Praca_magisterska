@@ -88,7 +88,7 @@ class NN(InitializationInterface):
         xdata = []
         ydata = []
         mapa = mp.Map()
-        with open("Training_maps.txt", "a") as file:
+        with open("TrainingData/Training_maps1.txt", "a") as file:
             for _ in range(self.InputTrainNumber):
                 mapa.createRandomMap()
                 v = mapa.getListRep()
@@ -101,13 +101,13 @@ class NN(InitializationInterface):
 
         self.TrainX = np.array(xdata)
         self.TrainY = np.array(ydata)
-        np.savetxt("Training_Q.txt", self.TrainY)
+        np.savetxt("TrainingData/Training_Q1.txt", self.TrainY)
         print("Finished generating")
 
     def loadTrainingData(self):
         xdata = []
         nr = 0
-        with open("Training_maps.txt", "r") as file:
+        with open("TrainingData/Training_maps.txt", "r") as file:
             for line in file:
                 x = eval(line)
                 xdata.append(x)
@@ -116,7 +116,7 @@ class NN(InitializationInterface):
                     break
         # ydata=[22*100]*len(xdata)
         nr = 0
-        ydata = np.loadtxt("Training_Q.txt")
+        ydata = np.loadtxt("TrainingData/Training_Q.txt")
         print(ydata.shape)
         self.TrainX = np.array(xdata)
         self.TrainY = ydata[: self.InputTrainNumber, :]
@@ -170,23 +170,23 @@ class NN(InitializationInterface):
 
 
 network = NN()
-network.InputTrainNumber = 64 * 64* 4
-#network.createTrainData()
-#network.loadTrainingData()
-#network.model.summary()
-#network.train()
-#network.save_model()
-network.load("AdamModelMSE.keras")
-m=mp.Map()
-m.createRandomMap()
-listaa = m.getListRep()
-print(listaa)
-v=network.model.predict(tf.constant(np.reshape(listaa,(1,445))))
-print(v)
-#network.model.summary()
-#print(network.model.layers[1].get_weights())
-#print(network.model.layers[2].get_weights())
-#print(network.model.layers[3].get_weights())
+network.InputTrainNumber = 64 * 64 * 4
+network.createTrainData()
+# network.loadTrainingData()
+# network.model.summary()
+# network.train()
+# network.save_model()
+# network.load("AdamModelMSE.keras")
+# m = mp.Map()
+# m.createRandomMap()
+# listaa = m.getListRep()
+# print(listaa)
+# v = network.model.predict(tf.constant(np.reshape(listaa, (1, 445))))
+# print(v)
+# network.model.summary()
+# print(network.model.layers[1].get_weights())
+# print(network.model.layers[2].get_weights())
+# print(network.model.layers[3].get_weights())
 # network.loadTrainingData()
 # network.model.summary()
 # network.train()
