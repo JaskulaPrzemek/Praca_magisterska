@@ -213,7 +213,6 @@ class Map:
             return True
         else:
             return False
-
     def selfIntersecting(self, obstacle):
         if len(obstacle) <= 4:
             return False
