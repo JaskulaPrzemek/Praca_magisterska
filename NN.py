@@ -153,10 +153,9 @@ class NN(InitializationInterface):
 
     def initialize(self, map, gazebo):
         List = map.getListRep()
-        output = self.model.predict(List)
-        print(output)
+        output = self.model.predict(tf.reshape(List, (1, 445)))
         self.Q = np.reshape(output, (441, 4))
-        return self.Q
+        return self.Q.copy()
 
     def save(self, path="data.txt", full=True, Q=True):
         with open(path, "a") as file:
@@ -169,9 +168,6 @@ class NN(InitializationInterface):
 # print(network.model.layers[3].get_weights())
 
 
-network = NN()
-network.InputTrainNumber = 64 * 64 * 4
-network.createTrainData()
 # network.loadTrainingData()
 # network.model.summary()
 # network.train()
