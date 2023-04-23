@@ -88,7 +88,7 @@ class NN(InitializationInterface):
         xdata = []
         ydata = []
         mapa = mp.Map()
-        with open("TrainingData/Training_maps3.txt", "a") as file:
+        with open("TrainingData/Training_maps2.txt", "a") as file:
             for _ in range(self.InputTrainNumber):
                 mapa.createRandomMap()
                 v = mapa.getListRep()
@@ -101,7 +101,7 @@ class NN(InitializationInterface):
 
         self.TrainX = np.array(xdata)
         self.TrainY = np.array(ydata)
-        np.savetxt("TrainingData/Training_Q3.txt", self.TrainY)
+        np.savetxt("TrainingData/Training_Q2.txt", self.TrainY)
         print("Finished generating")
 
     def loadTrainingData(self):
