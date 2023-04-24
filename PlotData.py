@@ -5,6 +5,7 @@ import Mapa as mp
 import FPA as f
 import APF as a
 import WOA as w
+import random
 
 # import NN as n
 NNBool = False
@@ -324,6 +325,63 @@ def generateLatexTableRest(mapstr):
     print(LatexStr)
 
 
+def genLatexPaths(mapstr):
+    PossibleMaps = ["Zero", "APF", "FPA", "WOA", "NN"]
+    for map in PossibleMaps:
+        i = random.randint(0, 9)
+        if map == "FPA":
+            i = i * 2
+        latexStr = (
+            """
+        \\begin{frame}
+        \centering
+        """
+            + map
+            + """
+        \includegraphics[width=\\textwidth,height=\\textheight]{Obrazy/"""
+            + mapstr
+        )
+        latexStr += (
+            """/"""
+            + map
+            + str(i)
+            + """.png}
+    \end{frame}
+        """
+        )
+        print(latexStr)
+
+
+def genLatexBeamer(map):
+    str = (
+        """
+        \\begin{frame}
+    \centering
+    \includegraphics[width=\\textwidth,height=\\textheight]{Obrazy/"""
+        + map
+        + """/mapa.png}
+    \end{frame}
+    \\begin{frame}
+    \centering
+        """
+    )
+    print(str)
+    generateLatexTableTime_Qtime(map)
+    print(
+        """
+        \end{frame}
+    \\begin{frame}
+    \centering
+        """
+    )
+    generateLatexTableRest(map)
+    print(
+        """
+        \end{frame}
+        """
+    )
+
+
 AllList = [
     "map1",
     "map2",
@@ -336,34 +394,9 @@ AllList = [
     "randMap/rand4",
     "randMap/rand5",
 ]
-for map in AllList:
-    str = (
-        """
-    \\begin{frame}
-\centering
-\includegraphics[width=\\textwidth,height=\\textheight]{Obrazy/"""
-        + map
-        + """/mapa.png}
-\end{frame}
-\\begin{frame}
-\centering
-    """
-    )
-    print(str)
-    generateLatexTableTime_Qtime(map)
-    print(
-        """
-    \end{frame}
-\\begin{frame}
-\centering
-    """
-    )
-    generateLatexTableRest(map)
-    print(
-        """
-    \end{frame}
-    """
-    )
+for mapstr in AllList:
+    genLatexBeamer(mapstr)
+    genLatexPaths(mapstr)
 # getDataForAMap("map1")
 # getDataForAMap("map2")
 # getDataForAMap("map3")
