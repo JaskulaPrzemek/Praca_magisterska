@@ -225,15 +225,152 @@ def getDataForAMap(mapstr):
             fig.savefig("plots/" + mapstr + "/" + map + str(index) + ".png")
 
 
-getDataForAMap("map1")
-getDataForAMap("map2")
-getDataForAMap("map3")
-getDataForAMap("map4")
-getDataForAMap("map5")
-getDataForAMap("randMap/rand1")
-getDataForAMap("randMap/rand2")
-getDataForAMap("randMap/rand3")
-getDataForAMap("randMap/rand4")
-getDataForAMap("randMap/rand5")
+def generateLatexTableTime_Qtime(mapstr):
+    LatexStr = """
+\\begin{table}[]
+\centering
+\\begin{tabular}{l|llllll}
+\cline{2-7}
+& \multicolumn{1}{l|}{$Time_{Min}$} & \multicolumn{1}{l|}{$Time_{Max}$} & \multicolumn{1}{l|}{$Time_{Avg}$} & \multicolumn{1}{l|}{$QTime_{Min}$} & \multicolumn{1}{l|}{$QTime_{Max}$} & \multicolumn{1}{l|}{$QTime_{Avg}$} \\\\ \hline
+    """
+    Numbers = []
+    PossibleMaps = ["Zero", "APF", "FPA", "WOA", "NN"]
 
-getDataForAMap("map1")
+    with open("plots/" + mapstr + "/statData.txt") as file:
+        for line in file:
+            lista = line.split(" ")
+            if "Time" in lista:
+                Numbers.append(lista[2])
+                Numbers.append(lista[4])
+                Numbers.append(lista[6])
+            if "QTime" in lista:
+                Numbers.append(lista[2])
+                Numbers.append(lista[4])
+                Numbers.append(lista[6])
+    map_index = -1
+    for index, value in enumerate(Numbers):
+        if index % 6 == 0:
+            if map_index != -1:
+                str = str[:-1]
+                str += "\\\\ \cline{1-1} \n"
+                LatexStr += str
+            map_index += 1
+            # print(map_index)
+            str = "\multicolumn{1}{|l|}{" + f" {PossibleMaps[map_index]}" + "} &"
+        str += value + "&"
+    LatexStr += str[:-1] + "\\\\ \cline{1-1} \n"
+    # LatexStr = LatexStr[:-1]
+    LatexStr += """
+    \end{tabular}
+    \end{table}
+    """
+
+    print(LatexStr)
+
+
+def generateLatexTableRest(mapstr):
+    LatexStr = """
+\\begin{table}[]
+\centering
+\\resizebox{\\textwidth}{!}{%
+\\begin{tabular}{l|llllllll}
+\cline{2-9}
+ &
+  \multicolumn{1}{l|}{$Lenght_{Min}$} &
+  \multicolumn{1}{l|}{$Lenght_{Max}$} &
+  \multicolumn{1}{l|}{$Lenght_{Avg}$} &
+  \multicolumn{1}{l|}{$Smoothness_{Min}$} &
+  \multicolumn{1}{l|}{$Smoothness_{Max}$} &
+  \multicolumn{1}{l|}{$Smoothness_{Avg}$} &
+  \multicolumn{1}{l|}{$Step_{Max}$} &
+  \multicolumn{1}{l|}{$Step_{Avg}$} \\\\ \hline
+          """
+    Numbers = []
+    PossibleMaps = ["Zero", "APF", "FPA", "WOA", "NN"]
+
+    with open("plots/" + mapstr + "/statData.txt") as file:
+        for line in file:
+            lista = line.split(" ")
+            if "Lenght" in lista:
+                Numbers.append(lista[2])
+                Numbers.append(lista[4])
+                Numbers.append(lista[6])
+            if "Smoothnes" in lista:
+                Numbers.append(lista[2])
+                Numbers.append(lista[4])
+                Numbers.append(lista[6])
+            if "Step" in lista:
+                Numbers.append(lista[4])
+                Numbers.append(lista[6])
+    map_index = -1
+    for index, value in enumerate(Numbers):
+        if index % 8 == 0:
+            if map_index != -1:
+                str = str[:-1]
+                str += "\\\\ \cline{1-1} \n"
+                LatexStr += str
+            map_index += 1
+            # print(map_index)
+            str = "\multicolumn{1}{|l|}{" + f" {PossibleMaps[map_index]}" + "} &"
+        str += value + "&"
+    LatexStr += str[:-1] + "\\\\ \cline{1-1} \n"
+    # LatexStr = LatexStr[:-1]
+    LatexStr += """
+    \end{tabular}%
+    }
+    \end{table}
+    """
+
+    print(LatexStr)
+
+
+AllList = [
+    "map1",
+    "map2",
+    "map3",
+    "map4",
+    "map5",
+    "randMap/rand1",
+    "randMap/rand2",
+    "randMap/rand3",
+    "randMap/rand4",
+    "randMap/rand5",
+]
+for map in AllList:
+    str = (
+        """
+    \\begin{frame}
+\centering
+\includegraphics[width=\\textwidth,height=\\textheight]{Obrazy/"""
+        + map
+        + """/mapa.png}
+\end{frame}
+\\begin{frame}
+\centering
+    """
+    )
+    print(str)
+    generateLatexTableTime_Qtime(map)
+    print(
+        """
+    \end{frame}
+\\begin{frame}
+\centering
+    """
+    )
+    generateLatexTableRest(map)
+    print(
+        """
+    \end{frame}
+    """
+    )
+# getDataForAMap("map1")
+# getDataForAMap("map2")
+# getDataForAMap("map3")
+# getDataForAMap("map4")
+# getDataForAMap("map5")
+# getDataForAMap("randMap/rand1")
+# getDataForAMap("randMap/rand2")
+# getDataForAMap("randMap/rand3")
+# getDataForAMap("randMap/rand4")
+# getDataForAMap("randMap/rand5")
