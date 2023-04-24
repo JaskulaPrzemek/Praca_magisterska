@@ -213,6 +213,7 @@ class Map:
             return True
         else:
             return False
+
     def selfIntersecting(self, obstacle):
         if len(obstacle) <= 4:
             return False
@@ -306,6 +307,17 @@ class Map:
             fig = self.viewMap(False)
         plt.figure(fig.number)
         x, y = self.getPath(Q)
+        plt.plot(x, y)
+        if show:
+            plt.show()
+        return fig
+
+    def plotFromPath(self, path, show=True, fig=-1):
+        if fig == -1:
+            fig = self.viewMap(False)
+        plt.figure(fig.number)
+        x = [x for x, y in path]
+        y = [y for x, y in path]
         plt.plot(x, y)
         if show:
             plt.show()

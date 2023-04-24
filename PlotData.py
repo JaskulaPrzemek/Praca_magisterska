@@ -1,3 +1,4 @@
+import os
 import matplotlib as plt
 import numpy as np
 import Mapa as mp
@@ -42,6 +43,10 @@ def getAllLists(mapstr, stratStr):
             if beggining == "s":
                 SmoothnesList.append(float(line[2:]))
     return TimeList, QTimeList, StepList, PathList, LenghtList, SmoothnesList
+
+
+def avg(lst):
+    return sum(lst) / len(lst)
 
 
 def reconstructMap(mapstr):
@@ -101,24 +106,27 @@ def reconstructQiList(mapstr, stratStr):
 
 def reconstructQList(mapstr, stratStr):
     Qlist = []
+    begList = []
     flag = False
     with open("wyniki/" + mapstr + "/" + stratStr + ".txt") as file:
         for line in file:
             beggining = line[:2]
             beggining = beggining.strip()
-            if beggining != "[" and flag:
+            end = line[-2:]
+            if beggining != "[" and flag or end == " \n" and flag:
                 flag = False
+                Qstring += line
                 Qstring = Qstring.strip()
                 Qstring = Qstring.replace("]\n", "];")
                 Array = np.matrix(Qstring, dtype=float)
-                print(Array)
                 Qlist.append(Array)
             if flag:
                 Qstring += line
-            if beggining == "Q":
+            if beggining == "Q" or beggining == "\n":
                 Qstring = ""
                 Qstring += line[2:]
                 flag = True
+    return Qlist
 
 
 def reconstructWOA(mapstr):
@@ -174,11 +182,58 @@ def reconstructFPA(mapstr):
                 fpa.beta = float(line[2:])
 
 
-m = reconstructMap("randMap/rand2")
-qlist = reconstructQList("map2", "FPA")
-print()
-m.viewMap()
-TimeList, QTimeList, StepList, PathList, LenghtList, SmoothnesList = getAllLists(
-    "map1", "Zero"
-)
-getAllLists("randMap/rand1", "Zero")
+def getDataForAMap(mapstr):
+    m = reconstructMap(mapstr)
+    if not os.path.exists("plots/" + mapstr):
+        os.makedirs("plots/" + mapstr, exist_ok=True)
+    fig = m.viewMap(False)
+    fig.savefig("plots/" + mapstr + "/mapa.png", bbox_inches="tight")
+    PossibleMaps = ["Zero", "APF", "FPA", "WOA", "NN"]
+    for map in PossibleMaps:
+        Qlist = reconstructQList(mapstr, map)
+        (
+            TimeList,
+            QTimeList,
+            StepList,
+            PathList,
+            LenghtList,
+            SmoothnesList,
+        ) = getAllLists(mapstr, map)
+        for index, value in enumerate(StepList):
+            StepList[index] = avg(value)
+        with open("plots/" + mapstr + "/statData.txt", "a") as file:
+            file.write(map + "\n")
+            file.write(
+                f"Time Min {'%.3f' % min(TimeList)} Max {'%.3f' % max(TimeList)} Avg {'%.3f' % avg(TimeList)} \n"
+            )
+            file.write(
+                f"QTime Min {'%.3f' % min(QTimeList)} Max {'%.3f' % max(QTimeList)} Avg {'%.3f' % avg(QTimeList)} \n"
+            )
+            file.write(
+                f"Lenght Min {'%.3f' % min(LenghtList)} Max {'%.3f' % max(LenghtList)} Avg {'%.3f' % avg(LenghtList)} \n"
+            )
+            file.write(
+                f"Smoothnes Min {'%.3f' % min(SmoothnesList)} Max {'%.3f' % max(SmoothnesList)} Avg {'%.3f' % avg(SmoothnesList)} \n"
+            )
+            file.write(
+                f"Step Min {'%.3f' % min(StepList)} Max {'%.3f' % max(StepList)} Avg {'%.3f' % avg(StepList)} \n"
+            )
+        for index, path in enumerate(PathList):
+            if type(path) == float:
+                continue
+            fig = m.plotFromPath(path, False)
+            fig.savefig("plots/" + mapstr + "/" + map + str(index) + ".png")
+
+
+getDataForAMap("map1")
+getDataForAMap("map2")
+getDataForAMap("map3")
+getDataForAMap("map4")
+getDataForAMap("map5")
+getDataForAMap("randMap/rand1")
+getDataForAMap("randMap/rand2")
+getDataForAMap("randMap/rand3")
+getDataForAMap("randMap/rand4")
+getDataForAMap("randMap/rand5")
+
+getDataForAMap("map1")
