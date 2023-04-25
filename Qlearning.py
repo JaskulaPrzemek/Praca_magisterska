@@ -19,6 +19,7 @@ class Qlearning:
         self.alpha = 0.2
         self.gamma = 0.8
         self.time = 0
+        self.iterations = 500
         self.strategyFlag = False
         self.disableInit = False
         np.set_printoptions(threshold=sys.maxsize, suppress=True)
@@ -60,7 +61,7 @@ class Qlearning:
 
     def initializeQMatrix(self):
         if self.strategyFlag == 0:
-            self.Q = np.zeros((self.map.size[0] * self.map.size[1], 4))
+            self.Q = np.zeros((self.map.size[0], self.map.size[1], 4))
         else:
             self.Q = self.strategy.initialize(self.map, self.gazebo)
 
@@ -75,7 +76,7 @@ class Qlearning:
         self.r = 0
         temp_eps = self.epsilon
         flag = False
-        for i in range(100):
+        for i in range(self.iterations):
             self.state = self.map.startingPoint
             stepNr = 0
             self.epsilon = temp_eps * (1 - i / 75)
@@ -90,16 +91,24 @@ class Qlearning:
                 stepNr += 1
                 # print(self.state)
                 # print(stepNr)
-                if stepNr > 1000000:
+                if stepNr > 100000000:
                     # print(stepNr)
                     flag = True
                     break
             if flag:
-                self.Q = np.zeros((self.map.size[0] * self.map.size[1], 4))
+                self.Q = np.zeros((self.map.size[0], self.map.size[1], 4))
                 self.steps.append(stepNr)
                 break
             # print(stepNr)
+            if (
+                i > 100
+                and stepNr == self.steps[-1]
+                and stepNr == self.steps[-2]
+                and stepNr == self.steps[-3]
+            ):
+                break
             self.steps.append(stepNr)
+
             self.DealWithPioneer()
         self.epsilon = temp_eps
         self.time = time.time() - start
@@ -126,7 +135,7 @@ class Qlearning:
                 elif (x, y) == self.map.target:
                     Q.append(200)
                 else:
-                    val = max(self.Q[x + (y - 1) * 20 - 1])
+                    val = max(self.Q[x][y])
                     Q.append(val)
             indexes = []
             max_value = max(Q)
@@ -186,11 +195,10 @@ class Qlearning:
         self.nextState = posNext
 
     def UpdateQ(self):
-        pos = self.state[0] + (self.state[1] - 1) * 20 - 1
-        self.Q[pos][self.a] = (1 - self.alpha) * self.Q[pos][self.a] + self.alpha * (
-            self.r
-            + self.gamma
-            * max(self.Q[self.nextState[0] + (self.nextState[1] - 1) * 20 - 1])
+        self.Q[self.state[0]][self.state[1]][self.a] = (1 - self.alpha) * self.Q[
+            self.state[0]
+        ][self.state[1]][self.a] + self.alpha * (
+            self.r + self.gamma * max(self.Q[self.nextState[0]][self.nextState[1]])
         )
 
     def StartPioneer(self):

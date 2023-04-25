@@ -9,11 +9,11 @@ import random
 
 class Map:
     def __init__(self):
-        self.size = (20, 20)
+        self.size = (64, 64)
         self.obstacles = []
 
     def createMap(self, type=1):
-        self.size = (20, 20)
+        self.size = (64, 64)
         self.obstacles = []
         if type == -1:
             self.startingPoint = (2, 16)
@@ -107,13 +107,13 @@ class Map:
     def createRandomMap(self):
         self.obstacles.clear()
         while True:
-            nr_of_obstacles = int(random.random() * 7 + 6)
+            nr_of_obstacles = int(random.random() * 47 + 6)
             for i in range(nr_of_obstacles):
                 p = random.random()
                 flag = False
                 while not flag:
                     if p < 0.1:
-                        randr = int(random.random() * 2 + 1)
+                        randr = int(random.random() * 4 + 2)
                         minx = 1 + randr
                         maxx = self.size[0] - randr - minx
                         randx = int(random.random() * maxx + minx)
@@ -123,7 +123,7 @@ class Map:
                         if p < 0.3:
                             nr_or_vertices = 3
                         else:
-                            nr_or_vertices = int(random.random() * 6 + 4)
+                            nr_or_vertices = int(random.random() * 4 + 4)
                         randx = int(random.random() * (self.size[0] - 1) + 1)
                         randy = int(random.random() * (self.size[0] - 1) + 1)
                         tempobstacle = [(randx, randy)]
@@ -186,8 +186,10 @@ class Map:
         if self.selfIntersecting(obstacle):
             return False
         self.createCMap()
-        width = self.size[0] + 1
-        height = self.size[1] + 1
+        # width = self.size[0] + 1
+        # height = self.size[1] + 1
+        width = self.size[0]
+        height = self.size[1]
         # mode L = 8-bit pixels, black and white
         img = Image.new(mode="L", size=(width, height), color=0)
         draw = ImageDraw.Draw(img)
@@ -245,8 +247,10 @@ class Map:
         return (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
 
     def createCMap(self):
-        width = self.size[0] + 1
-        height = self.size[1] + 1
+        # width = self.size[0] + 1
+        # height = self.size[1] + 1
+        width = self.size[0]
+        height = self.size[1]
         # mode L = 8-bit pixels, black and white
         img = Image.new(mode="L", size=(width, height), color=0)
         draw = ImageDraw.Draw(img)
@@ -331,9 +335,15 @@ class Map:
         y.append(state[1])
         if np.any(Q):
             while state != self.target:
-                temp = state[0] + state[1] * 20 - 21
-                list_Q = Q[temp].tolist()
-                a = list_Q.index(max(list_Q))
+                list_Q = Q[state[0]][state[1]].tolist()
+                if np.all((list_Q) == 0):
+                    print("all bad on western front")
+                indexes = []
+                maximum = max(list_Q)
+                for i, value in enumerate(list_Q):
+                    if value == maximum:
+                        indexes.append(i)
+                a = random.choice(indexes)
                 if a == 0:
                     state = (state[0] - 1, state[1])
                 elif a == 1:
@@ -342,8 +352,18 @@ class Map:
                     state = (state[0], state[1] - 1)
                 else:
                     state = (state[0], state[1] + 1)
+                if (
+                    state[0] < 0
+                    or state[1] < 0
+                    or state[0] >= self.size[0]
+                    or state[1] >= self.size[1]
+                ):
+                    print("wa")
                 x.append(state[0])
                 y.append(state[1])
+                if len(x) > 170:
+                    pass
+                    # print("bed")
         self.path = tuple(zip(x, y))
         self.pathLenght = len(x)
         self.pathSmoothness = self.getSmoothness(self.path)

@@ -10,7 +10,7 @@ class APF(InitializationInterface):
     def __init__(self):
         self.attractivePot = True
         self.repulsivePot = False
-        self.atractScale = 0.1
+        self.atractScale = 3.1
         self.repulseScale = -0.00006
         self.influenceDistance = 2
         self.inverseInfuence = 1 / self.influenceDistance
@@ -50,7 +50,7 @@ class APF(InitializationInterface):
         self.map = map
         self.size = map.size
         target = map.target
-        self.Q = np.zeros((self.map.size[0] * self.map.size[1], 4))
+        self.Q = np.zeros((self.map.size[0], self.map.size[1], 4))
         self.test = np.zeros((self.map.size[0], self.map.size[1]))
         aPot = 0
         aRep = 0
@@ -78,9 +78,8 @@ class APF(InitializationInterface):
                             )
                             if aRep < -1:
                                 aRep = -1
-                pos = i + j * 20 - 21
                 U = (self.Umax - aPot - aRep) / self.Umax
-                self.Q[pos] = aPot - aRep
+                self.Q[i][j] = aPot - aRep
                 self.test[j][i] = aPot + aRep
         self.test[self.test == -1] = min(self.test[self.test > -1])
 

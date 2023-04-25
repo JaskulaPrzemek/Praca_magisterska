@@ -7,10 +7,10 @@ from interfaces import InitializationInterface
 class FPA(InitializationInterface):
     def __init__(self):
         self.gamma = 0.5
-        self.iterations = 100
+        self.iterations = 500
         self.updateGamma = 0.8
         self.updateAlpha = 0.2
-        self.populationSize = 10
+        self.populationSize = 30
         self.gazebo = False
         self.probability = 0.5
         self.beta = 1.4
@@ -49,7 +49,7 @@ class FPA(InitializationInterface):
     def initialize(self, map, gazebo):
         self.map = map
         self.gazebo = gazebo
-        self.Q = np.zeros((self.map.size[0] * self.map.size[1], 4))
+        self.Q = np.zeros((self.map.size[0], self.map.size[1], 4))
         population = self.initialPopulation()
         bestFitness = 0
         nextPopulation = []
@@ -66,9 +66,9 @@ class FPA(InitializationInterface):
             for i in range(self.populationSize):
                 temp = np.array([0, 0])
                 while (
-                    temp[0] < 1
+                    temp[0] < 0
                     or temp[0] >= self.map.size[0]
-                    or temp[1] < 1
+                    or temp[1] < 0
                     or temp[1] >= self.map.size[1]
                 ):
                     if random.random() > self.probability:
@@ -83,7 +83,7 @@ class FPA(InitializationInterface):
                         temp = population[i] + random.random() * (
                             population[j] - population[k]
                         )
-                temp = temp.round().astype(int)
+                    temp = temp.round().astype(int)
                 fitness = self.fitness(temp)
                 if fitness > fitnessList[i]:
                     nextPopulation[i] = temp
@@ -98,7 +98,7 @@ class FPA(InitializationInterface):
             self.a = i
             self.Reinforcment()
             self.UpdateQ()
-        return max(self.Q[self.state[0] + self.state[1] * 20 - 21])
+        return max(self.Q[self.state[0]][self.state[1]])
 
     def Reinforcment(self):
         if self.gazebo:
@@ -143,12 +143,10 @@ class FPA(InitializationInterface):
         pass
 
     def UpdateQ(self):
-        pos = self.state[0] + self.state[1] * 20 - 21
-        self.Q[pos][self.a] = (1 - self.updateAlpha) * self.Q[pos][
-            self.a
-        ] + self.updateAlpha * (
-            self.r
-            + self.gamma * max(self.Q[self.nextState[0] + self.nextState[1] * 20 - 21])
+        self.Q[self.state[0]][self.state[1]][self.a] = (1 - self.updateAlpha) * self.Q[
+            self.state[0]
+        ][self.state[1]][self.a] + self.updateAlpha * (
+            self.r + self.gamma * max(self.Q[self.nextState[0]][self.nextState[1]])
         )
 
     def levy(self):
@@ -161,11 +159,11 @@ class FPA(InitializationInterface):
         for i in range(self.populationSize):
             # x=random.randint(1,self.map.size[0])
             # y=random.randint(1,self.map.size[1])
-            x = int(random.random() * (self.map.size[0]) + 1)
-            y = int(random.random() * (self.map.size[1]) + 1)
+            x = int(random.random() * (self.map.size[0]))
+            y = int(random.random() * (self.map.size[1]))
             while self.map.checkInterior(x, y):
-                x = int(random.random() * (self.map.size[0]) + 1)
-                y = int(random.random() * (self.map.size[1]) + 1)
+                x = int(random.random() * (self.map.size[0]))
+                y = int(random.random() * (self.map.size[1]))
                 # x=random.randint(1,self.map.size[0])
                 # y=random.randint(1,self.map.size[1])
             population.append(np.array([x, y]))
