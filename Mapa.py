@@ -11,6 +11,9 @@ class Map:
     def __init__(self):
         self.size = (64, 64)
         self.obstacles = []
+        self.scaling = 5
+        self.obstaclesRange = 20
+        self.minobstacles = 15
 
     def createMap(self, type=1):
         self.size = (64, 64)
@@ -107,7 +110,9 @@ class Map:
     def createRandomMap(self):
         self.obstacles.clear()
         while True:
-            nr_of_obstacles = int(random.random() * 27 + 6)
+            nr_of_obstacles = int(
+                random.random() * self.obstaclesRange + self.minobstacles
+            )
             for i in range(nr_of_obstacles):
                 p = random.random()
                 flag = False
@@ -132,7 +137,7 @@ class Map:
                         for j in range(nr_or_vertices):
                             x = -1
                             y = -1
-                            scaling = 5
+                            scaling = self.scaling
 
                             while (
                                 x < 1 or x >= self.size[0] or y < 1 or y >= self.size[1]
@@ -184,14 +189,23 @@ class Map:
             self.startingPoint = (x, y)
             x = int(random.random() * (self.size[0] - 2) + 1)
             y = int(random.random() * (self.size[0] - 2) + 1)
+            nrOfTimes = 0
             while (
                 self.checkInterior(x, y)
                 or self.startingPoint == (x, y)
-                or self.distance(self.startingPoint, (x, y))
-                < np.sqrt(self.size[0]) + self.size[1] / 2
+                or np.sqrt(self.size[0]) + self.distance(self.startingPoint, (x, y))
+                < self.size[1] * 3 / 4
             ):
                 x = int(random.random() * (self.size[0] - 2) + 1)
                 y = int(random.random() * (self.size[0] - 2) + 1)
+                nrOfTimes += 1
+                if nrOfTimes > 15:
+                    while self.checkInterior(x, y):
+                        x = int(random.random() * (self.size[0] - 2) + 1)
+                        y = int(random.random() * (self.size[0] - 2) + 1)
+                    self.startingPoint = (x, y)
+                    nrOfTimes = 0
+
             self.target = (x, y)
             if not wavefront(self.startingPoint, self.target, self):
                 break

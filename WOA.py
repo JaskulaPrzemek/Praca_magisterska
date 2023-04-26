@@ -7,18 +7,21 @@ import Qlearning as Q
 
 class WOA(InitializationInterface):
     def __init__(self):
-        self.iterations = 500
+        self.iterations = 1500
         self.b = 0
         self.initA = 2
         self.probability = 0.5
-        self.populationSize = 30
+        self.populationSize = 60
         self.gamma = 0.5
         self.updateAlpha = 0.2
 
-    def initialize(self, map, gazebo):
+    def initialize(self, map, gazebo, Q=None):
         self.map = map
         self.gazebo = gazebo
-        self.Q = np.zeros((self.map.size[0], self.map.size[1], 4))
+        if np.any(Q):
+            self.Q = Q
+        else:
+            self.Q = np.zeros((self.map.size[0], self.map.size[1], 4))
         population = self.initialPopulation()
         a = np.array([self.initA, self.initA])
         bestFitness = 0

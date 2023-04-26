@@ -91,7 +91,7 @@ class Qlearning:
                 stepNr += 1
                 # print(self.state)
                 # print(stepNr)
-                if stepNr > 100000000:
+                if stepNr > 10000000:
                     # print(stepNr)
                     flag = True
                     break
