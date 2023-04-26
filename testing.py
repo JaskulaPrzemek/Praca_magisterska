@@ -43,42 +43,55 @@ apf = a.APF()
 fpa = f.FPA()
 Qleran = Q.Qlearning()
 nn = n.NN()
+nn.load()
 testWrap = weirdWrapper()
 testWrap1 = weirdWrapper()
 testWrap1.flag = True
-strats = [fpa, woa]
+strats = [
+    nn,
+    testWrap,
+    testWrap1,
+]
 nn.InputTrainNumber = 16
 # nn.createTrainData()
 # nn.loadTrainingData()
 # print(type(nn.TrainX))
 # print(type(nn.TrainY))
 Qleran.setEpsilon(0.05)
-for population in range(10, 110, 10):
-    for iterations in range(100, 3100, 100):
-        woatime = []
-        woaQtime = []
-        fpatime = []
-        fpaQtime = []
-        for _ in range(20):
-            woa.iterations = iterations
-            woa.populationSize = population
-            fpa.iterations = iterations
-            fpa.populationSize = population
-            Qleran.createMap(4)
-            # Qleran.map.viewMap()
-            Qleran.setStrategy(woa)
-            Qleran.learn()
-            woatime.append(Qleran.time)
-            woaQtime.append(Qleran.Qtime)
-            Qleran.setStrategy(fpa)
-            Qleran.learn()
-            fpatime.append(Qleran.time)
-            fpaQtime.append(Qleran.Qtime)
-        print(f"Iterations {iterations}, population {population} \n")
-        print(f"woa avgt {avg(woatime)}, avgqt {avg(woaQtime)} \n")
-        print(f"fpa avgt {avg(fpatime)}, avgqt {avg(fpaQtime)} \n")
+for _ in range(5):
+    Qleran.createMap(4)
+    for strat in strats:
+        Qleran.setStrategy(strat)
+        Qleran.learn()
+        print(Qleran.strategy.__class__)
+        print(Qleran.time)
+        print(Qleran.Qtime)
+# for population in range(10, 110, 10):
+#    for iterations in range(100, 3100, 100):
+#        woatime = []
+#        woaQtime = []
+#        fpatime = []
+#        fpaQtime = []
+#        for _ in range(20):
+#            woa.iterations = iterations
+#            woa.populationSize = population
+#            fpa.iterations = iterations
+#            fpa.populationSize = population
+#            Qleran.createMap(4)
+#            # Qleran.map.viewMap()
+#            Qleran.setStrategy(woa)
+#            Qleran.learn()
+#            woatime.append(Qleran.time)
+#            woaQtime.append(Qleran.Qtime)
+#            Qleran.setStrategy(fpa)
+#            Qleran.learn()
+#            fpatime.append(Qleran.time)
+#            fpaQtime.append(Qleran.Qtime)
+#        print(f"Iterations {iterations}, population {population} \n")
+#        print(f"woa avgt {avg(woatime)}, avgqt {avg(woaQtime)} \n")
+#        print(f"fpa avgt {avg(fpatime)}, avgqt {avg(fpaQtime)} \n")
 
-    # Qleran.plotPath()
+# Qleran.plotPath()
 # prt(Qleran.steps)
 # l.setStrategy(fpa)
 # l.learn()
