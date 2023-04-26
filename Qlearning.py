@@ -104,7 +104,7 @@ class Qlearning:
                 i > 100
                 and stepNr == self.steps[-1]
                 and stepNr == self.steps[-2]
-                and stepNr == self.steps[-3]
+                and stepNr == self.steps[-7]
             ):
                 break
             self.steps.append(stepNr)

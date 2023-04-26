@@ -107,7 +107,7 @@ class Map:
     def createRandomMap(self):
         self.obstacles.clear()
         while True:
-            nr_of_obstacles = int(random.random() * 47 + 6)
+            nr_of_obstacles = int(random.random() * 27 + 6)
             for i in range(nr_of_obstacles):
                 p = random.random()
                 flag = False
@@ -126,32 +126,53 @@ class Map:
                             nr_or_vertices = int(random.random() * 4 + 4)
                         randx = int(random.random() * (self.size[0] - 1) + 1)
                         randy = int(random.random() * (self.size[0] - 1) + 1)
-                        tempobstacle = [(randx, randy)]
+                        tempobstacle = []
                         z = 0
-                        for j in range(nr_or_vertices - 1):
+                        templist = []
+                        for j in range(nr_or_vertices):
                             x = -1
                             y = -1
+                            scaling = 5
 
                             while (
-                                x < 1 or x > self.size[0] or y < 1 or y > self.size[1]
+                                x < 1 or x >= self.size[0] or y < 1 or y >= self.size[1]
                             ):
-                                x = tempobstacle[j][0] + int(random.random() * (6) - 3)
-                                y = tempobstacle[j][1] + int(random.random() * (6) - 3)
-                                if (x, y) in tempobstacle:
+                                x = randx + int(
+                                    random.random() * (scaling * 2) - scaling
+                                )
+                                y = randy + int(
+                                    random.random() * (scaling * 2) - scaling
+                                )
+                                if (x, y) in templist:
                                     x = -1
                                     z += 1
-                                if j > 0 and (
-                                    tempobstacle[j - 1][1] == y
-                                    or tempobstacle[j - 1][0] == x
-                                ):
-                                    x = -1
-                                    z += 1
+                                for x1, y1 in templist:
+                                    if (
+                                        self.distance((x1, y1), (x, y)) < scaling
+                                        or self.distance((x1, y1), (x, y)) > 2 * scaling
+                                    ):
+                                        continue
                                 if z > 120:
                                     flag = True
                                     break
-                            tempobstacle.append((x, y))
+                            templist.append((x, y))
+                        while templist:
+                            if tempobstacle == []:
+                                x, y = templist.pop()
+                                tempobstacle.append((x, y))
+                                continue
+                            x, y = tempobstacle[-1]
+                            minimum = 200
+                            for x1, y1 in templist:
+                                if self.distance((x, y), (x1, y1)) < minimum:
+                                    minimum = self.distance((x, y), (x1, y1))
+                                    best = (x1, y1)
+                            tempobstacle.append(best)
+                            templist.remove(best)
                         tempobstacle.append(tempobstacle[0])
-                    if self.checkProperObstacle(tempobstacle):
+                    if self.checkProperObstacle(tempobstacle) and self.checkAngles(
+                        tempobstacle, 30
+                    ):
                         self.obstacles.append(tempobstacle)
                         flag = True
             self.createCMap()
@@ -166,10 +187,8 @@ class Map:
             while (
                 self.checkInterior(x, y)
                 or self.startingPoint == (x, y)
-                or np.sqrt(
-                    (self.startingPoint[0] - x) ** 2 + (self.startingPoint[1] - y) ** 2
-                )
-                < 9
+                or self.distance(self.startingPoint, (x, y))
+                < np.sqrt(self.size[0]) + self.size[1] / 2
             ):
                 x = int(random.random() * (self.size[0] - 2) + 1)
                 y = int(random.random() * (self.size[0] - 2) + 1)
@@ -181,6 +200,18 @@ class Map:
                 self.obstacles.clear()
         # for obs in self.obstacles:
         #   print(obs)
+
+    def distance(self, point1, point2):
+        return np.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
+
+    def area(self, obstacle):
+        area = 0
+        for i in range(len(obstacle) - 1):
+            obs = obstacle[i]
+            obs1 = obstacle[i + 1]
+            diff = obs[0] * obs1[1] - obs1[0] * obs[1]
+            area = area + diff
+        return area / 2
 
     def checkProperObstacle(self, obstacle):
         if self.selfIntersecting(obstacle):
@@ -206,7 +237,7 @@ class Map:
                 obstacle.append((x[i], y[i]))
             obstacle.append((x[0], y[0]))
         draw.polygon(obstacle, outline=1, fill=1)
-        mask = np.array(img).astype("float32")
+        mask = np.array(img).astype("float32").T
         mask[np.where(mask == 0)] = 0
         mask = mask.astype(int)
         mask = mask + self.cMap
@@ -233,6 +264,35 @@ class Map:
                 if self.lineIntersect(side1, sides[j]):
                     return True
         return False
+
+    def checkAngles(self, obstacle, maxangle):
+        if len(obstacle[0]) == 3:
+            return True
+        for index in range(len(obstacle) - 2):
+            p1 = obstacle[index + 2]
+            p2 = obstacle[index + 1]
+            p3 = obstacle[index]
+
+            ba = [p1[0] - p2[0], p1[1] - p2[1]]
+            bc = [p3[0] - p2[0], p3[1] - p2[1]]
+            cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+            angle = np.arccos(cosine_angle)
+            deg = np.degrees(angle)
+            if deg < maxangle or deg > 360 - maxangle:
+                return False
+        p1 = obstacle[-2]
+        p2 = obstacle[0]
+        p3 = obstacle[1]
+
+        ba = [p1[0] - p2[0], p1[1] - p2[1]]
+        bc = [p3[0] - p2[0], p3[1] - p2[1]]
+        cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+        angle = np.arccos(cosine_angle)
+        deg = np.degrees(angle)
+        if deg < maxangle or deg > 360 - maxangle:
+            return False
+
+        return True
 
     def lineIntersect(self, Side1, Side2):
         A = Side1[0]
@@ -270,7 +330,7 @@ class Map:
 
             draw.polygon(polygon, outline=1, fill=1)
         # replace 0 with 'value'
-        mask = np.array(img).astype("float32")
+        mask = np.array(img).astype("float32").T
         mask[np.where(mask == 0)] = 0
         self.cMap = mask.astype(int)
 
@@ -395,7 +455,7 @@ class Map:
                 )
 
     def checkInterior(self, x, y):
-        if self.cMap[y][x] == 1:
+        if self.cMap[x][y] == 1:
             return True
         return False
 
@@ -428,10 +488,10 @@ class Map:
 
 
 def wavefront(start, finish, Map):
-    startIdx = start[1]
-    startIdy = start[0]
-    finishIdx = finish[1]
-    finishIdy = finish[0]
+    startIdx = start[0]
+    startIdy = start[1]
+    finishIdx = finish[0]
+    finishIdy = finish[1]
     trueDim = Map.size[0]
     WavefrontMap = np.copy(Map.cMap.astype(float))
     WavefrontMap[WavefrontMap > 0.5] = np.Inf

@@ -27,99 +27,29 @@ class NN(InitializationInterface):
         self.loss = tf.keras.losses.MeanAbsoluteError()
         # self.Qlearning.setDisableInit()
 
-    def custom_loss(self, y_true, y_pred):
-        # avg = tf.py_function(
-        #     func=self.run_average_steps, inp=[y_true, y_pred], Tout=[tf.float64]
-        # )
-        avg = self.run_average_steps(y_true, y_pred)
-        # print(avg)
-
-        return tf.constant(avg)
-
-    def run_average_steps(self, map_rep, Q_list):
-        avg = []
-        print("calculating loss")
-        Qlist = [Queue() for _ in range(self.batch_size)]
-        # print(Qlist)
-        # avg.append(self.batch_size)
-        list_of_lists_of_processes = []
-        for map_list, q_matrix, q in zip(map_rep.numpy(), Q_list.numpy(), Qlist):
-            q_matrix = np.reshape(q_matrix, (441, 4))
-            map_list = np.reshape(map_list, (445))
-            p_list = [
-                Process(
-                    target=self.get_avg_step,
-                    args=(
-                        map_list,
-                        q_matrix,
-                        q,
-                    ),
-                )
-                for _ in range(self.average_nr)
-            ]
-            for process in p_list:
-                process.start()
-            list_of_lists_of_processes.append(p_list)
-        for l, q in zip(list_of_lists_of_processes, Qlist):
-            for p in l:
-                p.join()
-            suma = 0
-            for _ in range(self.average_nr):
-                suma += q.get()
-            avg.append(suma / self.average_nr)
-            # print(avg)
-        # avg = tf.constant(avg,dtype=tf.float64)
-        print(avg)
-        return avg
-
-    def get_avg_step(self, map_rep, q_matrix, Que):
-        # print("process jo")
-        q = Qmodule.Qlearning()
-        q.setEpsilon(self.eps)
-        q.setDisableInit()
-        q.Q = np.copy(q_matrix)
-        q.map.loadListRep(map_rep)
-        q.learn()
-        steps = q.steps
-        avg = sum(steps) / len(steps)
-        Que.put(avg)
-
     def createTrainData(self):
-        xdata = []
-        ydata = []
-        mapa = mp.Map()
-        with open("TrainingData/Training_maps3.txt", "a") as file:
-            for _ in range(self.InputTrainNumber):
-                mapa.createRandomMap()
-                v = mapa.getListRep()
-                file.write(f"{str(v)} \n")
-                xdata.append(v)
-        for map in xdata:
-            self.Qlearning.map.loadListRep(map)
+        maps = []
+        Qmatrices = []
+        for _ in range(self.InputTrainNumber):
+            self.Qlearning.createMap(4)
+            tempMap = self.Qlearning.map.cMap.copy()
+            tempMap = tempMap * 255
+            x, y = self.Qlearning.map.startingPoint
+            tempMap[x][y] = 40
+            x, y = self.Qlearning.map.target
+            tempMap[x][y] = 200
+            maps.append(tempMap)
             self.Qlearning.learn()
-            ydata.append(np.reshape(self.Qlearning.Q, (1764)))
-
-        self.TrainX = np.array(xdata)
-        self.TrainY = np.array(ydata)
-        np.savetxt("TrainingData/Training_Q3.txt", self.TrainY)
+            Qmatrices.append(self.Qlearning.Q.copy())
+        self.TrainX = np.array(maps)
+        self.TrainY = np.array(Qmatrices)
+        np.save("TrainingData/Training_Q", self.TrainY)
+        np.save("TrainingData/Training_Maps", self.TrainX)
         print("Finished generating")
 
     def loadTrainingData(self):
-        xdata = []
-        nr = 0
-        with open("TrainingData/Training_maps.txt", "r") as file:
-            for line in file:
-                x = eval(line)
-                xdata.append(x)
-                nr += 1
-                if nr >= self.InputTrainNumber:
-                    break
-        # ydata=[22*100]*len(xdata)
-        nr = 0
-        ydata = np.loadtxt("TrainingData/Training_Q.txt")
-        print(ydata.shape)
-        self.TrainX = np.array(xdata)
-        self.TrainY = ydata[: self.InputTrainNumber, :]
+        self.TrainY = np.load("TrainingData/Training_Q.npy")
+        self.TrainX = np.load("TrainingData/Training_Maps.npy")
         print(self.TrainY.shape)
         print("Finished loading")
 
