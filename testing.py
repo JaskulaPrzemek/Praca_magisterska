@@ -43,29 +43,43 @@ apf = a.APF()
 fpa = f.FPA()
 Qleran = Q.Qlearning()
 nn = n.NN()
-nn.load()
 testWrap = weirdWrapper()
 testWrap1 = weirdWrapper()
 testWrap1.flag = True
-strats = [
-    nn,
-    testWrap,
-    testWrap1,
-]
+strats = [None, apf, fpa, woa, testWrap, testWrap1]
+strats1 = [testWrap, testWrap1]
+strats2 = [None, fpa]
 nn.InputTrainNumber = 16
-# nn.createTrainData()
+testWrap.woa.populationSize = 10
+testWrap.woa.iterations = 500
+testWrap1.fpa.populationSize = 20
+testWrap1.fpa.iterations = 500
+# n.createTrainData()
 # nn.loadTrainingData()
 # print(type(nn.TrainX))
 # print(type(nn.TrainY))
-Qleran.setEpsilon(0.05)
+Qleran.setEpsilon(0.15)  # FPA needs higher epsilon
+fpa.iterations = 1500
+fpa.populationSize = 40
 for _ in range(5):
     Qleran.createMap(4)
-    for strat in strats:
+    print("create done")
+    for strat in strats2:
         Qleran.setStrategy(strat)
         Qleran.learn()
         print(Qleran.strategy.__class__)
         print(Qleran.time)
         print(Qleran.Qtime)
+if False:
+    nn.InputTrainNumber = 256 * 4
+    nn.Qlearning.setStrategy(testWrap)
+    nn.createTrainData("TrainingWrapWoa")
+    nn.Qlearning.setStrategy(testWrap1)
+    nn.createTrainData("TrainingWrapFpa")
+    nn.setStrategy(None)
+    nn.createTrainData("TrainingNormal")
+
+
 # for population in range(10, 110, 10):
 #    for iterations in range(100, 3100, 100):
 #        woatime = []

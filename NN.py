@@ -124,7 +124,7 @@ class NN(InitializationInterface):
             x, y = self.Qlearning.map.startingPoint
             tempMap[x][y] = 40
             x, y = self.Qlearning.map.target
-            tempMap[x][y] = 200
+            tempMap[x][y] = 150
             maps.append(tempMap)
             self.Qlearning.learn()
             Qmatrices.append(self.Qlearning.Q.copy())

@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 import gazeboCommunication as gzlib
 import random
+import warnings
+
+warnings.simplefilter("ignore")
 
 
 class Map:

@@ -10,10 +10,11 @@ class FPA(InitializationInterface):
         self.iterations = 1500
         self.updateGamma = 0.8
         self.updateAlpha = 0.2
-        self.populationSize = 60
+        self.populationSize = 40
         self.gazebo = False
         self.probability = 0.5
         self.beta = 1.4
+        self.invbeta = 1 / self.beta
         self.num = math.gamma(self.beta) * math.sin(math.pi * self.beta / 2)
         self.den = (
             math.gamma((1 + self.beta) / 2) * self.beta * (2 ** (self.beta - 1) / 2)
@@ -22,6 +23,7 @@ class FPA(InitializationInterface):
 
     def setBeta(self, beta):
         self.beta = beta
+        self.invbeta = 1 / self.beta
         self.num = math.gamma(self.beta) * math.sin(math.pi * self.beta / 2)
         self.den = (
             math.gamma((1 + self.beta) / 2) * self.beta * (2 ** (self.beta - 1) / 2)
@@ -55,44 +57,30 @@ class FPA(InitializationInterface):
             self.Q = np.zeros((self.map.size[0], self.map.size[1], 4))
         population = self.initialPopulation()
         bestFitness = 0
-        nextPopulation = []
-        fitnessList = []
-        for i in range(self.populationSize):
-            nextPopulation.append(0)
-            fitnessList.append(self.fitness(population[i]))
-        for j in range(self.iterations):
+        fitnessList = [self.fitness(flower) for flower in population]
+        nextPopulation = population.copy()
+        for _ in range(self.iterations):
             tempBest = max(fitnessList)
             index = fitnessList.index(tempBest)
             if tempBest >= bestFitness:
                 bestFitness = tempBest
                 bestFlower = population[index]
-            for i in range(self.populationSize):
-                temp = np.array([0, 0])
-                while (
-                    temp[0] < 0
-                    or temp[0] >= self.map.size[0]
-                    or temp[1] < 0
-                    or temp[1] >= self.map.size[1]
-                ):
-                    if random.random() > self.probability:
-                        temp = population[i] + self.gamma * self.levy() * (
-                            population[i] - bestFlower
-                        )
-                    else:
-                        # j=random.randint(0,self.populationSize-1)
-                        # k=random.randint(0,self.populationSize-1)
-                        j = int(random.random() * (self.populationSize))
-                        k = int(random.random() * (self.populationSize))
-                        temp = population[i] + random.random() * (
-                            population[j] - population[k]
-                        )
-                    temp = temp.round().astype(int)
+            for i, flower in enumerate(population):
+                if random.random() > self.probability:
+                    temp = flower + self.gamma * self.levy() * (flower - bestFlower)
+                else:
+                    # j=random.randint(0,self.populationSize-1)
+                    # k=random.randint(0,self.populationSize-1)
+                    j = int(random.random() * (self.populationSize))
+                    k = int(random.random() * (self.populationSize))
+                    temp = flower + random.random() * (population[j] - population[k])
+                temp = temp.round().astype(int)
+                temp = np.clip(temp, 0, self.map.size[0] - 1)
                 fitness = self.fitness(temp)
                 if fitness > fitnessList[i]:
+                    fitnessList[i] = fitness
                     nextPopulation[i] = temp
-                else:
-                    nextPopulation[i] = population[i]
-            population = nextPopulation
+            population = nextPopulation.copy()
         return self.Q.copy()
 
     def fitness(self, flower):

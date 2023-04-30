@@ -52,7 +52,10 @@ class Qlearning:
         self.disableInit = False
 
     def setStrategy(self, strategy):
-        self.strategyFlag = True
+        if strategy:
+            self.strategyFlag = True
+        else:
+            self.strategyFlag = False
         self.strategy = strategy
 
     def resetStrategy(self):

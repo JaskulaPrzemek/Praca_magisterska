@@ -7,11 +7,11 @@ import Qlearning as Q
 
 class WOA(InitializationInterface):
     def __init__(self):
-        self.iterations = 1500
+        self.iterations = 1200
         self.b = 0
         self.initA = 2
         self.probability = 0.5
-        self.populationSize = 60
+        self.populationSize = 50
         self.gamma = 0.5
         self.updateAlpha = 0.2
 
