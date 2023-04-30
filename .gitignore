@@ -164,3 +164,4 @@ cython_debug/
 #Training_maps.txt
 #Training_Q.txt
 .swp
+*.*~
