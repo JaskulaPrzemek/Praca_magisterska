@@ -1922,3 +1922,91 @@ woa avgt 22.085150051116944, avgqt 21.95533242225647
 
 fpa avgt 40.39526607990265, avgqt 10.627124106884002 
 
+2023-04-30 10:51:41.955431: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+Finished generating
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+yo
+Finished generating
+Traceback (most recent call last):
+  File "/home/ubuntu/Praca_magisterska/testing.py", line 79, in <module>
+    nn.setStrategy(None)
+AttributeError: 'NN' object has no attribute 'setStrategy'
