@@ -108,6 +108,26 @@ class Map:
                     (7, 15),
                 ]
             )
+        if type != 4:
+            self.startingPoint = (
+                int(self.startingPoint[0] * 64 / 20),
+                int(self.startingPoint[1] * 64 / 20),
+            )
+            self.target = (
+                int(self.target[0] * 64 / 20),
+                int(self.target[1] * 64 / 20),
+            )
+            newob = []
+            for obs in self.obstacles:
+                if len(obs) == 1:
+                    no = [
+                        (int(o[0] * 64 / 20), int(o[1] * 64 / 20), int(o[2] * 64 / 20))
+                        for o in obs
+                    ]
+                else:
+                    no = [(int(o[0] * 64 / 20), int(o[1] * 64 / 20)) for o in obs]
+                newob.append(no)
+            self.obstacles = newob
         self.obstaclesShort = self.obstacles.copy()
 
     def createRandomMap(self):

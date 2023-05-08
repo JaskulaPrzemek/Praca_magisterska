@@ -38,22 +38,34 @@ class weirdWrapper:
         return self.Q.copy()
 
 
-woa = w.WOA()
-apf = a.APF()
-fpa = f.FPA()
+# woa = w.WOA()
+# apf = a.APF()
+# fpa = f.FPA()
 Qleran = Q.Qlearning()
-nn = n.NN()
-testWrap = weirdWrapper()
-testWrap1 = weirdWrapper()
-testWrap1.flag = True
-strats = [None, apf, fpa, woa, testWrap, testWrap1]
-strats1 = [testWrap, testWrap1]
-strats2 = [None, fpa]
-nn.InputTrainNumber = 16
-testWrap.woa.populationSize = 10
-testWrap.woa.iterations = 500
-testWrap1.fpa.populationSize = 20
-testWrap1.fpa.iterations = 500
+AdamNorm = n.NN()
+AdamF = n.NN()
+AdamW = n.NN()
+SqdNorm = n.NN()
+SqdF = n.NN()
+SqdW = n.NN()
+AdamNorm.load("NewTest/MseAdamNorm.keras")
+AdamF.load("NewTest/MseAdamWrapF.keras")
+AdamW.load("NewTest/MseAdamWrapW.keras")
+SqdNorm.load("NewTest/MseSqdNorm.keras")
+SqdF.load("NewTest/MseSqdWrapF.keras")
+SqdW.load("NewTest/MseSqdWrapW.keras")
+# testWrap = weirdWrapper()
+# testWrap1 = weirdWrapper()
+# testWrap1.flag = True
+# strats = [None, apf, fpa, woa, testWrap, testWrap1]
+# strats1 = [testWrap, testWrap1]
+# strats2 = [None, fpa]
+strats = [AdamNorm, AdamF, AdamW, SqdNorm, SqdF, SqdW]
+# nn.InputTrainNumber = 16
+# testWrap.woa.populationSize = 10
+# testWrap.woa.iterations = 500
+# testWrap1.fpa.populationSize = 20
+# testWrap1.fpa.iterations = 500
 # n.createTrainData()
 # nn.loadTrainingData()
 # print(type(nn.TrainX))
@@ -61,19 +73,20 @@ testWrap1.fpa.iterations = 500
 # Qleran.setEpsilon(0.15)  # FPA needs higher epsilon
 # fpa.iterations = 1500
 # fpa.populationSize = 40
-# for _ in range(5):
-#    Qleran.createMap(4)
-#    print("create done")
-#    for strat in strats2:
-#        Qleran.setStrategy(strat)
-#        Qleran.learn()
-#        print(Qleran.strategy.__class__)
-#        print(Qleran.time)
-#        print(Qleran.Qtime)
-if True:
-    nn.InputTrainNumber = 256 * 4
-    nn.Qlearning.setStrategy(None)
-    nn.createTrainData("TrainingNormal")
+for _ in range(5):
+    Qleran.createMap(4)
+    print("create done")
+    for strat in strats:
+        Qleran.setStrategy(strat)
+        print(strat.ModelName)
+        meanTime = 0
+        Qleran.learn()
+        print(Qleran.time)
+        print(Qleran.Qtime)
+# if True:
+#    nn.InputTrainNumber = 256 * 4
+#    nn.Qlearning.setStrategy(None)
+#    nn.createTrainData("TrainingNormal")
 
 
 # for population in range(10, 110, 10):

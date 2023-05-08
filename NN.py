@@ -141,7 +141,7 @@ class NN(InitializationInterface):
         print(self.TrainY.shape)
         print("Finished loading")
 
-    def train(self,path="history.json"):
+    def train(self, path="history.json"):
         # self.model.compile(
         #    optimizer="adam", run_eagerly=self.eagerly, loss=self.custom_loss
         # )
@@ -162,13 +162,14 @@ class NN(InitializationInterface):
             epochs=self.epochs,
         )
         print(hist)
-        hist_dict=hist.history
-        json.dump(hist_dict,open(path,'w'))
+        hist_dict = hist.history
+        json.dump(hist_dict, open(path, "w"))
 
     def save_model(self, path="model.keras"):
         self.model.save("Models/" + path)
 
     def load(self, path="model.keras"):
+        self.ModelName = path[:-6]
         self.model = tf.keras.saving.load_model("Models/" + path)
 
     def initialize(self, map, gazebo):
