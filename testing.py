@@ -23,11 +23,11 @@ def avg(lst):
 
 
 class weirdWrapper:
-    def __init__(self) -> None:
+    def __init__(self, flag=False) -> None:
         self.apf = a.APF()
         self.fpa = f.FPA()
         self.woa = w.WOA()
-        self.flag = False
+        self.flag = flag
 
     def initialize(self, map, gazebo):
         Qapf = self.apf.initialize(map, gazebo)
