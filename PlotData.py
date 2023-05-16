@@ -189,7 +189,7 @@ def getDataForAMap(mapstr):
         os.makedirs("plots/" + mapstr, exist_ok=True)
     fig = m.viewMap(False)
     fig.savefig("plots/" + mapstr + "/mapa.png", bbox_inches="tight")
-    PossibleMaps = ["Zero", "APF", "FPA", "WOA", "NN"]
+    PossibleMaps = ["Zero", "APF", "FPA", "WOA", "WrapFPA", "WrapWOA"]
     for map in PossibleMaps:
         Qlist = reconstructQList(mapstr, map)
         (
@@ -395,8 +395,7 @@ AllList = [
     "randMap/rand5",
 ]
 for mapstr in AllList:
-    genLatexBeamer(mapstr)
-    genLatexPaths(mapstr)
+    getDataForAMap(mapstr)
 # getDataForAMap("map1")
 # getDataForAMap("map2")
 # getDataForAMap("map3")

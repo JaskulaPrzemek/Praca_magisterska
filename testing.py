@@ -22,22 +22,6 @@ def avg(lst):
     return sum(lst) / len(lst)
 
 
-class weirdWrapper:
-    def __init__(self, flag=False) -> None:
-        self.apf = a.APF()
-        self.fpa = f.FPA()
-        self.woa = w.WOA()
-        self.flag = flag
-
-    def initialize(self, map, gazebo):
-        Qapf = self.apf.initialize(map, gazebo)
-        if self.flag:
-            self.Q = self.fpa.initialize(map, gazebo, Qapf)
-        else:
-            self.Q = self.woa.initialize(map, gazebo, Qapf)
-        return self.Q.copy()
-
-
 # woa = w.WOA()
 # apf = a.APF()
 # fpa = f.FPA()
