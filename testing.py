@@ -1,4 +1,5 @@
 import math
+from RandomInitialization import randomInit
 
 try:
     import rospy
@@ -26,25 +27,32 @@ def avg(lst):
 # apf = a.APF()
 # fpa = f.FPA()
 Qleran = Q.Qlearning()
-AdamNorm = n.NN()
-AdamF = n.NN()
-AdamW = n.NN()
-SqdNorm = n.NN()
-SqdF = n.NN()
-SqdW = n.NN()
-AdamNorm.load("NewTest/MseAdamNorm.keras")
-AdamF.load("NewTest/MseAdamWrapF.keras")
-AdamW.load("NewTest/MseAdamWrapW.keras")
-SqdNorm.load("NewTest/MseSqdNorm.keras")
-SqdF.load("NewTest/MseSqdWrapF.keras")
-SqdW.load("NewTest/MseSqdWrapW.keras")
+# AdamNorm = n.NN()
+# AdamF = n.NN()
+# AdamW = n.NN()
+# SqdNorm = n.NN()
+# SqdF = n.NN()
+# SqdW = n.NN()
+# AdamNorm.load("NewTest/MseAdamNorm.keras")
+# AdamF.load("NewTest/MseAdamWrapF.keras")
+# AdamW.load("NewTest/MseAdamWrapW.keras")
+# SqdNorm.load("NewTest/MseSqdNorm.keras")
+# SqdF.load("NewTest/MseSqdWrapF.keras")
+# SqdW.load("NewTest/MseSqdWrapW.keras")
 # testWrap = weirdWrapper()
 # testWrap1 = weirdWrapper()
 # testWrap1.flag = True
 # strats = [None, apf, fpa, woa, testWrap, testWrap1]
 # strats1 = [testWrap, testWrap1]
 # strats2 = [None, fpa]
-strats = [AdamNorm, AdamF, AdamW, SqdNorm, SqdF, SqdW]
+# strats = [AdamNorm, AdamF, AdamW, SqdNorm, SqdF, SqdW]
+randomI = randomInit()
+randomI.gauss = True
+randNorm = randomInit()
+randNorm.gauss = False
+randNorm.Min = -0.5
+randNorm.Max = 0.5
+strats = [None, randomI, randNorm]
 # nn.InputTrainNumber = 16
 # testWrap.woa.populationSize = 10
 # testWrap.woa.iterations = 500
@@ -57,16 +65,17 @@ strats = [AdamNorm, AdamF, AdamW, SqdNorm, SqdF, SqdW]
 # Qleran.setEpsilon(0.15)  # FPA needs higher epsilon
 # fpa.iterations = 1500
 # fpa.populationSize = 40
-for _ in range(5):
+for _ in range(15):
     Qleran.createMap(4)
     print("create done")
+    Qleran.maxvalue = 100000000
     for strat in strats:
         Qleran.setStrategy(strat)
-        print(strat.ModelName)
-        meanTime = 0
+        # print(strat.ModelName)
         Qleran.learn()
         print(Qleran.time)
         print(Qleran.Qtime)
+        # Qleran.plotPath()
 # if True:
 #    nn.InputTrainNumber = 256 * 4
 #    nn.Qlearning.setStrategy(None)

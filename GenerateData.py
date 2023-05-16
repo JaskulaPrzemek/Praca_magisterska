@@ -11,13 +11,16 @@ import APF as a
 import WOA as w
 import NN as n
 from Wrapper import weirdWrapper
+from RandomInitialization import randomInit
+from PlotData import reconstructMap
 
-NNBool = False
-WOABool = True
-APFBool = True
-FPABool = True
-WrapFPABool = True
-WrapWOABool = True
+NNBool = True
+WOABool = False
+APFBool = False
+FPABool = False
+WrapFPABool = False
+WrapWOABool = False
+RandBool = True
 iterations = 10
 Qlearning = Q.Qlearning()
 Qlearning.setEpsilon(0.05)
@@ -29,11 +32,17 @@ if APFBool:
     APF = a.APF()
 if NNBool:
     NN = n.NN()
-    NN.load("Models/16000/SqdModelMSEBig.keras")
+    NN.load("Models/NewTest/MseAdamNorm.keras")
+    NN1 = n.NN()
+    NN1.load("Models/NewTest/MseAdamWrapW.keras")
+    NN2 = n.NN()
+    NN2.load("Models/NewTest/MseAdamWrapF.keras")
 if WrapFPABool:
     WrapFPA = weirdWrapper(flag=True)
 if WrapWOABool:
     WrapWOA = weirdWrapper(flag=False)
+if RandBool:
+    RandInit = randomInit()
 
 
 def genForMap(Qlearning, mapstr):
@@ -67,7 +76,13 @@ def genForMap(Qlearning, mapstr):
         if NNBool:
             Qlearning.setStrategy(NN)
             Qlearning.learn()
-            Qlearning.save("wyniki/" + mapstr + "/NN.txt", mapa=False)
+            Qlearning.save("wyniki/" + mapstr + "/NNnorm.txt", mapa=False)
+            Qlearning.setStrategy(NN1)
+            Qlearning.learn()
+            Qlearning.save("wyniki/" + mapstr + "/NNWrapW.txt", mapa=False)
+            Qlearning.setStrategy(NN2)
+            Qlearning.learn()
+            Qlearning.save("wyniki/" + mapstr + "/NNWrapF.txt", mapa=False)
         if WrapFPABool:
             Qlearning.setStrategy(WrapFPA)
             Qlearning.learn()
@@ -76,6 +91,10 @@ def genForMap(Qlearning, mapstr):
             Qlearning.setStrategy(WrapWOA)
             Qlearning.learn()
             Qlearning.save("wyniki/" + mapstr + "/WrapWOA.txt", mapa=False)
+        if RandBool:
+            Qlearning.setStrategy(RandInit)
+            Qlearning.learn()
+            Qlearning.save("wyniki/" + mapstr + "/RandInit.txt", mapa=False)
 
 
 Qlearning.createMap(-1)
@@ -88,13 +107,24 @@ Qlearning.createMap(2)
 genForMap(Qlearning, "map4")
 Qlearning.createMap(3)
 genForMap(Qlearning, "map5")
-Qlearning.createMap(4)
-genForMap(Qlearning, "randMap/rand1")
-Qlearning.createMap(4)
-genForMap(Qlearning, "randMap/rand2")
-Qlearning.createMap(4)
-genForMap(Qlearning, "randMap/rand3")
-Qlearning.createMap(4)
-genForMap(Qlearning, "randMap/rand4")
-Qlearning.createMap(4)
-genForMap(Qlearning, "randMap/rand5")
+MapStrings = [
+    "randMap/rand1",
+    "randMap/rand2",
+    "randMap/rand3",
+    "randMap/rand4",
+    "randMap/rand5",
+]
+for mapstr in MapStrings:
+    RecMap = reconstructMap(mapstr)
+    Qlearning.setMap(RecMap)
+    genForMap(Qlearning, mapstr)
+# Qlearning.createMap(4)
+# genForMap(Qlearning, "randMap/rand1")
+# Qlearning.createMap(4)
+# genForMap(Qlearning, "randMap/rand2")
+# Qlearning.createMap(4)
+# genForMap(Qlearning, "randMap/rand3")
+# Qlearning.createMap(4)
+# genForMap(Qlearning, "randMap/rand4")
+# Qlearning.createMap(4)
+# genForMap(Qlearning, "randMap/rand5")

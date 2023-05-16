@@ -22,6 +22,7 @@ class Qlearning:
         self.iterations = 500
         self.strategyFlag = False
         self.disableInit = False
+        self.maxvalue = 10000000
         np.set_printoptions(threshold=sys.maxsize, suppress=True)
 
     def createMap(self, type):
@@ -94,7 +95,7 @@ class Qlearning:
                 stepNr += 1
                 # print(self.state)
                 # print(stepNr)
-                if stepNr > 10000000:
+                if stepNr > self.maxvalue:
                     # print(stepNr)
                     flag = True
                     break

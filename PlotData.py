@@ -1,4 +1,5 @@
 import os
+from statistics import median
 import matplotlib as plt
 import numpy as np
 import Mapa as mp
@@ -189,7 +190,18 @@ def getDataForAMap(mapstr):
         os.makedirs("plots/" + mapstr, exist_ok=True)
     fig = m.viewMap(False)
     fig.savefig("plots/" + mapstr + "/mapa.png", bbox_inches="tight")
-    PossibleMaps = ["Zero", "APF", "FPA", "WOA", "WrapFPA", "WrapWOA"]
+    PossibleMaps = [
+        "Zero",
+        "RandInit",
+        "APF",
+        "FPA",
+        "WOA",
+        "WrapFPA",
+        "WrapWOA",
+        "NNnorm",
+        "NNWrapW",
+        "NNWrapF",
+    ]
     for map in PossibleMaps:
         Qlist = reconstructQList(mapstr, map)
         (
@@ -205,20 +217,21 @@ def getDataForAMap(mapstr):
         with open("plots/" + mapstr + "/statData.txt", "a") as file:
             file.write(map + "\n")
             file.write(
-                f"Time Min {'%.3f' % min(TimeList)} Max {'%.3f' % max(TimeList)} Avg {'%.3f' % avg(TimeList)} \n"
+                f"Time Min {'%.3f' % min(TimeList)} Max {'%.3f' % max(TimeList)} Avg {'%.3f' % avg(TimeList)} Median {'%.3f' % median(TimeList)} \n"
             )
             file.write(
-                f"QTime Min {'%.3f' % min(QTimeList)} Max {'%.3f' % max(QTimeList)} Avg {'%.3f' % avg(QTimeList)} \n"
+                f"QTime Min {'%.3f' % min(QTimeList)} Max {'%.3f' % max(QTimeList)} Avg {'%.3f' % avg(QTimeList)} Median {'%.3f' % median(QTimeList)} \n"
             )
             file.write(
-                f"Lenght Min {'%.3f' % min(LenghtList)} Max {'%.3f' % max(LenghtList)} Avg {'%.3f' % avg(LenghtList)} \n"
+                f"Lenght Min {'%.3f' % min(LenghtList)} Max {'%.3f' % max(LenghtList)} Avg {'%.3f' % avg(LenghtList)} Median {'%.3f' % median(LenghtList)} \n"
             )
             file.write(
-                f"Smoothnes Min {'%.3f' % min(SmoothnesList)} Max {'%.3f' % max(SmoothnesList)} Avg {'%.3f' % avg(SmoothnesList)} \n"
+                f"Smoothnes Min {'%.3f' % min(SmoothnesList)} Max {'%.3f' % max(SmoothnesList)} Avg {'%.3f' % avg(SmoothnesList)} Median {'%.3f' % median(SmoothnesList)} \n"
             )
             file.write(
-                f"Step Min {'%.3f' % min(StepList)} Max {'%.3f' % max(StepList)} Avg {'%.3f' % avg(StepList)} \n"
+                f"Step Min {'%.3f' % min(StepList)} Max {'%.3f' % max(StepList)} Avg {'%.3f' % avg(StepList)} Median {'%.3f' % median(StepList)} \n"
             )
+
         for index, path in enumerate(PathList):
             if type(path) == float:
                 continue
