@@ -43,6 +43,7 @@ if WrapWOABool:
     WrapWOA = weirdWrapper(flag=False)
 if RandBool:
     RandInit = randomInit()
+    RandInit.scale = 0.05
 
 
 def genForMap(Qlearning, mapstr):
@@ -92,8 +93,19 @@ def genForMap(Qlearning, mapstr):
             Qlearning.learn()
             Qlearning.save("wyniki/" + mapstr + "/WrapWOA.txt", mapa=False)
         if RandBool:
+            flag = True
             Qlearning.setStrategy(RandInit)
-            Qlearning.learn()
+            tests = 0
+            while flag:
+                Qlearning.learn()
+                tests += 1
+                if (
+                    Qlearning.path
+                    and Qlearning.pathLenght != 100
+                    and Qlearning.pathSmoothness != 100
+                ):
+                    flag = False
+            print(f"That took {tests} tries")
             Qlearning.save("wyniki/" + mapstr + "/RandInit.txt", mapa=False)
 
 

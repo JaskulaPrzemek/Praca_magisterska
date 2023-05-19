@@ -29,4 +29,4 @@ class randomInit(InitializationInterface):
         with open(path, "a") as file:
             file.write(f"{__name__}: \n")
             if Q:
-                file.write(f"Q {np.array_str(self.Q)} \n")
+                file.write(f"Qi {np.array_str(self.Q)} \n")
