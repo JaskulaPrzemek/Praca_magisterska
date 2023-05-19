@@ -21,6 +21,7 @@ FPABool = False
 WrapFPABool = False
 WrapWOABool = False
 RandBool = True
+ZeroBool = False
 iterations = 10
 Qlearning = Q.Qlearning()
 Qlearning.setEpsilon(0.05)
@@ -56,12 +57,13 @@ def genForMap(Qlearning, mapstr):
         os.makedirs("wyniki/" + mapstr, exist_ok=True)
     for i in range(iterations):
         Qlearning.resetStrategy()
-        Qlearning.learn()
-        if not i:
-            MapBool = True
-        else:
-            MapBool = False
-        Qlearning.save("wyniki/" + mapstr + "/Zero.txt", mapa=MapBool)
+        if ZeroBool:
+            Qlearning.learn()
+            if not i:
+                MapBool = True
+            else:
+                MapBool = False
+            Qlearning.save("wyniki/" + mapstr + "/Zero.txt", mapa=MapBool)
         if FPABool:
             Qlearning.setStrategy(FPA)
             Qlearning.learn()
