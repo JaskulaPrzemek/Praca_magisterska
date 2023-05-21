@@ -192,15 +192,11 @@ def getDataForAMap(mapstr):
     fig.savefig("plots/" + mapstr + "/mapa.png", bbox_inches="tight")
     PossibleMaps = [
         "Zero",
-        "RandInit",
         "APF",
         "FPA",
         "WOA",
         "WrapFPA",
         "WrapWOA",
-        "NNnorm",
-        "NNWrapW",
-        "NNWrapF",
     ]
     for map in PossibleMaps:
         Qlist = reconstructQList(mapstr, map)
@@ -215,7 +211,7 @@ def getDataForAMap(mapstr):
         for index, value in enumerate(StepList):
             StepList[index] = avg(value)
         with open("plots/" + mapstr + "/statData.txt", "a") as file:
-            file.write(map + "\n")
+            file.write(map + f" iterations {len(TimeList)}\n")
             file.write(
                 f"Time Min {'%.3f' % min(TimeList)} Max {'%.3f' % max(TimeList)} Avg {'%.3f' % avg(TimeList)} Median {'%.3f' % median(TimeList)} \n"
             )
@@ -237,6 +233,61 @@ def getDataForAMap(mapstr):
                 continue
             fig = m.plotFromPath(path, False)
             fig.savefig("plots/" + mapstr + "/" + map + str(index) + ".png")
+
+
+def getDataForAMapNoZero(mapstr):
+    m = reconstructMap(mapstr)
+    if not os.path.exists("plots/" + mapstr):
+        os.makedirs("plots/" + mapstr, exist_ok=True)
+    fig = m.viewMap(False)
+    fig.savefig("plots/" + mapstr + "/mapa.png", bbox_inches="tight")
+    PossibleMaps = [
+        "Zero",
+        "APF",
+        "FPA",
+        "WOA",
+        "WrapFPA",
+        "WrapWOA",
+    ]
+    for map in PossibleMaps:
+        Qlist = reconstructQList(mapstr, map)
+        (
+            TimeList,
+            QTimeList,
+            StepList,
+            PathList,
+            LenghtList,
+            SmoothnesList,
+        ) = getAllLists(mapstr, map)
+        for index in range(len(LenghtList) - 1, -1, -1):
+            if LenghtList[index] == 100 and SmoothnesList[index] == 100:
+                del TimeList[index]
+                del QTimeList[index]
+                del StepList[index]
+                del PathList[index]
+                del LenghtList[index]
+                del SmoothnesList[index]
+        for index, value in enumerate(StepList):
+            StepList[index] = avg(value)
+        with open("plots/" + mapstr + "/statDataNoZero.txt", "a") as file:
+            file.write(map + f" iterations {len(TimeList)}\n")
+            if len(TimeList) == 0:
+                continue
+            file.write(
+                f"Time Min {'%.3f' % min(TimeList)} Max {'%.3f' % max(TimeList)} Avg {'%.3f' % avg(TimeList)} Median {'%.3f' % median(TimeList)} \n"
+            )
+            file.write(
+                f"QTime Min {'%.3f' % min(QTimeList)} Max {'%.3f' % max(QTimeList)} Avg {'%.3f' % avg(QTimeList)} Median {'%.3f' % median(QTimeList)} \n"
+            )
+            file.write(
+                f"Lenght Min {'%.3f' % min(LenghtList)} Max {'%.3f' % max(LenghtList)} Avg {'%.3f' % avg(LenghtList)} Median {'%.3f' % median(LenghtList)} \n"
+            )
+            file.write(
+                f"Smoothnes Min {'%.3f' % min(SmoothnesList)} Max {'%.3f' % max(SmoothnesList)} Avg {'%.3f' % avg(SmoothnesList)} Median {'%.3f' % median(SmoothnesList)} \n"
+            )
+            file.write(
+                f"Step Min {'%.3f' % min(StepList)} Max {'%.3f' % max(StepList)} Avg {'%.3f' % avg(StepList)} Median {'%.3f' % median(StepList)} \n"
+            )
 
 
 def generateLatexTableTime_Qtime(mapstr):
@@ -407,8 +458,10 @@ AllList = [
     "randMap/rand4",
     "randMap/rand5",
 ]
-#for mapstr in AllList:
+# for mapstr in AllList:
 #    getDataForAMap(mapstr)
+for mapstr in AllList:
+    getDataForAMapNoZero(mapstr)
 # getDataForAMap("map1")
 # getDataForAMap("map2")
 # getDataForAMap("map3")
