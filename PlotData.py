@@ -407,8 +407,8 @@ AllList = [
     "randMap/rand4",
     "randMap/rand5",
 ]
-for mapstr in AllList:
-    getDataForAMap(mapstr)
+#for mapstr in AllList:
+#    getDataForAMap(mapstr)
 # getDataForAMap("map1")
 # getDataForAMap("map2")
 # getDataForAMap("map3")

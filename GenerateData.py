@@ -20,7 +20,7 @@ APFBool = False
 FPABool = False
 WrapFPABool = False
 WrapWOABool = False
-RandBool = True
+RandBool = False
 ZeroBool = False
 iterations = 10
 Qlearning = Q.Qlearning()
@@ -33,11 +33,11 @@ if APFBool:
     APF = a.APF()
 if NNBool:
     NN = n.NN()
-    NN.load("Models/NewTest/MseAdamNorm.keras")
+    NN.load("NewTest/MseAdamNorm.keras")
     NN1 = n.NN()
-    NN1.load("Models/NewTest/MseAdamWrapW.keras")
+    NN1.load("NewTest/MseAdamWrapW.keras")
     NN2 = n.NN()
-    NN2.load("Models/NewTest/MseAdamWrapF.keras")
+    NN2.load("NewTest/MseAdamWrapF.keras")
 if WrapFPABool:
     WrapFPA = weirdWrapper(flag=True)
 if WrapWOABool:
