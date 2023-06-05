@@ -27,6 +27,7 @@ def avg(lst):
 # apf = a.APF()
 # fpa = f.FPA()
 Qleran = Q.Qlearning()
+Qlearn = Q.Qlearning()
 # AdamNorm = n.NN()
 # AdamF = n.NN()
 # AdamW = n.NN()
@@ -65,17 +66,22 @@ strats = [None, randomI, randNorm]
 # Qleran.setEpsilon(0.15)  # FPA needs higher epsilon
 # fpa.iterations = 1500
 # fpa.populationSize = 40
-for _ in range(15):
-    Qleran.createMap(4)
-    print("create done")
-    Qleran.maxvalue = 100000000
-    for strat in strats:
-        Qleran.setStrategy(strat)
-        # print(strat.ModelName)
-        Qleran.learn()
-        print(Qleran.time)
-        print(Qleran.Qtime)
-        # Qleran.plotPath()
+Qlearn.maxvalue = 10
+Qlearn.learn()
+Qlearn.createMap(4)
+if Qlearn.path and Qlearn.pathLenght != 100 and Qlearn.pathSmoothness != 100:
+    print("nah,allgood")
+# for _ in range(15):
+#    Qleran.createMap(4)
+#    print("create done")
+#    Qleran.maxvalue = 100000000
+#    for strat in strats:
+#        Qleran.setStrategy(strat)
+#        # print(strat.ModelName)
+#        Qleran.learn()
+#        print(Qleran.time)
+#        print(Qleran.Qtime)
+#        # Qleran.plotPath()
 # if True:
 #    nn.InputTrainNumber = 256 * 4
 #    nn.Qlearning.setStrategy(None)

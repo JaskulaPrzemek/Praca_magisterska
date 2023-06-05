@@ -13,6 +13,7 @@ import NN as n
 from Wrapper import weirdWrapper
 from RandomInitialization import randomInit
 from PlotData import reconstructMap
+import gc
 
 NNBool = True
 WOABool = False
@@ -111,16 +112,11 @@ def genForMap(Qlearning, mapstr):
             Qlearning.save("wyniki/" + mapstr + "/RandInit.txt", mapa=False)
 
 
-Qlearning.createMap(-1)
-genForMap(Qlearning, "map1")
-Qlearning.createMap(0)
-genForMap(Qlearning, "map2")
-Qlearning.createMap(1)
-genForMap(Qlearning, "map3")
-Qlearning.createMap(2)
-genForMap(Qlearning, "map4")
-Qlearning.createMap(3)
-genForMap(Qlearning, "map5")
+MapStrings = ["map1", "map2", "map3", "map4", "map5"]
+for index, map in enumerate(MapStrings):
+    Qlearning.createMap(index - 1)
+    genForMap(Qlearning, map)
+    gc.collect()
 MapStrings = [
     "randMap/rand1",
     "randMap/rand2",
@@ -132,6 +128,7 @@ for mapstr in MapStrings:
     RecMap = reconstructMap(mapstr)
     Qlearning.setMap(RecMap)
     genForMap(Qlearning, mapstr)
+    gc.collect()
 # Qlearning.createMap(4)
 # genForMap(Qlearning, "randMap/rand1")
 # Qlearning.createMap(4)

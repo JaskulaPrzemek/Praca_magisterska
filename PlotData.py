@@ -1,4 +1,7 @@
 import os
+import pandas as pd
+import re
+import ast
 from statistics import median
 import matplotlib as plt
 import numpy as np
@@ -114,17 +117,19 @@ def reconstructQList(mapstr, stratStr):
         for line in file:
             beggining = line[:2]
             beggining = beggining.strip()
-            end = line[-2:]
-            if beggining != "[" and flag or end == " \n" and flag:
+            end = line[-4:]
+
+            if flag and end == "]] \n":
                 flag = False
+                Qstring = Qstring.replace("]\n", "]\n")
                 Qstring += line
-                Qstring = Qstring.strip()
-                Qstring = Qstring.replace("]\n", "];")
-                Array = np.matrix(Qstring, dtype=float)
+                s = re.sub("\[ +", "[", Qstring.strip())
+                s = re.sub("[,\s]+", ", ", s)
+                Array = np.array(ast.literal_eval(s))
                 Qlist.append(Array)
             if flag:
                 Qstring += line
-            if beggining == "Q" or beggining == "\n":
+            if beggining == "Q":
                 Qstring = ""
                 Qstring += line[2:]
                 flag = True
@@ -446,6 +451,136 @@ def genLatexBeamer(map):
     )
 
 
+def genHistograms(mapstr):
+    PossibleMaps = [
+        "Zero",
+        "APF",
+        "FPA",
+        "WOA",
+        "WrapFPA",
+        "WrapWOA",
+    ]
+    if not os.path.exists("plots/histograms/" + mapstr):
+        os.makedirs("plots/histograms/" + mapstr, exist_ok=True)
+    for map in PossibleMaps:
+        Qlist = reconstructQList(mapstr, map)
+        for index, Q in enumerate(Qlist):
+            # print(Q)
+            Q = Q.flatten()
+            plt.pyplot.clf()
+            plt.pyplot.hist(Q, bins="auto")
+            plt.pyplot.savefig(
+                "plots/histograms/" + mapstr + "/" + map + str(index) + "auto.png"
+            )
+            plt.pyplot.clf()
+            plt.pyplot.hist(Q, bins=100)
+            plt.pyplot.savefig(
+                "plots/histograms/" + mapstr + "/" + map + str(index) + ".png"
+            )
+
+
+def genLatexPandas(mapstr):
+    PossibleMaps = [
+        "Zero",
+        "APF",
+        "FPA",
+        "WOA",
+        "WrapFPA",
+        "WrapWOA",
+    ]
+    columns = ["Mapa", "Min", "Max", "Średnia", "Mediana"]
+    DoneLists = [[], [], [], [], [], []]
+    Values = ["Time", "QTimes", "Step", "Path", "Lenght", "Smoothness"]
+    for map in PossibleMaps:
+        (
+            TimeList,
+            QTimeList,
+            StepList,
+            PathList,
+            LenghtList,
+            SmoothnesList,
+        ) = getAllLists(mapstr, map)
+        Alllists = getAllLists(mapstr, map)
+        for index, value in enumerate(Alllists[2]):
+            Alllists[2][index] = avg(value)
+        for index, l in enumerate(Alllists):
+            if index == 3:
+                continue
+            temp = [map, min(l), max(l), avg(l), median(l)]
+            DoneLists[index].append(temp)
+    print(mapstr)
+    for index, l in enumerate(DoneLists):
+        df = pd.DataFrame(l, columns=columns)
+        print(Values[index])
+        print(
+            df.to_latex(
+                index=False, float_format="{:.2f}".format, column_format="|ccccc|"
+            )
+        )
+
+
+def genForAllRand():
+    AllList = [
+        "randMap/rand1",
+        "randMap/rand2",
+        "randMap/rand3",
+        "randMap/rand4",
+        "randMap/rand5",
+    ]
+    PossibleMaps = [
+        "Zero",
+        "APF",
+        "FPA",
+        "WOA",
+        "WrapFPA",
+        "WrapWOA",
+    ]
+    columns = ["Mapa", "Min", "Max", "Średnia", "Mediana"]
+    DoneLists = [
+        [[], [], [], [], [], []],
+        [[], [], [], [], [], []],
+        [[], [], [], [], [], []],
+        [[], [], [], [], [], []],
+        [[], [], [], [], [], []],
+        [[], [], [], [], [], []],
+    ]
+    Values = ["Time", "QTimes", "Step", "Path", "Lenght", "Smoothness"]
+    for mapstr in AllList:
+        for index1, map in enumerate(PossibleMaps):
+            (
+                TimeList,
+                QTimeList,
+                StepList,
+                PathList,
+                LenghtList,
+                SmoothnesList,
+            ) = getAllLists(mapstr, map)
+            Alllists = getAllLists(mapstr, map)
+            for index, value in enumerate(Alllists[2]):
+                Alllists[2][index] = avg(value)
+            for index, l in enumerate(Alllists):
+                if index == 3:
+                    continue
+                DoneLists[index][index1].extend(l)
+
+    for index, l in enumerate(DoneLists):
+        if index == 3:
+            continue
+        for index1, val in enumerate(l):
+            temp = [PossibleMaps[index1], min(val), max(val), avg(val), median(val)]
+            DoneLists[index][index1] = temp
+    for index, l in enumerate(DoneLists):
+        if index == 3:
+            continue
+        df = pd.DataFrame(l, columns=columns)
+        print(Values[index])
+        print(
+            df.to_latex(
+                index=False, float_format="{:.2f}".format, column_format="|ccccc|"
+            )
+        )
+
+
 AllList = [
     "map1",
     "map2",
@@ -458,10 +593,36 @@ AllList = [
     "randMap/rand4",
     "randMap/rand5",
 ]
+# AllList = [
+#    "randMap/rand1",
+#    "randMap/rand2",
+#    "randMap/rand3",
+#    "randMap/rand4",
+#    "randMap/rand5",
+# ]
 # for mapstr in AllList:
 #    getDataForAMap(mapstr)
 for mapstr in AllList:
-    getDataForAMapNoZero(mapstr)
+    genLatexPandas(mapstr)
+
+genForAllRand()
+# getDataForAMap(mapstr)
+# getDataForAMapNoZero(mapstr)
+# genHistograms(mapstr)
+# PossibleMaps = [
+#    "Zero",
+#    "APF" "FPA",
+#    "WOA",
+#    "WrapFPA",
+#    "WrapWOA",
+# ]
+# for map in PossibleMaps:
+#    Qlist = reconstructQList(mapstr, map)
+#    for Q in Qlist:
+#        print(Q)
+#        Q = Q.flatten()
+#        plt.pyplot.hist(Q, bins="auto")
+#        plt.pyplot.show()
 # getDataForAMap("map1")
 # getDataForAMap("map2")
 # getDataForAMap("map3")

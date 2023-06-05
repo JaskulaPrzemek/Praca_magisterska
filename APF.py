@@ -126,4 +126,4 @@ class APF(InitializationInterface):
                     file.write(f"rs {self.repulseScale}: \n")
                 file.write(f"D {self.influenceDistance}: \n")
             if Q:
-                file.write(f"Q {np.array_str(self.Q)} \n")
+                file.write(f"Qi {np.array_str(self.Q)} \n")
