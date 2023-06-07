@@ -17,6 +17,7 @@ import NN as n
 import random
 import time
 import numpy as np
+from Wrapper import weirdWrapper as Wrapper
 
 
 def avg(lst):
@@ -26,7 +27,6 @@ def avg(lst):
 # woa = w.WOA()
 # apf = a.APF()
 # fpa = f.FPA()
-Qleran = Q.Qlearning()
 Qlearn = Q.Qlearning()
 # AdamNorm = n.NN()
 # AdamF = n.NN()
@@ -40,11 +40,11 @@ Qlearn = Q.Qlearning()
 # SqdNorm.load("NewTest/MseSqdNorm.keras")
 # SqdF.load("NewTest/MseSqdWrapF.keras")
 # SqdW.load("NewTest/MseSqdWrapW.keras")
-# testWrap = weirdWrapper()
-# testWrap1 = weirdWrapper()
-# testWrap1.flag = True
+testWrap = Wrapper()
+testWrap1 = Wrapper()
+testWrap1.flag = True
 # strats = [None, apf, fpa, woa, testWrap, testWrap1]
-# strats1 = [testWrap, testWrap1]
+strats1 = [testWrap, testWrap1]
 # strats2 = [None, fpa]
 # strats = [AdamNorm, AdamF, AdamW, SqdNorm, SqdF, SqdW]
 randomI = randomInit()
@@ -55,10 +55,10 @@ randNorm.Min = -0.5
 randNorm.Max = 0.5
 strats = [None, randomI, randNorm]
 # nn.InputTrainNumber = 16
-# testWrap.woa.populationSize = 10
-# testWrap.woa.iterations = 500
-# testWrap1.fpa.populationSize = 20
-# testWrap1.fpa.iterations = 500
+testWrap.woa.populationSize = 80
+testWrap.woa.iterations = 3500
+testWrap1.fpa.populationSize = 80
+testWrap1.fpa.iterations = 3700
 # n.createTrainData()
 # nn.loadTrainingData()
 # print(type(nn.TrainX))
@@ -66,9 +66,13 @@ strats = [None, randomI, randNorm]
 # Qleran.setEpsilon(0.15)  # FPA needs higher epsilon
 # fpa.iterations = 1500
 # fpa.populationSize = 40
-Qlearn.maxvalue = 10
-Qlearn.learn()
-Qlearn.createMap(4)
+Qlearn.createMap(3)
+for _ in range(10):
+    for strat in strats1:
+        Qlearn.setStrategy(strat)
+        Qlearn.learn()
+        print(Qlearn.time)
+        print(Qlearn.Qtime)
 if Qlearn.path and Qlearn.pathLenght != 100 and Qlearn.pathSmoothness != 100:
     print("nah,allgood")
 # for _ in range(15):

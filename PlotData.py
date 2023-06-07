@@ -488,7 +488,7 @@ def genLatexPandas(mapstr):
         "WrapFPA",
         "WrapWOA",
     ]
-    columns = ["Mapa", "Min", "Max", "Średnia", "Mediana"]
+    columns = ["Algorytm", "Min", "Max", "Średnia", "Mediana"]
     DoneLists = [[], [], [], [], [], []]
     Values = ["Time", "QTimes", "Step", "Path", "Lenght", "Smoothness"]
     for map in PossibleMaps:
@@ -514,7 +514,10 @@ def genLatexPandas(mapstr):
         print(Values[index])
         print(
             df.to_latex(
-                index=False, float_format="{:.2f}".format, column_format="|ccccc|"
+                index=False,
+                float_format="{:.2f}".format,
+                column_format="|ccccc|",
+                caption=" ",
             )
         )
 
@@ -535,7 +538,7 @@ def genForAllRand():
         "WrapFPA",
         "WrapWOA",
     ]
-    columns = ["Mapa", "Min", "Max", "Średnia", "Mediana"]
+    columns = ["Algorytm", "Min", "Max", "Średnia", "Mediana"]
     DoneLists = [
         [[], [], [], [], [], []],
         [[], [], [], [], [], []],
@@ -576,7 +579,10 @@ def genForAllRand():
         print(Values[index])
         print(
             df.to_latex(
-                index=False, float_format="{:.2f}".format, column_format="|ccccc|"
+                index=False,
+                float_format="{:.2f}".format,
+                column_format="|ccccc|",
+                caption=" ",
             )
         )
 
