@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1a44eec8b15c59af702c9eec33ba5afb91f04447b1b284c8b3c3a56541bfba17
-size 1786
+Zero iterations 10
+Time Min 22.711 Max 45.247 Avg 29.759 Median 28.385 
+QTime Min 0.000 Max 0.000 Avg 0.000 Median 0.000 
+Lenght Min 69.000 Max 87.000 Avg 78.400 Median 78.000 
+Smoothnes Min 21.991 Max 48.695 Avg 35.579 Median 34.558 
+Step Min 4350.360 Max 5930.557 Avg 5084.164 Median 5069.117 
+APF iterations 10
+Time Min 0.712 Max 1.225 Avg 0.926 Median 0.958 
+QTime Min 0.011 Max 0.013 Avg 0.012 Median 0.012 
+Lenght Min 69.000 Max 79.000 Avg 72.800 Median 72.000 
+Smoothnes Min 21.206 Max 36.914 Avg 27.332 Median 25.918 
+Step Min 357.297 Max 601.465 Avg 479.212 Median 509.292 
+FPA iterations 10
+Time Min 22.493 Max 38.718 Avg 30.973 Median 31.075 
+QTime Min 5.824 Max 6.402 Avg 6.106 Median 6.116 
+Lenght Min 69.000 Max 87.000 Avg 78.600 Median 79.000 
+Smoothnes Min 21.206 Max 49.480 Avg 36.364 Median 36.914 
+Step Min 3720.085 Max 5353.786 Avg 4469.304 Median 4426.584 
+WOA iterations 10
+Time Min 5.193 Max 43.668 Avg 17.787 Median 10.385 
+QTime Min 4.275 Max 5.097 Avg 4.765 Median 4.750 
+Lenght Min 73.000 Max 99.000 Avg 83.200 Median 85.000 
+Smoothnes Min 27.489 Max 69.115 Avg 42.883 Median 44.768 
+Step Min 372.980 Max 5527.556 Avg 2863.898 Median 2406.930 
+WrapFPA iterations 10
+Time Min 6.305 Max 7.398 Avg 6.909 Median 6.857 
+QTime Min 5.726 Max 6.479 Avg 6.060 Median 5.952 
+Lenght Min 69.000 Max 73.000 Avg 70.200 Median 70.000 
+Smoothnes Min 21.206 Max 27.489 Avg 23.562 Median 23.169 
+Step Min 284.515 Max 562.020 Avg 446.508 Median 466.936 
+WrapWOA iterations 10
+Time Min 4.381 Max 5.268 Avg 4.782 Median 4.662 
+QTime Min 4.244 Max 4.975 Avg 4.612 Median 4.525 
+Lenght Min 75.000 Max 99.000 Avg 85.000 Median 86.000 
+Smoothnes Min 30.631 Max 67.544 Avg 45.396 Median 46.731 
+Step Min 76.079 Max 164.386 Avg 93.995 Median 86.886 
+NNnorm iterations 0
+NNWrapF iterations 0
+NNWrapW iterations 0

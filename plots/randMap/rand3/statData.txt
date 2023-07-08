@@ -1,3 +1,54 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4c83f321b6b2f261ae7d60f642e381868e4132f93a0f46cb70788f0f0bf1980e
-size 1819
+Zero iterations 10
+Time Min 28.174 Max 40.367 Avg 34.269 Median 34.581 
+QTime Min 0.000 Max 0.000 Avg 0.000 Median 0.000 
+Lenght Min 71.000 Max 81.000 Avg 75.400 Median 75.000 
+Smoothnes Min 176.715 Max 191.637 Avg 183.390 Median 182.998 
+Step Min 7330.790 Max 10609.480 Avg 8618.546 Median 8161.742 
+APF iterations 10
+Time Min 1.456 Max 10.346 Avg 5.064 Median 3.220 
+QTime Min 0.011 Max 0.011 Avg 0.011 Median 0.011 
+Lenght Min 71.000 Max 83.000 Avg 74.400 Median 73.000 
+Smoothnes Min 176.715 Max 196.350 Avg 182.291 Median 179.856 
+Step Min 776.673 Max 6189.564 Avg 2915.720 Median 1797.337 
+FPA iterations 10
+Time Min 21.191 Max 32.707 Avg 27.583 Median 27.441 
+QTime Min 5.329 Max 5.901 Avg 5.527 Median 5.516 
+Lenght Min 71.000 Max 79.000 Avg 74.400 Median 74.000 
+Smoothnes Min 177.500 Max 189.281 Avg 182.369 Median 181.427 
+Step Min 5372.449 Max 7362.310 Avg 6360.907 Median 6363.503 
+WOA iterations 10
+Time Min 4.914 Max 43.896 Avg 22.330 Median 24.843 
+QTime Min 4.152 Max 4.355 Avg 4.246 Median 4.244 
+Lenght Min 71.000 Max 85.000 Avg 76.000 Median 75.000 
+Smoothnes Min 177.500 Max 198.706 Avg 184.883 Median 182.998 
+Step Min 385.020 Max 7931.844 Avg 4394.915 Median 4980.952 
+WrapFPA iterations 10
+Time Min 7.431 Max 13.719 Avg 10.021 Median 8.967 
+QTime Min 5.453 Max 5.755 Avg 5.618 Median 5.608 
+Lenght Min 71.000 Max 81.000 Avg 73.600 Median 73.000 
+Smoothnes Min 176.715 Max 193.208 Avg 181.034 Median 179.856 
+Step Min 965.465 Max 4677.574 Avg 2486.810 Median 1877.376 
+WrapWOA iterations 10
+Time Min 4.273 Max 4.489 Avg 4.361 Median 4.362 
+QTime Min 4.144 Max 4.360 Avg 4.225 Median 4.226 
+Lenght Min 71.000 Max 81.000 Avg 75.000 Median 75.000 
+Smoothnes Min 175.929 Max 193.208 Avg 183.155 Median 182.998 
+Step Min 71.485 Max 81.911 Avg 75.847 Median 75.921 
+NNnorm iterations 10
+Time Min 363.552 Max 560.597 Avg 471.734 Median 482.784 
+QTime Min 0.103 Max 0.133 Avg 0.121 Median 0.123 
+Lenght Min 100.000 Max 100.000 Avg 100.000 Median 100.000 
+Smoothnes Min 100.000 Max 100.000 Avg 100.000 Median 100.000 
+Step Min 176450.026 Max 214973.895 Avg 187362.137 Median 186356.461 
+NNWrapF iterations 10
+Time Min 270.723 Max 346.051 Avg 336.526 Median 343.488 
+QTime Min 0.101 Max 0.319 Avg 0.135 Median 0.116 
+Lenght Min 100.000 Max 100.000 Avg 100.000 Median 100.000 
+Smoothnes Min 100.000 Max 100.000 Avg 100.000 Median 100.000 
+Step Min 10000001.000 Max 10000001.000 Avg 10000001.000 Median 10000001.000 
+NNWrapW iterations 10
+Time Min 383.858 Max 727.042 Avg 532.606 Median 496.674 
+QTime Min 0.110 Max 0.120 Avg 0.113 Median 0.113 
+Lenght Min 100.000 Max 100.000 Avg 100.000 Median 100.000 
+Smoothnes Min 100.000 Max 100.000 Avg 100.000 Median 100.000 
+Step Min 171249.763 Max 285290.211 Avg 208945.213 Median 190558.770 

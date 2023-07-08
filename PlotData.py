@@ -12,9 +12,9 @@ import WOA as w
 import random
 
 # import NN as n
-NNBool = False
+NNBool = True
 WOABool = False
-APFBool = True
+APFBool = False
 FPABool = False
 
 
@@ -203,6 +203,7 @@ def getDataForAMap(mapstr):
         "WrapFPA",
         "WrapWOA",
     ]
+    PossibleMaps = ["NNnorm", "NNWrapF", "NNWrapW"]
     for map in PossibleMaps:
         Qlist = reconstructQList(mapstr, map)
         (
@@ -254,6 +255,7 @@ def getDataForAMapNoZero(mapstr):
         "WrapFPA",
         "WrapWOA",
     ]
+    PossibleMaps = ["NNnorm", "NNWrapF", "NNWrapW"]
     for map in PossibleMaps:
         Qlist = reconstructQList(mapstr, map)
         (
@@ -609,11 +611,12 @@ AllList = [
 # for mapstr in AllList:
 #    getDataForAMap(mapstr)
 for mapstr in AllList:
-    genLatexPandas(mapstr)
+    # genLatexPandas(mapstr)
+    getDataForAMap(mapstr)
+    getDataForAMapNoZero(mapstr)
 
 genForAllRand()
 # getDataForAMap(mapstr)
-# getDataForAMapNoZero(mapstr)
 # genHistograms(mapstr)
 # PossibleMaps = [
 #    "Zero",

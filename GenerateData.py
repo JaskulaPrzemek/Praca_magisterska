@@ -16,13 +16,12 @@ from PlotData import reconstructMap
 import gc
 
 NNBool = True
-WOABool = False
-APFBool = False
-FPABool = False
-WrapFPABool = False
-WrapWOABool = False
-RandBool = False
-ZeroBool = False
+WOABool = True
+APFBool = True
+FPABool = True
+WrapFPABool = True
+WrapWOABool = True
+ZeroBool = True
 iterations = 10
 Qlearning = Q.Qlearning()
 Qlearning.setEpsilon(0.05)
@@ -43,9 +42,6 @@ if WrapFPABool:
     WrapFPA = weirdWrapper(flag=True)
 if WrapWOABool:
     WrapWOA = weirdWrapper(flag=False)
-if RandBool:
-    RandInit = randomInit()
-    RandInit.scale = 0.05
 
 
 def genForMap(Qlearning, mapstr):
@@ -95,21 +91,6 @@ def genForMap(Qlearning, mapstr):
             Qlearning.setStrategy(WrapWOA)
             Qlearning.learn()
             Qlearning.save("wyniki/" + mapstr + "/WrapWOA.txt", mapa=False)
-        if RandBool:
-            flag = True
-            Qlearning.setStrategy(RandInit)
-            tests = 0
-            while flag:
-                Qlearning.learn()
-                tests += 1
-                if (
-                    Qlearning.path
-                    and Qlearning.pathLenght != 100
-                    and Qlearning.pathSmoothness != 100
-                ):
-                    flag = False
-            print(f"That took {tests} tries")
-            Qlearning.save("wyniki/" + mapstr + "/RandInit.txt", mapa=False)
 
 
 MapStrings = ["map1", "map2", "map3", "map4", "map5"]
